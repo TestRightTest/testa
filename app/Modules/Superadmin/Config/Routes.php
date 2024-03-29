@@ -16,6 +16,7 @@ $routes->group("superAdmin", ["namespace" => "App\Modules\SuperAdmin\Controllers
     $routes->get("createdevice", "SuperAdminController::createDevice");
     $routes->post("addDevice", "SuperAdminController::addDevice");
     $routes->get("getDevices", "SuperAdminController::getDevices");
+    $routes->get("getClientId", "SuperAdminController::getClientId");
 
 });
 ?>

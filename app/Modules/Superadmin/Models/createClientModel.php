@@ -38,7 +38,7 @@ class CreateClientModel extends Model
         // Insert data into the client_role table
         $clientRoleData = [
             'date_created' => date('Y-m-d H:i:s'),
-            'client_id' => $data['client_id'], // Assuming you pass client_id from controller
+            // 'client_id' => $data['client_id'], // Assuming you pass client_id from controller
             'role_id' => $roleId,
             'role_details' => json_encode([
                 'can_create' => $data['can_create'],
@@ -78,5 +78,25 @@ class CreateClientModel extends Model
             return false;
         }
     }
-    
+    // public function getClientWithRoleDetails()
+    // {
+    //     // Fetch all clients along with their role details
+    //     $query = $this->db->table('master.client_details')
+    //         ->select('master.client_details.id, master.client_details.client_name, client_role.role_details')
+    //         ->join('master.client_role', 'client_role.client_id = master.client_details.id', 'left')
+    //         ->get();
+
+    //     return $query->getResultArray();
+    // }
+    public function getClientWithRoleDetails()
+{
+    // Fetch all clients along with their role details
+    $query = $this->db->table('master.client_details')
+        ->select('master.client_details.id, master.client_details.client_name, client_role.role_details')
+        ->join('master.client_role', 'client_role.client_id = master.client_details.id', 'left')
+        ->get();
+
+    return $query->getResultArray();
+}
+
 }

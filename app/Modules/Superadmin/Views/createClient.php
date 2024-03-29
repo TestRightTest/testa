@@ -429,8 +429,8 @@
 		}
 		});
 	}
-	// var clientId; // Assuming you have the clientId variable defined and set somewhere in your code
 		var updateClientId;
+		
 		function updateClientDetails() {
 		// Get the updated status and role details
 		var status = $('#updateStatus').val();
@@ -472,7 +472,7 @@
 				// Optionally, you can also log the client ID and any other relevant information
 				console.log('Client ID from response :', response.clientId);
 				console.log('Success message:', response.message);
-
+				$('#updateTable').modal('hide');
 				// Optionally, you can perform additional actions here based on the response
 			},
 			error: function (xhr, status, error) {
