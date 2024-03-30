@@ -1,0 +1,167 @@
+ERROR - 2024-03-20 11:42:13 --> ErrorException: pg_query(): Query failed: ERROR:  syntax error at or near &quot;added&quot;
+LINE 1: CREATE SCHEMA client_User added successfully
+                                  ^ in C:\xampp\htdocs\world\system\Database\Postgre\Connection.php:187
+Stack trace:
+#0 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'pg_query(): Que...', 'C:\\xampp\\htdocs...', 187)
+#1 C:\xampp\htdocs\world\system\Database\Postgre\Connection.php(187): pg_query(Object(PgSql\Connection), 'CREATE SCHEMA c...')
+#2 C:\xampp\htdocs\world\system\Database\BaseConnection.php(693): CodeIgniter\Database\Postgre\Connection->execute('CREATE SCHEMA c...')
+#3 C:\xampp\htdocs\world\system\Database\BaseConnection.php(607): CodeIgniter\Database\BaseConnection->simpleQuery('CREATE SCHEMA c...')
+#4 C:\xampp\htdocs\world\app\Modules\Superadmin\Controllers\SuperAdminController.php(171): CodeIgniter\Database\BaseConnection->query('CREATE SCHEMA c...')
+#5 C:\xampp\htdocs\world\system\CodeIgniter.php(941): App\Modules\SuperAdmin\Controllers\SuperAdminController->createSchemaAndTables()
+#6 C:\xampp\htdocs\world\system\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Modules\SuperAdmin\Controllers\SuperAdminController))
+#7 C:\xampp\htdocs\world\system\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\xampp\htdocs\world\index.php(79): CodeIgniter\CodeIgniter->run()
+#9 {main}
+CRITICAL - 2024-03-20 11:42:13 --> CodeIgniter\Database\Exceptions\DatabaseException: pg_query(): Query failed: ERROR:  syntax error at or near &quot;added&quot;
+LINE 1: CREATE SCHEMA client_User added successfully
+                                  ^
+in SYSTEMPATH\Database\BaseConnection.php on line 647.
+ 1 APPPATH\Modules\Superadmin\Controllers\SuperAdminController.php(171): CodeIgniter\Database\BaseConnection->query('CREATE SCHEMA client_User added successfully')
+ 2 SYSTEMPATH\CodeIgniter.php(941): App\Modules\SuperAdmin\Controllers\SuperAdminController->createSchemaAndTables()
+ 3 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Modules\SuperAdmin\Controllers\SuperAdminController))
+ 4 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-03-20 11:42:13 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: pg_query(): Query failed: ERROR:  syntax error at or near &quot;added&quot;
+LINE 1: CREATE SCHEMA client_User added successfully
+                                  ^
+in SYSTEMPATH\Database\Postgre\Connection.php on line 192.
+ 1 SYSTEMPATH\Database\BaseConnection.php(693): CodeIgniter\Database\Postgre\Connection->execute('CREATE SCHEMA client_User added successfully')
+ 2 SYSTEMPATH\Database\BaseConnection.php(607): CodeIgniter\Database\BaseConnection->simpleQuery('CREATE SCHEMA client_User added successfully')
+ 3 APPPATH\Modules\Superadmin\Controllers\SuperAdminController.php(171): CodeIgniter\Database\BaseConnection->query('CREATE SCHEMA client_User added successfully')
+ 4 SYSTEMPATH\CodeIgniter.php(941): App\Modules\SuperAdmin\Controllers\SuperAdminController->createSchemaAndTables()
+ 5 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Modules\SuperAdmin\Controllers\SuperAdminController))
+ 6 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-03-20 11:42:13 --> [Caused by] ErrorException: pg_query(): Query failed: ERROR:  syntax error at or near &quot;added&quot;
+LINE 1: CREATE SCHEMA client_User added successfully
+                                  ^
+in SYSTEMPATH\Database\Postgre\Connection.php on line 187.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'pg_query(): Query failed: ERROR:  syntax error at or near &quot;added&quot;
+LINE 1: CREATE SCHEMA client_User added successfully
+                                  ^', 'C:\\xampp\\htdocs\\world\\system\\Database\\Postgre\\Connection.php', 187)
+ 2 SYSTEMPATH\Database\Postgre\Connection.php(187): pg_query(Object(PgSql\Connection), 'CREATE SCHEMA client_User added successfully')
+ 3 SYSTEMPATH\Database\BaseConnection.php(693): CodeIgniter\Database\Postgre\Connection->execute('CREATE SCHEMA client_User added successfully')
+ 4 SYSTEMPATH\Database\BaseConnection.php(607): CodeIgniter\Database\BaseConnection->simpleQuery('CREATE SCHEMA client_User added successfully')
+ 5 APPPATH\Modules\Superadmin\Controllers\SuperAdminController.php(171): CodeIgniter\Database\BaseConnection->query('CREATE SCHEMA client_User added successfully')
+ 6 SYSTEMPATH\CodeIgniter.php(941): App\Modules\SuperAdmin\Controllers\SuperAdminController->createSchemaAndTables()
+ 7 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Modules\SuperAdmin\Controllers\SuperAdminController))
+ 8 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+ERROR - 2024-03-20 11:43:24 --> ErrorException: pg_query(): Query failed: ERROR:  syntax error at or near &quot;added&quot;
+LINE 1: CREATE SCHEMA client_User added successfully
+                                  ^ in C:\xampp\htdocs\world\system\Database\Postgre\Connection.php:187
+Stack trace:
+#0 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'pg_query(): Que...', 'C:\\xampp\\htdocs...', 187)
+#1 C:\xampp\htdocs\world\system\Database\Postgre\Connection.php(187): pg_query(Object(PgSql\Connection), 'CREATE SCHEMA c...')
+#2 C:\xampp\htdocs\world\system\Database\BaseConnection.php(693): CodeIgniter\Database\Postgre\Connection->execute('CREATE SCHEMA c...')
+#3 C:\xampp\htdocs\world\system\Database\BaseConnection.php(607): CodeIgniter\Database\BaseConnection->simpleQuery('CREATE SCHEMA c...')
+#4 C:\xampp\htdocs\world\app\Modules\Superadmin\Controllers\SuperAdminController.php(177): CodeIgniter\Database\BaseConnection->query('CREATE SCHEMA c...')
+#5 C:\xampp\htdocs\world\system\CodeIgniter.php(941): App\Modules\SuperAdmin\Controllers\SuperAdminController->createSchemaAndTables()
+#6 C:\xampp\htdocs\world\system\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Modules\SuperAdmin\Controllers\SuperAdminController))
+#7 C:\xampp\htdocs\world\system\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\xampp\htdocs\world\index.php(79): CodeIgniter\CodeIgniter->run()
+#9 {main}
+CRITICAL - 2024-03-20 11:43:24 --> CodeIgniter\Database\Exceptions\DatabaseException: pg_query(): Query failed: ERROR:  syntax error at or near &quot;added&quot;
+LINE 1: CREATE SCHEMA client_User added successfully
+                                  ^
+in SYSTEMPATH\Database\BaseConnection.php on line 647.
+ 1 APPPATH\Modules\Superadmin\Controllers\SuperAdminController.php(177): CodeIgniter\Database\BaseConnection->query('CREATE SCHEMA client_User added successfully')
+ 2 SYSTEMPATH\CodeIgniter.php(941): App\Modules\SuperAdmin\Controllers\SuperAdminController->createSchemaAndTables()
+ 3 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Modules\SuperAdmin\Controllers\SuperAdminController))
+ 4 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-03-20 11:43:24 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: pg_query(): Query failed: ERROR:  syntax error at or near &quot;added&quot;
+LINE 1: CREATE SCHEMA client_User added successfully
+                                  ^
+in SYSTEMPATH\Database\Postgre\Connection.php on line 192.
+ 1 SYSTEMPATH\Database\BaseConnection.php(693): CodeIgniter\Database\Postgre\Connection->execute('CREATE SCHEMA client_User added successfully')
+ 2 SYSTEMPATH\Database\BaseConnection.php(607): CodeIgniter\Database\BaseConnection->simpleQuery('CREATE SCHEMA client_User added successfully')
+ 3 APPPATH\Modules\Superadmin\Controllers\SuperAdminController.php(177): CodeIgniter\Database\BaseConnection->query('CREATE SCHEMA client_User added successfully')
+ 4 SYSTEMPATH\CodeIgniter.php(941): App\Modules\SuperAdmin\Controllers\SuperAdminController->createSchemaAndTables()
+ 5 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Modules\SuperAdmin\Controllers\SuperAdminController))
+ 6 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-03-20 11:43:24 --> [Caused by] ErrorException: pg_query(): Query failed: ERROR:  syntax error at or near &quot;added&quot;
+LINE 1: CREATE SCHEMA client_User added successfully
+                                  ^
+in SYSTEMPATH\Database\Postgre\Connection.php on line 187.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'pg_query(): Query failed: ERROR:  syntax error at or near &quot;added&quot;
+LINE 1: CREATE SCHEMA client_User added successfully
+                                  ^', 'C:\\xampp\\htdocs\\world\\system\\Database\\Postgre\\Connection.php', 187)
+ 2 SYSTEMPATH\Database\Postgre\Connection.php(187): pg_query(Object(PgSql\Connection), 'CREATE SCHEMA client_User added successfully')
+ 3 SYSTEMPATH\Database\BaseConnection.php(693): CodeIgniter\Database\Postgre\Connection->execute('CREATE SCHEMA client_User added successfully')
+ 4 SYSTEMPATH\Database\BaseConnection.php(607): CodeIgniter\Database\BaseConnection->simpleQuery('CREATE SCHEMA client_User added successfully')
+ 5 APPPATH\Modules\Superadmin\Controllers\SuperAdminController.php(177): CodeIgniter\Database\BaseConnection->query('CREATE SCHEMA client_User added successfully')
+ 6 SYSTEMPATH\CodeIgniter.php(941): App\Modules\SuperAdmin\Controllers\SuperAdminController->createSchemaAndTables()
+ 7 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Modules\SuperAdmin\Controllers\SuperAdminController))
+ 8 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+ERROR - 2024-03-20 11:45:03 --> ErrorException: pg_query(): Query failed: ERROR:  syntax error at or near &quot;added&quot;
+LINE 1: CREATE SCHEMA client_User added successfully
+                                  ^ in C:\xampp\htdocs\world\system\Database\Postgre\Connection.php:187
+Stack trace:
+#0 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'pg_query(): Que...', 'C:\\xampp\\htdocs...', 187)
+#1 C:\xampp\htdocs\world\system\Database\Postgre\Connection.php(187): pg_query(Object(PgSql\Connection), 'CREATE SCHEMA c...')
+#2 C:\xampp\htdocs\world\system\Database\BaseConnection.php(693): CodeIgniter\Database\Postgre\Connection->execute('CREATE SCHEMA c...')
+#3 C:\xampp\htdocs\world\system\Database\BaseConnection.php(607): CodeIgniter\Database\BaseConnection->simpleQuery('CREATE SCHEMA c...')
+#4 C:\xampp\htdocs\world\app\Modules\Superadmin\Controllers\SuperAdminController.php(180): CodeIgniter\Database\BaseConnection->query('CREATE SCHEMA c...')
+#5 C:\xampp\htdocs\world\system\CodeIgniter.php(941): App\Modules\SuperAdmin\Controllers\SuperAdminController->createSchemaAndTables()
+#6 C:\xampp\htdocs\world\system\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Modules\SuperAdmin\Controllers\SuperAdminController))
+#7 C:\xampp\htdocs\world\system\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\xampp\htdocs\world\index.php(79): CodeIgniter\CodeIgniter->run()
+#9 {main}
+CRITICAL - 2024-03-20 11:45:03 --> CodeIgniter\Database\Exceptions\DatabaseException: pg_query(): Query failed: ERROR:  syntax error at or near &quot;added&quot;
+LINE 1: CREATE SCHEMA client_User added successfully
+                                  ^
+in SYSTEMPATH\Database\BaseConnection.php on line 647.
+ 1 APPPATH\Modules\Superadmin\Controllers\SuperAdminController.php(180): CodeIgniter\Database\BaseConnection->query('CREATE SCHEMA client_User added successfully')
+ 2 SYSTEMPATH\CodeIgniter.php(941): App\Modules\SuperAdmin\Controllers\SuperAdminController->createSchemaAndTables()
+ 3 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Modules\SuperAdmin\Controllers\SuperAdminController))
+ 4 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-03-20 11:45:03 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: pg_query(): Query failed: ERROR:  syntax error at or near &quot;added&quot;
+LINE 1: CREATE SCHEMA client_User added successfully
+                                  ^
+in SYSTEMPATH\Database\Postgre\Connection.php on line 192.
+ 1 SYSTEMPATH\Database\BaseConnection.php(693): CodeIgniter\Database\Postgre\Connection->execute('CREATE SCHEMA client_User added successfully')
+ 2 SYSTEMPATH\Database\BaseConnection.php(607): CodeIgniter\Database\BaseConnection->simpleQuery('CREATE SCHEMA client_User added successfully')
+ 3 APPPATH\Modules\Superadmin\Controllers\SuperAdminController.php(180): CodeIgniter\Database\BaseConnection->query('CREATE SCHEMA client_User added successfully')
+ 4 SYSTEMPATH\CodeIgniter.php(941): App\Modules\SuperAdmin\Controllers\SuperAdminController->createSchemaAndTables()
+ 5 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Modules\SuperAdmin\Controllers\SuperAdminController))
+ 6 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-03-20 11:45:03 --> [Caused by] ErrorException: pg_query(): Query failed: ERROR:  syntax error at or near &quot;added&quot;
+LINE 1: CREATE SCHEMA client_User added successfully
+                                  ^
+in SYSTEMPATH\Database\Postgre\Connection.php on line 187.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'pg_query(): Query failed: ERROR:  syntax error at or near &quot;added&quot;
+LINE 1: CREATE SCHEMA client_User added successfully
+                                  ^', 'C:\\xampp\\htdocs\\world\\system\\Database\\Postgre\\Connection.php', 187)
+ 2 SYSTEMPATH\Database\Postgre\Connection.php(187): pg_query(Object(PgSql\Connection), 'CREATE SCHEMA client_User added successfully')
+ 3 SYSTEMPATH\Database\BaseConnection.php(693): CodeIgniter\Database\Postgre\Connection->execute('CREATE SCHEMA client_User added successfully')
+ 4 SYSTEMPATH\Database\BaseConnection.php(607): CodeIgniter\Database\BaseConnection->simpleQuery('CREATE SCHEMA client_User added successfully')
+ 5 APPPATH\Modules\Superadmin\Controllers\SuperAdminController.php(180): CodeIgniter\Database\BaseConnection->query('CREATE SCHEMA client_User added successfully')
+ 6 SYSTEMPATH\CodeIgniter.php(941): App\Modules\SuperAdmin\Controllers\SuperAdminController->createSchemaAndTables()
+ 7 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Modules\SuperAdmin\Controllers\SuperAdminController))
+ 8 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-03-20 12:46:23 --> ErrorException: Undefined variable $id
+in APPPATH\Modules\Superadmin\Controllers\SuperAdminController.php on line 118.
+ 1 APPPATH\Modules\Superadmin\Controllers\SuperAdminController.php(118): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $id', 'C:\\xampp\\htdocs\\world\\app\\Modules\\Superadmin\\Controllers\\SuperAdminController.php', 118)
+ 2 SYSTEMPATH\CodeIgniter.php(941): App\Modules\SuperAdmin\Controllers\SuperAdminController->addClient()
+ 3 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Modules\SuperAdmin\Controllers\SuperAdminController))
+ 4 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-03-20 12:46:44 --> ErrorException: Undefined variable $id
+in APPPATH\Modules\Superadmin\Controllers\SuperAdminController.php on line 118.
+ 1 APPPATH\Modules\Superadmin\Controllers\SuperAdminController.php(118): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $id', 'C:\\xampp\\htdocs\\world\\app\\Modules\\Superadmin\\Controllers\\SuperAdminController.php', 118)
+ 2 SYSTEMPATH\CodeIgniter.php(941): App\Modules\SuperAdmin\Controllers\SuperAdminController->addClient()
+ 3 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Modules\SuperAdmin\Controllers\SuperAdminController))
+ 4 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-03-20 14:00:04 --> Error: Class "App\Modules\SuperAdmin\Controllers\AdminLoginModel" not found
+in APPPATH\Modules\Superadmin\Controllers\SuperAdminController.php on line 27.
+ 1 SYSTEMPATH\CodeIgniter.php(941): App\Modules\SuperAdmin\Controllers\SuperAdminController->loginAuth()
+ 2 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Modules\SuperAdmin\Controllers\SuperAdminController))
+ 3 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
