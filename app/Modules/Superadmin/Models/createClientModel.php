@@ -13,7 +13,8 @@ class CreateClientModel extends Model
     {
         return $this->where('client_name', $name)->countAllResults() > 0;
     }
-    public function addRole($data)
+
+    public function addRole($clientId, $data)
     {
         // Insert data into the role_list table
         $roleData = [
@@ -38,7 +39,7 @@ class CreateClientModel extends Model
         // Insert data into the client_role table
         $clientRoleData = [
             'date_created' => date('Y-m-d H:i:s'),
-            // 'client_id' => $data['client_id'], // Assuming you pass client_id from controller
+            'client_id' => $clientId, // Assign the client_id passed from the controller
             'role_id' => $roleId,
             'role_details' => json_encode([
                 'can_create' => $data['can_create'],
@@ -52,6 +53,7 @@ class CreateClientModel extends Model
 
         return $this->db->table('master.client_role')->insert($clientRoleData);
     }
+
     public function getClientsWithRoles()
     {
         return $this->select('master.client_details.*, client_role.role_details')
@@ -78,16 +80,7 @@ class CreateClientModel extends Model
             return false;
         }
     }
-    // public function getClientWithRoleDetails()
-    // {
-    //     // Fetch all clients along with their role details
-    //     $query = $this->db->table('master.client_details')
-    //         ->select('master.client_details.id, master.client_details.client_name, client_role.role_details')
-    //         ->join('master.client_role', 'client_role.client_id = master.client_details.id', 'left')
-    //         ->get();
 
-    //     return $query->getResultArray();
-    // }
     public function getClientWithRoleDetails()
 {
     // Fetch all clients along with their role details
@@ -98,5 +91,16 @@ class CreateClientModel extends Model
 
     return $query->getResultArray();
 }
+    public function getDevicesByClientId($clientId)
+    {
+        // Query to fetch devices based on client ID
+        $query = $this->db->table('master.device')
+            ->select('id, device_name')
+            ->where('client_id', $clientId)
+            ->get();
 
+        return $query->getResultArray();
+    }
+
+    
 }

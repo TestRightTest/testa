@@ -173,7 +173,7 @@
 							<hr class="light-line">
 
 							<li class="nav-item">
-                                <a href="#signout function" class="collapsed" aria-expanded="false" onclick="signOut()">
+                                <a href="#signout function" class="collapsed" aria-expanded="false" onclick="logout()">
                                     <i class="fas fa-sign-out-alt"></i>
                                     <p>Logout</p>
                                 </a>
@@ -344,6 +344,19 @@
 
 			});
 		});
+		function logout(){
+			$.ajax({
+			type: "GET",
+			url: "/mbscan/client/logout",
+			success: function(response) {
+				window.location.href = '/mbscan/client/login';
+			},
+			error: function(xhr, status, error) {
+				console.error(xhr.responseText);
+			}
+			});
+
+		}
 	</script>
 	<!-- <script>
 		function fetchDataServer() {

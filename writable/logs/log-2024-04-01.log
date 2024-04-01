@@ -1,0 +1,28 @@
+CRITICAL - 2024-04-01 11:31:46 --> TypeError: explode(): Argument #2 ($string) must be of type string, array given
+in APPPATH\Modules\Superadmin\Controllers\SuperAdminController.php on line 162.
+ 1 APPPATH\Modules\Superadmin\Controllers\SuperAdminController.php(162): explode(',', [...])
+ 2 SYSTEMPATH\CodeIgniter.php(941): App\Modules\SuperAdmin\Controllers\SuperAdminController->addUser()
+ 3 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Modules\SuperAdmin\Controllers\SuperAdminController))
+ 4 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-04-01 11:32:02 --> TypeError: explode(): Argument #2 ($string) must be of type string, array given
+in APPPATH\Modules\Superadmin\Controllers\SuperAdminController.php on line 162.
+ 1 APPPATH\Modules\Superadmin\Controllers\SuperAdminController.php(162): explode(',', [...])
+ 2 SYSTEMPATH\CodeIgniter.php(941): App\Modules\SuperAdmin\Controllers\SuperAdminController->addUser()
+ 3 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Modules\SuperAdmin\Controllers\SuperAdminController))
+ 4 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-04-01 11:33:03 --> BadMethodCallException: Call to undefined method App\Modules\SuperAdmin\Models\CreateUserModel::addDevice
+in SYSTEMPATH\Model.php on line 874.
+ 1 APPPATH\Modules\Superadmin\Controllers\SuperAdminController.php(176): CodeIgniter\Model->__call('addDevice', [...])
+ 2 SYSTEMPATH\CodeIgniter.php(941): App\Modules\SuperAdmin\Controllers\SuperAdminController->addUser()
+ 3 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Modules\SuperAdmin\Controllers\SuperAdminController))
+ 4 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-04-01 11:34:41 --> BadMethodCallException: Call to undefined method App\Modules\SuperAdmin\Models\CreateUserModel::addDevice
+in SYSTEMPATH\Model.php on line 874.
+ 1 APPPATH\Modules\Superadmin\Controllers\SuperAdminController.php(176): CodeIgniter\Model->__call('addDevice', [...])
+ 2 SYSTEMPATH\CodeIgniter.php(941): App\Modules\SuperAdmin\Controllers\SuperAdminController->addUser()
+ 3 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Modules\SuperAdmin\Controllers\SuperAdminController))
+ 4 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()

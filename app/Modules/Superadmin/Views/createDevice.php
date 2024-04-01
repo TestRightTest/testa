@@ -57,7 +57,7 @@
         <div class="sidebar-wrapper scrollbar scrollbar-inner">
             <div class="sidebar-content">
                 <ul class="nav nav-primary">
-                    <li class="nav-item active">
+                    <li class="nav-item ">
                         <a href="<?= base_url('superAdmin/dashboard') ?>" class="collapsed" aria-expanded="false">
                             <i class="fas fa-plus"></i>
                             <p>Create/Edit Client</p>
@@ -69,7 +69,7 @@
                             <p>Create/Edit User</p>
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item active">
                         <a href="<?= base_url('superAdmin/createdevice') ?>" class="collapsed" aria-expanded="false">
                             <i class="fas fa-plus"></i>
                             <p>Create/Edit Device</p>
@@ -104,10 +104,10 @@
 						<div class="card">
 							<div class="card-header">
 								<div class="d-flex align-items-center">
-									<h4 class="card-title">Add Client</h4>
+									<h4 class="card-title">Add Device</h4>
 									<button class="btn btn-primary btn-round ml-auto" data-toggle="modal" data-target="#addRowModal">
 										<i class="fa fa-plus"></i>
-										Add Client
+										Add Device
 									</button>
 								</div>
 							</div>
@@ -126,7 +126,15 @@
 																<input id="addName" type="text" class="form-control" placeholder="Enter name" >
 															</div>
 														</div>
-														<div class="col-md-6 pr-0">
+														<div class="col-sm-12">
+															<div class="form-group form-group-default">
+																<label for="addclientID">Select Client</label>
+																<select id="addclientID" class="form-control">
+																	<option value="" selected>Select a client</option>
+																</select>
+															</div>
+														</div>
+														<div class="col-md-6 ">
 															<div class="form-group form-group-default">
 																<label>Status</label>
 																<select id="addStatus" class="form-control">
@@ -135,10 +143,10 @@
 																</select>
 															</div>
 														</div>
-														<div class="col-md-6 pr-0">
+														<div class="col-md-6 ">
 															<div class="form-group form-group-default">
 																<label>MAC ID</label>
-																<input id="addMacId" type="text" class="form-control" placeholder="Enter name" >
+																<input id="addMacId" type="text" class="form-control" placeholder="Enter MAC ID" >
 															</div>
 														</div>
 													</div>
@@ -155,6 +163,7 @@
 									<table id="add-row" class="display table table-striped table-hover" >
 										<thead>
 											<tr>
+												<th>Client ID</th>
 												<th>Name</th>
 												<th>Status</th>
 												<th>MAC ID</th>
@@ -191,69 +200,177 @@
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/select/1.3.4/js/dataTables.select.min.js"></script>
 <script>
+	// $(document).ready(function() {
+	// 	var table = $('#add-row').DataTable({
+	// 		"pageLength": 10,
+	// 	});
+
+	// 	const $addclientID = $('#addclientID');
+
+	// 	// Function to fetch data and populate the table
+	// 	function populateTable() {
+	// 		$.ajax({
+	// 			url: '/mbscan/superAdmin/getDevices', // Adjust the URL according to your routing
+	// 			type: 'GET',
+	// 			success: function(response) {
+	// 				// Clear existing rows
+	// 				table.clear();
+
+	// 				// Add new rows from the response data
+	// 				response.forEach(function(device) {
+	// 					table.row.add([
+	// 						device.device_name,
+	// 						device.status,
+	// 						device.mac_id
+	// 					]).draw(false);
+	// 				});
+	// 			},
+	// 			error: function(xhr, status, error) {
+	// 				console.error(xhr.responseText);
+	// 			}
+	// 		});
+	// 	}
+
+	// 	// Call the populateTable function to initially populate the table
+	// 	populateTable();
+	// });
+
+	// function addDevice() {
+    // var name = $('#addName').val();
+    // var status = $('#addStatus').val();
+    // var macId = $('#addMacId').val();
+
+    // // AJAX call
+    // $.ajax({
+    //     type: 'POST',
+    //     url: '/mbscan/superAdmin/addDevice', // Adjust the URL according to your routing
+    //     data: {
+    //         name: name,
+    //         status: status,
+    //         mac_id: macId
+    //     },
+    //     success: function(response) {
+    //         if (response.status === 'success') {
+	// 			$('#addRowModal').modal('hide');
+    //             // alert(response.message);
+    //             // Optionally, reload the page or do something else
+    //         } else {
+    //             alert('Failed to add device. Please try again.');
+    //         }
+    //     },
+    //     error: function(xhr, status, error) {
+    //         console.error(xhr.responseText);
+    //         alert('Failed to add device. Please try again.');
+    //     }
+    // });
+
+	// 	// Populate the dropdown with client names
+	// 	$.ajax({
+	// 	url: '/mbscan/superAdmin/getClientId',
+	// 	type: "GET",
+	// 	dataType: "json",
+	// 	success: function(data) {
+	// 		// Iterate over client data
+	// 		$.each(data, function(index, value) {
+	// 			console.log("Client ID: ", data);
+	// 			// Append option elements to select element
+	// 			var $option = $('<option value="' + value.id + '">' + value.client_name + '</option>');
+	// 			$option.data('role_details', value.role_details); // Set role_details as data attribute
+	// 			$('#addclientID').append($option);
+	// 		});
+	// 	}
+	// });
+	// }
 	$(document).ready(function() {
-		var table = $('#add-row').DataTable({
-			"pageLength": 10,
-		});
+        var table = $('#add-row').DataTable({
+            "pageLength": 10,
+        });
+        const $addRowModal = $('#addRowModal');
+        const $addclientID = $('#addclientID');
+        const $addName = $('#addName');
+		const $addMacId = $('#addMacId');
+        $addRowModal.on('show.bs.modal', function (e) {
+            // Clear input fields and remove validation classes
+            [ $addclientID, $addName, $addMacId ].forEach(field => {
+                field.val('').removeClass('is-invalid');
+            });
 
-		// Function to fetch data and populate the table
-		function populateTable() {
-			$.ajax({
-				url: '/mbscan/superAdmin/getDevices', // Adjust the URL according to your routing
-				type: 'GET',
-				success: function(response) {
-					// Clear existing rows
-					table.clear();
+        });
+        // Function to fetch data and populate the table
+        function populateTable() {
+            $.ajax({
+                url: '/mbscan/superAdmin/getDevices',
+                type: 'GET',
+                success: function(response) {
+                    table.clear();
 
-					// Add new rows from the response data
-					response.forEach(function(device) {
-						table.row.add([
-							device.device_name,
-							device.status,
-							device.mac_id
-						]).draw(false);
-					});
-				},
-				error: function(xhr, status, error) {
-					console.error(xhr.responseText);
-				}
-			});
-		}
+                    response.forEach(function(device) {
+                        table.row.add([
+							device.client_id || '-',
+                            device.device_name || '-',
+                            device.status || '-',
+                            device.mac_id || '-'
+                        ]).draw(false);
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        }
+        populateTable();
 
-		// Call the populateTable function to initially populate the table
-		populateTable();
-	});
+        // Populate the dropdown with client names
+        function populateClientDropdown() {
+            $.ajax({
+                url: '/mbscan/superAdmin/getClientId',
+                type: "GET",
+                dataType: "json",
+                success: function(data) {
+                    $('#addclientID').empty();
+                    $.each(data, function(index, value) {
+                        var $option = $('<option value="' + value.id + '">' + value.client_name + '</option>');
+                        $option.data('role_details', value.role_details);
+                        $('#addclientID').append($option);
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                    alert('Failed to fetch client IDs. Please try again.');
+                }
+            });
+        }
+        populateClientDropdown();
+    });
 
-	function addDevice() {
-    var name = $('#addName').val();
-    var status = $('#addStatus').val();
-    var macId = $('#addMacId').val();
-
-    // AJAX call
-    $.ajax({
-        type: 'POST',
-        url: '/mbscan/superAdmin/addDevice', // Adjust the URL according to your routing
-        data: {
-            name: name,
-            status: status,
-            mac_id: macId
-        },
-        success: function(response) {
-            if (response.status === 'success') {
-				$('#addRowModal').modal('hide');
-                // alert(response.message);
-                // Optionally, reload the page or do something else
-            } else {
+    function addDevice() {
+        var name = $('#addName').val();
+        var status = $('#addStatus').val();
+        var macId = $('#addMacId').val();
+		var clientId = $('#addclientID').val();
+        // AJAX call
+        $.ajax({
+            type: 'POST',
+            url: '/mbscan/superAdmin/addDevice', 
+            data: {
+				client_id: clientId,
+                name: name,
+                status: status,
+                mac_id: macId
+            },
+            success: function(response) {
+                if (response.status === 'success') {
+                    $('#addRowModal').modal('hide');
+                } else {
+                    alert('Failed to add device. Please try again.');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText);
                 alert('Failed to add device. Please try again.');
             }
-        },
-        error: function(xhr, status, error) {
-            console.error(xhr.responseText);
-            alert('Failed to add device. Please try again.');
-        }
-    });
-	}
-
+        });
+    }
 </script>
 </body>
 </html>

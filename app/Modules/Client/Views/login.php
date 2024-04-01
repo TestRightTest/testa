@@ -1,15 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <script  src="https://www.gstatic.com/firebasejs/9.0.1/firebase-app-compat.js"></script>
-    <script  src="https://www.gstatic.com/firebasejs/9.0.1/firebase-auth-compat.js"></script>
-    <script  src="https://www.gstatic.com/firebasejs/ui/6.0.0/firebase-ui-auth.js"></script>
 	<link rel="icon" href="../assets/img/testright.svg" type="image/x-icon"/>
-
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <title>Login</title>
 </head>
 <body class="bg-gray-100 h-screen flex items-center justify-center">
@@ -34,6 +30,38 @@
             <img src="<?php echo base_url(); ?>assets/img/byTestRight.svg" alt="Company Logo" class="mx-auto mb-4" style="width: 120px;"> 
         </div>
     </div>
+
+    <script>
+        function login(){
+            var username = document.getElementById("username").value;
+            var password = document.getElementById("password").value;
+
+            var formData = {
+                username: username,
+                password: password
+            };
+            // AJAX request
+            $.ajax({
+                type: "POST",
+                url: "/mbscan/client/loginAuth",
+                data: JSON.stringify(formData),
+                contentType: "application/json",
+                dataType: "json",
+                success: function(response) {
+                    if (response.status === 'success') {
+                        // Redirect or do something upon successful login
+                        window.location.href = '/mbscan/client/dashboard';
+                        console.log(response.message);
+                    } else {
+                        document.getElementById("loginStatusLabel").innerHTML = response.message;
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        }
+    </script>
 </body>
 </html>
 

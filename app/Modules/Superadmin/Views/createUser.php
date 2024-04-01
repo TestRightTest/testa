@@ -23,6 +23,18 @@
 		.is-invalid {
 			border: 1px solid red !important;
 		}
+
+    /* Custom Select2 styling to remove the border around the main dropdown */
+    .select2-container--default .select2-selection--multiple {
+        width:200%;
+    }
+    .selected-devices {
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 	</style>
 
 	<!-- CSS Files -->
@@ -128,14 +140,21 @@
 													<p class="small">Create a new User</p>
 													<form>
 														<div class="row">
-															<div class="col-sm-12">
+															<div class="col-md-6">
 																<div class="form-group form-group-default">
                                                                     <label for="addclientID">Select Client</label>
-                                                                    <select id="addclientID" class="form-control">
+                                                                    <select id="addclientID" class="form-control" >
                                                                     </select>
 																</div>
 															</div>
-															<div class="col-md-6 pr-0">
+                                                            <div class="col-md-6">
+																<div class="form-group form-group-default">
+                                                                    <label for="addDeviceID">Select Device</label>
+                                                                    <select id="addDeviceID" class="selected-devices" multiple>
+                                                                    </select>
+																</div>
+															</div>
+															<div class="col-md-6">
 																<div class="form-group form-group-default">
 																	<label>Name</label>
 																	<input id="addName" type="text" class="form-control" placeholder="Enter Name">
@@ -158,6 +177,15 @@
 																	<label>Confirm Password</label>
 																	<input id="confirm_password" type="password" class="form-control" placeholder="Confirm Password">
 																	<div id="password_error" style="color: red;"></div>
+																</div>
+															</div>
+                                                            <div class="col-md-6">
+																<div class="form-group form-group-default">
+																	<label>Status</label>
+																	<select id="addStatus" class="form-control">
+																		<option value="Active">Active</option>
+																		<option value="InActive">InActive</option>
+																	</select>
 																</div>
 															</div>
                                                             <div class="col-sm-12">
@@ -213,10 +241,19 @@
                                                                     <input id="updateName" type="text" class="form-control" placeholder="Enter name" readonly>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-md-6 pr-0">
+                                                            <div class="col-md-6">
                                                                 <div class="form-group form-group-default">
                                                                     <label>Username</label>
-                                                                    <input id="updateUserName" type="text" class="form-control" placeholder="Enter Username" >
+                                                                    <input id="updateUserName" type="text" class="form-control" placeholder="Enter Username" readonly>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group form-group-default">
+                                                                    <label>Status</label>
+                                                                    <select id="updateStatus" class="form-control">
+                                                                        <option value="Active">Active</option>
+                                                                        <option value="InActive">InActive</option>
+                                                                    </select>
                                                                 </div>
                                                             </div>
                                                             <div class="col-sm-12">
@@ -224,22 +261,21 @@
                                                                     <label>Role</label>
                                                                     <div class="row">
                                                                         <div class="col-sm-3">
-                                                                            <input type="checkbox" data-role="create" value="create">
-                                                                            <label for="roleCreate">Create</label>
+                                                                            <input type="checkbox" id="updateCreateCheckbox" data-role="create" value="create">
+                                                                            <label for="roleCreate" id= "updateCheckboxLabel">Create</label>
                                                                         </div>
                                                                         <div class="col-sm-3">
-                                                                            <input type="checkbox" data-role="edit" value="edit">
-                                                                            <label for="roleEdit">Edit</label>
+                                                                            <input type="checkbox" id="updateRoleCheckbox" data-role="edit" value="edit">
+                                                                            <label for="roleEdit" id= "editRoleLabel">Edit</label>
                                                                         </div>
                                                                         <div class="col-sm-3">
-                                                                            <input type="checkbox" data-role="view" value="view">
-                                                                            <label for="roleView">View</label>
+                                                                            <input type="checkbox" id="updateViewCheckbox" data-role="view" value="view">
+                                                                            <label for="roleView" id="viewRoleLabel">View</label>
                                                                         </div>
                                                                         <div class="col-sm-3">
-                                                                            <input type="checkbox" data-role="delete" value="delete">
-                                                                            <label for="roleDelete">Delete</label>
+                                                                            <input type="checkbox" id="updateDeleteRole" data-role="delete" value="delete">
+                                                                            <label for="roleDelete" id="deleteRoleLabel">Delete</label>
                                                                         </div>
-
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -261,6 +297,7 @@
 													<th>Name</th>
 													<th>Username</th>
 													<th>Role</th>
+                                                    <th>Status</th>
 													<th style="width: 10%">Action</th>
 												</tr>
 											</thead>
@@ -291,12 +328,18 @@
 	<script src="<?php echo base_url(); ?>assets/js/atlantis.min.js"></script>
 	<!-- Atlantis DEMO methods, don't include it in your project! -->
 	<script src="<?php echo base_url(); ?>assets/js/setting-demo2.js"></script>
-	
+    <!-- Select2 CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
+    <!-- Select2 JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
 	<script>
         $(document).ready(function () {
         const table = $('#add-row').DataTable({
             pageLength: 10
         });
+        $('#addDeviceID').select2();
 
         const $addUserButton = $('#addUserButton');
         const $addRowModal = $('#addRowModal');
@@ -306,24 +349,26 @@
         const $addclientID = $('#addclientID');
         const $addName = $('#addName');
         const $addUsername = $('#addUsername');
+        const $addDeviceID = $('#addDeviceID');
 
         function initTooltips() {
             $('[data-toggle="tooltip"]').tooltip();
         }
-
-
+        
         $(document).on('click', '.edit-btn', function () {
             const $row = $(this).closest('tr');
-            var clientId = $row.find('td:eq(0)').text(); // Retrieve client ID from data attribute
+            var clientId = $row.find('td:eq(0)').text();
             var name = $row.find('td:eq(1)').text();
             var userName = $row.find('td:eq(2)').text();
-            var rolesData = $row.data('roles');
-            var roles = rolesData ? rolesData.split(', ') : [];
-
-            $('#updateClient').val(clientId); // Populate client ID
-            $('#updateName').val(name); // Populate name
-            $('#updateUserName').val(userName); // Populate username
-
+            var roles = $row.find('td:eq(3)').text().split(', '); 
+            var status = $row.find('td:eq(4)').text();
+			var userId = $row.data('user-id'); 
+			console.log("User ID:", userId); 
+            $('#updateClient').val(clientId);
+            $('#updateName').val(name);
+            $('#updateUserName').val(userName);
+			$('#updateStatus').val(status);
+            updateUserId = userId;
             // Uncheck all checkboxes first
             $('input[type="checkbox"]').prop('checked', false);
 
@@ -332,14 +377,32 @@
                 $('input[type="checkbox"][data-role="' + role + '"]').prop('checked', true);
             });
 
+            $('#updateCreateCheckbox, #updateCheckboxLabel, #updateRoleCheckbox, #editRoleLabel, #updateViewCheckbox, #viewRoleLabel, #updateDeleteRole, #deleteRoleLabel').hide();
+
+            var clientRoleDetails = $('#addclientID option[value="' + clientId + '"]').data('role_details');
+
+            if (clientRoleDetails) {
+                clientRoleDetails = JSON.parse(clientRoleDetails);
+                if (clientRoleDetails.can_create) {
+                    $('#updateCreateCheckbox, #updateCheckboxLabel').show();
+                }
+                if (clientRoleDetails.can_update) {
+                    $('#updateRoleCheckbox, #editRoleLabel').show();
+                }
+                if (clientRoleDetails.can_view) {
+                    $('#updateViewCheckbox, #viewRoleLabel').show();
+                }
+                if (clientRoleDetails.can_delete) {
+                    $('#updateDeleteRole, #deleteRoleLabel').show();
+                }
+            }
             $('#updateTable').modal('show');
+
         });
-
-
-
+        
         $addRowModal.on('show.bs.modal', function (e) {
             // Clear input fields and remove validation classes
-            [ $addclientID, $addName, $addUsername, $password, $confirmPassword ].forEach(field => {
+            [ $addclientID, $addName, $addUsername, $password, $confirmPassword,$addDeviceID ].forEach(field => {
                 field.val('').removeClass('is-invalid');
             });
 
@@ -352,6 +415,11 @@
             $('#updateCheckbox').prop('checked', false);
             $('#viewCheckbox').prop('checked', false);
             $('#deleteCheckbox').prop('checked', false);
+                // Reset Select2 dropdown
+            $('#addDeviceID').empty().select2({
+                placeholder: "Select a device",
+                allowClear: true // Option to allow clearing selection
+            });
         });
 
 
@@ -364,48 +432,96 @@
                 $confirmPassword.removeClass('is-invalid');
             }
         });
+
+        
         $.ajax({
             type: 'GET',
             url: '/mbscan/superAdmin/getUsers',
             success: function (response) {
-                table.clear().draw();
-                response.forEach(user => {
-                    const rowData = [
-                        user.client_id || '-',
-                        user.name || '-',
-                        user.user_name || '-',
-                        user.role_details || '-', // Include role details here
-                        `<div class="form-button-action">
-                            <button type="button" data-toggle="tooltip" class="btn btn-link btn-primary btn-lg edit-btn">
-                                <i class="fa fa-edit"></i>
-                            </button>
-                        </div>`
-                    ];
-                    initTooltips();
-                    table.row.add(rowData).draw(false);
+            table.clear().draw();
+            response.forEach(user => {
+                var roles = '';
+                if (user.role_details) {
+                    var roleDetails = JSON.parse(user.role_details);
+                    if (roleDetails.can_create) roles += 'create, ';
+                    if (roleDetails.can_edit) roles += 'edit, ';
+                    if (roleDetails.can_delete) roles += 'delete, ';
+                    if (roleDetails.can_view) roles += 'view, ';
+                }
+                roles = roles.replace(/,\s*$/, '');
+                const rowData = [
+                    user.client_id || '-',
+                    user.name || '-',
+                    user.user_name || '-',
+                    roles || '-', // Include role details here
+                    user.status || '-',
+                    `<div class="form-button-action">
+                        <button type="button" data-toggle="tooltip" class="btn btn-link btn-primary btn-lg edit-btn">
+                            <i class="fa fa-edit"></i>
+                        </button>
+                    </div>`
+                ];
+                console.log('User ID:', user.id); // Log user_id to console
+                initTooltips();
+                var row =  table.row.add(rowData).draw(false).node();
+                $(row).data('roles', roles);
+                $(row).data('user-id', user.id); 
+
+                // Create invisible row containing client_id only
+                var invisibleRow = '<tr class="invisible-row" data-user-id="' + user.id + '"></tr>';
+                $(row).after(invisibleRow);
                 });
-            },
+        },
+
             error: function (xhr, status, error) {
                 console.error(xhr.responseText);
             }
         });
 
         });
-        // Populate the dropdown with client names
-        $.ajax({
-            url: '/mbscan/superAdmin/getClientId',
-            type: "GET",
-            dataType: "json",
-            success: function(data) {
-                // Iterate over client data
-                $.each(data, function(index, value) {
-                    // Append option elements to select element
-                    var $option = $('<option value="' + value.id + '">' + value.client_name + '</option>');
-                    $option.data('role_details', value.role_details); // Set role_details as data attribute
-                    $('#addclientID').append($option);
+            // Populate the dropdown with client names
+            $.ajax({
+                url: '/mbscan/superAdmin/getClientId',
+                type: "GET",
+                dataType: "json",
+                success: function(data) {
+                    // Iterate over client data
+                    $.each(data, function(index, value) {
+                        // Append option elements to select element
+                        var $option = $('<option value="' + value.id + '">' + value.client_name + '</option>');
+                        $option.data('role_details', value.role_details); // Set role_details as data attribute
+                        $('#addclientID').append($option);
+                    });
+                }
+            });
+
+            // Event listener for dropdown change
+            $('#addclientID').on('change', function() {
+                var selectedClientId = $(this).val();
+
+                // AJAX request to fetch device data based on selected client ID
+                $.ajax({
+                    url: '/mbscan/superAdmin/getDevicesByClientId',
+                    type: "GET",
+                    dataType: "json",
+                    data: {
+                        clientId: selectedClientId
+                    },
+                    success: function(devices) {
+                    $('#addDeviceID').empty();
+                    $('#addDeviceID').append('<option value="">All Devices</option>');
+                    devices.forEach(function(device) {
+                        var $option = $('<option value="' + device.id + '">' + device.device_name + '</option>');
+                        $('#addDeviceID').append($option);
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
                 });
-            }
-        });
+            });
+
+
 
         // Initially hide all checkboxes and their associated labels
         $('#createCheckbox, #createLabel, #updateCheckbox, #updateLabel, #viewCheckbox, #viewLabel, #deleteCheckbox, #deleteLabel').hide();
@@ -435,19 +551,21 @@
                 }
             }
         });
-
         function addUser() {
             var clientID = $('#addclientID').val();
             var name = $('#addName').val();
             var username = $('#addUsername').val();
             var password = $('#password').val();
             var confirmPassword = $('#confirm_password').val();
+            var status = $('#addStatus').val();
             var createCheckbox = $('#createCheckbox').prop('checked');
             var updateCheckbox = $('#updateCheckbox').prop('checked');
             var viewCheckbox = $('#viewCheckbox').prop('checked');
             var deleteCheckbox = $('#deleteCheckbox').prop('checked');
+            var device_id = $('#addDeviceID').val();
+            console.log("selected device ids: ",device_id);
             // Perform client-side validation
-            if (!clientID || !name || !username || !password || !confirmPassword) {
+            if (!clientID || !name || !username || !password || !confirmPassword || !status) {
                 alert("Please fill out all required fields.");
                 return;
             }
@@ -469,8 +587,9 @@
                     update: updateCheckbox,
                     view: viewCheckbox,
                     delete: deleteCheckbox,
+                    device_id: device_id,
                     role_name: '',
-                    status:'',
+                    status: status,
                 },
                 success: function(response) {
                     console.log(response);
@@ -481,8 +600,50 @@
             });
         }
 
+        var updateUserId;
         function updateUserDetails(){
             $('#updateTable').modal('hide');
+            // Get the updated status and role details
+
+            var status = $('#updateStatus').val();
+            var clientId = $('#updateClient').val();
+            var username = $('#updateUserName').val();
+            // Get boolean values for role details
+            var roles = {
+                can_create: $('#updateRole input[data-role="create"]').prop('checked'),
+                can_edit: $('#updateRole input[data-role="edit"]').prop('checked'),
+                can_delete: $('#updateRole input[data-role="delete"]').prop('checked'),
+                can_view: $('#updateRole input[data-role="view"]').prop('checked')
+            };
+
+            console.log("status", status);
+            console.log("roles",roles);
+            // Convert boolean values to strings
+            for (var key in roles) {
+                if (roles.hasOwnProperty(key)) {
+                    roles[key] = roles[key] ? 'true' : 'false';
+                }
+            }
+            var data = {
+                // clientId: clientId,
+                userId: updateUserId,
+                status: status,
+                roleDetails: roles,
+                user_name: username 
+            };
+            console.log("data",data);
+
+            $.ajax({
+                type: 'POST',
+                url: '/mbscan/superAdmin/updateUser',
+                data: data,
+                success: function (response) {
+                    $('#updateTable').modal('hide');
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error updating client details:', error);
+                }
+            });
         }
         function logout(){
                 $.ajax({

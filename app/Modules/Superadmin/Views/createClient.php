@@ -127,7 +127,7 @@
 																	<input id="addName" type="text" class="form-control" placeholder="Enter name" >
 																</div>
 															</div>
-															<div class="col-md-6 pr-0">
+															<div class="col-md-6">
 																<div class="form-group form-group-default">
 																	<label>Status</label>
 																	<select id="addStatus" class="form-control">
@@ -183,7 +183,7 @@
 																<input id="updateName" type="text" class="form-control" placeholder="Enter name" readonly>
 															</div>
 														</div>
-														<div class="col-md-6 pr-0">
+														<div class="col-md-6">
 															<div class="form-group form-group-default">
 																<label>Status</label>
 																<select id="updateStatus" class="form-control">
@@ -281,14 +281,14 @@
 		function initTooltips() {
 			$('[data-toggle="tooltip"]').tooltip();
 		}
-		// Event listener for edit button
+
 		$(document).on('click', '.edit-btn', function () {
 			var $row = $(this).closest('tr');
 			var name = $row.find('td:eq(0)').text(); 
 			var status = $row.find('td:eq(1)').text();
 			var rolesData = $row.data('roles');
-			var clientId = $row.data('client-id'); // Retrieve client ID from data attribute
-			console.log("Client ID:", clientId); // Log client ID
+			var clientId = $row.data('client-id'); 
+			console.log("Client ID:", clientId); 
 			var roles = rolesData ? rolesData.split(', ') : []; 
 			$('#updateName').val(name); 
 			$('#updateStatus').val(status);
@@ -329,17 +329,12 @@
 			];
 
 			var row = table.row.add(rowData).draw(false).node();
-
-			// Set data-roles and data-client-id attributes in the row
-			$(row).data('roles', roles); // Set the roles data attribute in the table row
-			$(row).data('client-id', client.id); // Set the client ID data attribute in the table row
+			$(row).data('roles', roles);
+			$(row).data('client-id', client.id); 
 
 			// Create invisible row containing client_id only
 			var invisibleRow = '<tr class="invisible-row" data-client-id="' + client.id + '"></tr>';
 			$(row).after(invisibleRow);
-
-			// Log client ID
-			console.log("Client ID:", client.id);
 
 			});
 
@@ -351,12 +346,10 @@
 
 		// Event listener for add admin button
 		$('#addAdminButton').click(function () {
-			// console.log("Add admin button clicked.");
 			var addName = $('#addName');
 			var addStatus = $('#addStatus');
 			var roles = $('#roleCreate, #roleEdit, #roleView, #roleDelete');
 			if (addName.val().trim() === '' || addStatus.val().trim() === '' || !roles.is(':checked')) {
-				// console.log("Validation failed. Required fields are empty or checkboxes are not checked.");
 				addName.addClass('is-invalid');
 				addStatus.addClass('is-invalid');
 				roles.addClass('is-invalid');
@@ -405,11 +398,9 @@
 				alert("Client name already exists. Please choose a different name.");
 				return;
             }
-			// console.log("Client added with name: " + response);
 			var responseParts = response.split('|');
 			var clientId = responseParts[0];
 			var clientName = responseParts[1];
-			// console.log("Client ID: " + clientId);
 			$.ajax({
 				type: 'POST',
 				url: '/mbscan/superAdmin/createSchemaAndTables',
@@ -431,16 +422,16 @@
 	}
 		var updateClientId;
 		
-		function updateClientDetails() {
+	function updateClientDetails() {
 		// Get the updated status and role details
 		var status = $('#updateStatus').val();
 		
 		// Get boolean values for role details
 		var roles = {
-			can_create: $('#roleCreate').prop('checked'),
-			can_update: $('#roleEdit').prop('checked'),
-			can_delete: $('#roleDelete').prop('checked'),
-			can_view: $('#roleView').prop('checked')
+			can_create: $('#updateRole input[data-role="create"]').prop('checked'),
+			can_update: $('#updateRole input[data-role="edit"]').prop('checked'),
+			can_delete: $('#updateRole input[data-role="delete"]').prop('checked'),
+			can_view: $('#updateRole input[data-role="view"]').prop('checked')
 		};
 
 		// Convert boolean values to strings
@@ -449,36 +440,21 @@
 				roles[key] = roles[key] ? 'true' : 'false';
 			}
 		}
-
-		// Construct data to be sent in the AJAX call
 		var data = {
 			clientId: updateClientId,
 			status: status,
-			roleDetails: roles // Send roles data as an object with string values
+			roleDetails: roles 
 		};
 
-		// Log data before making the AJAX call
-		console.log('Data before ajax call :', data);
-
-		// Make AJAX call to update client details
 		$.ajax({
 			type: 'POST',
 			url: '/mbscan/superAdmin/updateClient',
 			data: data,
 			success: function (response) {
-				// Log the updated data to the console
-				console.log('Client details updated successfully:', response.updatedData);
-
-				// Optionally, you can also log the client ID and any other relevant information
-				console.log('Client ID from response :', response.clientId);
-				console.log('Success message:', response.message);
 				$('#updateTable').modal('hide');
-				// Optionally, you can perform additional actions here based on the response
 			},
 			error: function (xhr, status, error) {
-				// Handle error response
 				console.error('Error updating client details:', error);
-				// Optionally, you can display an error message or perform other actions here
 			}
 		});
 	}
@@ -488,7 +464,6 @@
 	type: "GET",
 	url: "/mbscan/superAdmin/logout",
 	success: function(response) {
-		// Redirect to login page after successful logout
 		window.location.href = '/mbscan/superAdmin/login';
 	},
 	error: function(xhr, status, error) {

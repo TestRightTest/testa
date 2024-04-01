@@ -4,12 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <script  src="https://www.gstatic.com/firebasejs/9.0.1/firebase-app-compat.js"></script>
-    <script  src="https://www.gstatic.com/firebasejs/9.0.1/firebase-auth-compat.js"></script>
-    <script  src="https://www.gstatic.com/firebasejs/ui/6.0.0/firebase-ui-auth.js"></script>
 	<link rel="icon" href="../assets/img/testright.svg" type="image/x-icon"/>
-
-    <script src="https://www.gstatic.com/firebasejs/9.0.1/firebase-database-compat.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
 

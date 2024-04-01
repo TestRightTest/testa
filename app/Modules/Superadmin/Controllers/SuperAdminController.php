@@ -107,6 +107,8 @@ class SuperAdminController extends BaseController
         $name = $this->request->getPost('name');
         $username = $this->request->getPost('username');
         $password = $this->request->getPost('password');
+        $status = $this->request->getPost('status');
+        $device_id = $this->request->getPost('device_id');
         // Convert checkbox values to boolean
         $create = $this->request->getPost('create') === 'true' ? true : false;
         $update = $this->request->getPost('update') === 'true' ? true : false;
@@ -126,7 +128,7 @@ class SuperAdminController extends BaseController
             'name' => $name,
             'user_name' => $username,
             'password' => md5($password),
-            'status' => 1,
+            'status' => $status,
             'client_id' => $clientID,
             'c_admin_id' => $currentUserId,
             'c_user_id' => 1
@@ -153,6 +155,32 @@ class SuperAdminController extends BaseController
             return "Error adding user";
         }
     
+        // Retrieve user_id for the inserted user
+        $userId = $insertResult;
+
+        // Convert device_id to string if it's an array
+        if (is_array($device_id)) {
+            $device_id = implode(',', $device_id);
+        }
+
+        // Split device_id string into an array
+        $deviceIds = explode(',', $device_id);
+
+        foreach ($deviceIds as $deviceId) {
+            $deviceData = [
+                'device_id' => $deviceId,
+                'user_id' => $userId
+            ];
+
+            // Insert device data into the database
+            $insertDeviceResult = $createUserModel->db->table('master.device_details')->insert($deviceData);
+
+            if ($insertDeviceResult === false) {
+                log_message('error', 'Error inserting device data into the database');
+            }
+        }
+
+
         // Insert role-related data into the role_list table
         $roleInsertResult = $createUserModel->addRole($roleData);
     
@@ -167,7 +195,7 @@ class SuperAdminController extends BaseController
             'role_id' => $roleInsertResult,
             'role_details' => json_encode($roleData),
             'user_id' => $insertResult,
-            'status' => 1,
+            'status' => $status,
             'updated_on' => date('Y-m-d')
         ];
     
@@ -181,8 +209,7 @@ class SuperAdminController extends BaseController
         return "User added successfully";
     }
     
-    public function getUsers()
-    {
+    public function getUsers(){
         if (!session()->get('isLoggedIn')) {
             return redirect()->to(base_url('superAdmin/login'));
         }
@@ -253,8 +280,9 @@ class SuperAdminController extends BaseController
         $roleData['client_id'] = $clientId;
     
         // Insert role-related data into the role_list table
-        $roleInsertResult = $this->createClientModel->addRole($roleData);
-    
+        // $roleInsertResult = $this->createClientModel->addRole($roleData);
+        $roleInsertResult = $this->createClientModel->addRole($insertResult, $roleData);
+
         if ($roleInsertResult === false) {
             log_message('error', 'Error inserting role data into the database');
         }
@@ -359,6 +387,40 @@ class SuperAdminController extends BaseController
         }
     }
 
+    public function updateUser(){
+        $clientId = $this->request->getPost('clientId');
+        $userId = $this->request->getPost('userId');
+
+        $status = $this->request->getPost('status');
+        $roleDetails = $this->request->getPost('roleDetails'); // Get the role details as an array
+        $user_name = $this-> request->getPost('user_name');
+        // Convert role details values to boolean
+        $roleDetails = array_map(function ($value) {
+            return filter_var($value, FILTER_VALIDATE_BOOLEAN);
+        }, $roleDetails);
+    
+        // Construct data array
+        $data = [
+            'status' => $status,
+            'role_details' => json_encode($roleDetails) // Convert array to JSON string
+        ];
+    
+        $result = $this->createUserModel->updateUserRole($userId, $data);
+    
+        if ($result) {
+            // Construct the response object with information about the update
+            $response = [
+                'success' => true,
+                'message' => 'User details updated successfully',
+                'userId' => $userId,
+                'updatedData' => $data // Include the updated data in the response
+            ];
+            return $this->response->setJSON($response);
+        } else {
+            return $this->response->setJSON(['success' => false, 'error' => 'Failed to update client details']);
+        }
+    }
+
     public function addDevice() {
         // Check if it's an AJAX request
         if ($this->request->isAJAX()) {
@@ -366,13 +428,14 @@ class SuperAdminController extends BaseController
             $name = $this->request->getPost('name');
             $status = $this->request->getPost('status');
             $macId = $this->request->getPost('mac_id');
-
+            $clientId = $this->request ->getpost('client_id');
             // Prepare data array
             $data = [
                 'log_time' => date('Y-m-d H:i:s'),
                 'device_name' => $name,
                 'mac_id' => $macId,
-                'status' => $status
+                'status' => $status,
+                'client_id' => $clientId
             ];
 
             // Insert data into the database
@@ -389,7 +452,6 @@ class SuperAdminController extends BaseController
         }
     }
 
-    // Method to get devices
     public function getDevices() {
         // Fetch devices from the database
         $devices = $this->createDeviceModel->findAll();
@@ -404,5 +466,19 @@ class SuperAdminController extends BaseController
     
         return $this->response->setJSON($clients);
     }
-    
+
+    public function getDevicesByClientId()
+    {
+        $clientId = $this->request->getGet('clientId'); // Get the client ID from the request
+        
+        // Instantiate the CreateClientModel
+        $createClientModel = new CreateClientModel();
+        
+        // Call the getDevicesByClientId method to fetch devices based on the client ID
+        $devices = $createClientModel->getDevicesByClientId($clientId);
+        
+        // Return devices as JSON response
+        return $this->response->setJSON($devices);
+    }
+
 }

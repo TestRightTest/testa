@@ -38,7 +38,26 @@ class CreateUserModel extends Model
             ->get()
             ->getResult();
     }
+
+    public function updateUserRole($userId, $data)
+    {
+        try {
+            $this->db->table('master.user_role')
+                ->where('user_id', $userId)
+                ->update($data);
     
+            // Update status in client_details table
+            $this->db->table('master.user_login')
+                ->where('id', $userId)
+                ->update(['status' => $data['status']]);
     
+            // Log the success message
+            log_message('debug', 'Client data updated successfully.');
+            return true;
+        } catch (\Exception $e) {
+            log_message('error', $e->getMessage()); // Log any errors
+            return false;
+        }
+    }
 
 }
