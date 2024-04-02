@@ -20,6 +20,7 @@ $routes->group("superAdmin", ["namespace" => "App\Modules\SuperAdmin\Controllers
     $routes->post("createSchemaAndTables", "SuperAdminController::createSchemaAndTables");
     $routes->post("addDevice", "SuperAdminController::addDevice");
     $routes->post("updateUser", "SuperAdminController::updateUser");
+    $routes->post("updateClient", "SuperAdminController::updateClient");
 
 });
 ?>

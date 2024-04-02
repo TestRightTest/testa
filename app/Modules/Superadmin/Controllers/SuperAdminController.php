@@ -74,7 +74,6 @@ class SuperAdminController extends BaseController
         $builder->where('username', $username);
         $builder->where('password', $password);
         $query = $builder->get();
-
         if ($row = $query->getRow()) {
             // Start session and set isLoggedIn to true
             session()->set('isLoggedIn', true);
@@ -312,36 +311,25 @@ class SuperAdminController extends BaseController
                         ->where('schema_name', $schemaName)
                         ->get();
         $result = $schemaQuery->getResult();
-
         if (empty($result)) {
             // Create the schema
             $db->query("CREATE SCHEMA {$schemaName}");
         }
 
-        // Create tables within the schema
-        $db->query("
-            CREATE TABLE IF NOT EXISTS {$schemaName}.device (
-                id SERIAL PRIMARY KEY,
-                log_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                device_name VARCHAR(255),
-                status VARCHAR(50)
-            )
-        ");
-
         $db->query("
             CREATE TABLE IF NOT EXISTS {$schemaName}.device_log (
                 id SERIAL PRIMARY KEY,
-                log_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                device_id INT,
                 channel_id INT,
+                test_count_id INT,
+                sample_name VARCHAR(255), 
                 progress_value FLOAT,
                 start_time TIMESTAMP,
                 end_time TIMESTAMP,
-                first_reading FLOAT,
-                sample_name VARCHAR(255),
+                log_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,                
                 data_extra JSONB
             )
         ");
-
         $db->query("
             CREATE TABLE IF NOT EXISTS {$schemaName}.device_parameter (
                 id SERIAL PRIMARY KEY,

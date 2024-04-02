@@ -12,6 +12,7 @@ in APPPATH\Modules\Superadmin\Controllers\SuperAdminController.php on line 174.
  3 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Modules\SuperAdmin\Controllers\SuperAdminController))
  4 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
  5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+<<<<<<< HEAD
 CRITICAL - 2024-03-27 15:45:22 --> ErrorException: Attempt to read property "username" on null
 in APPPATH/Modules/SuperAdmin/Controllers/SuperAdminController.php on line 58.
  1 APPPATH/Modules/SuperAdmin/Controllers/SuperAdminController.php(58): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Attempt to read property "username" on null', '/Applications/XAMPP/xamppfiles/htdocs/mbscan/app/Modules/SuperAdmin/Controllers/SuperAdminController.php', 58)
@@ -40,3 +41,5 @@ in APPPATH/Modules/SuperAdmin/Controllers/SuperAdminController.php on line 61.
  3 SYSTEMPATH/CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Modules\SuperAdmin\Controllers\SuperAdminController))
  4 SYSTEMPATH/CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
  5 FCPATH/index.php(79): CodeIgniter\CodeIgniter->run()
+=======
+>>>>>>> fc42a3c38ebf92068a36a9a969d3947cf8000455

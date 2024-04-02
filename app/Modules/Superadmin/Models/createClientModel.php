@@ -53,7 +53,6 @@ class CreateClientModel extends Model
 
         return $this->db->table('master.client_role')->insert($clientRoleData);
     }
-
     public function getClientsWithRoles()
     {
         return $this->select('master.client_details.*, client_role.role_details')

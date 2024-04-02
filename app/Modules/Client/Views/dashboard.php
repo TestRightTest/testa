@@ -36,57 +36,6 @@
 	});
 	
 	</script>
-	<style>
-		.logo-header .navbar-brand {
-            max-height: 30px; /* Adjust the max height as needed */
-        }
-
-        .logo-header .navbar-brand img {
-            max-width: 100%;
-            height: auto;
-        }
-
-        /* Optional: Adjust the size of the toggle button icons */
-        .navbar-toggler-icon,
-        .btn-toggle i {
-            font-size: 20px; /* Adjust the font size as needed */
-        }
-
-		.start-time-column {
-			display: none;
-		}
-
-		/* Show the Start Time column when the 'admin' class is present */
-		.admin .start-time-column {
-			display: table-cell;
-		}
-
-		#loadingScreen {
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		background: rgba(128, 128, 128, 0.8);
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		z-index: 9999;
-		color: white; /* Text color */
-	}
-
-
-    #loadingIcon {
-        font-size: 3em; /* Adjust the size of the spinner */
-        animation: spin 1s linear infinite; /* Rotation animation */
-    }
-
-    @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-    }
-
-	</style>
 
 	<!-- CSS Files -->
 	<link rel="stylesheet" href="<?php echo base_url('assets/css/bootstrap.min.css'); ?>">
@@ -148,8 +97,8 @@
 								<a data-toggle="collapse" href="#collapseExample" aria-expanded="true">
 									<span>
 										<span id="companyName" style="font-weight: bold; font-size: larger;">Company Name</span>
-										<span id="AccType" style=" font-size: small">Account Type</span>
-										<span id="companyId" style=" font-size: small">Company ID</span>
+										<!-- <span id="AccType" style=" font-size: small">Account Type</span> -->
+										<!-- <span id="companyId" style=" font-size: small">Company ID</span> -->
 									</span>
 								</a>
 								<div class="clearfix"></div>
@@ -196,7 +145,7 @@
 				<div class="page-inner">
 
 					<div class="page-header">
-						<div><h1><span id="deviceId">Device ID: </span></h1></div>
+						<!-- <div><h1><span id="deviceId">Device ID: </span></h1></div> -->
 					
 						<div class="btn-group" id="companyIdDropdownContainer" style="display: none;">
 							<button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -212,38 +161,25 @@
 						<div class="col-md-12">
 							<div class="card">
 								<div class="card-header d-flex justify-content-between">
-									<div class="dropdown" id="AllDevices" style="display: none;">
-										<button class="btn  dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background-color: #3f8cda; color: white;">
+									<div class="dropdown" id="AllDevices">
+										<button class="btn  dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background-color: #3f8cda; color: white; width: 130px;">
 											<!-- All Devices -->
 										</button>
 										<div class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="deviceDropdown">
 											<!-- Device IDs will be dynamically added here -->
 										</div>
 									</div>
-									<!-- Add this HTML structure to your page where you want to display the toast -->
 
-									<!-- Place this div with ml-auto to push the buttons to the right -->
 									<div class="ml-auto">
-										<!-- user download button -->
-										<div class="btn-group" id="userDownload" style="display: none;">
-											<button onclick="exportSelected()" type="button" class="btn" style="background-color: #2dbd85; color: #ffffff;">Download</button>
-											<button id="downloadAllDropdownItem" type="button" class="btn dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background-color: #2dbd85; color: #ffffff;">
-												<span class="sr-only">Toggle Dropdown</span>
-											</button>
-											<div class="dropdown-menu">
-												<a class="dropdown-item" onclick="downloadAll()" style="color: #2dbd85;">Download All</a>
-											</div>
-										</div>
-						
 										<!-- admin download button -->
-										<div class="btn-group" id="adminDownload" style="display: none; ">
-											<button onclick="downloadAdminSelectedData()" type="button" class="btn" style="background-color: #2dbd85; color: #ffffff;">Download</button>
-											<button id="downloadAllDropdownItem" type="button" class="btn dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background-color: #2dbd85; color: #ffffff;">
+										<div class="btn-group" id="Download">
+											<button onclick="DownloadData()" type="button" class="btn" style="background-color: #2dbd85; color: #ffffff;">Download</button>
+											<!-- <button id="downloadAllDropdownItem" type="button" class="btn dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background-color: #2dbd85; color: #ffffff;">
 												<span class="sr-only">Toggle Dropdown</span>
 											</button>
 											<div class="dropdown-menu">
-												<a class="dropdown-item" onclick="downloadAdminAllData()" >Download All</a>
-											</div>
+												<a class="dropdown-item" onclick="downloadAllData()" >Download All</a>
+											</div> -->
 										</div>
 
 										<!-- <div id="toastContainer" class="position-fixed top-0 end-0 p-3" style="z-index: 11">
@@ -256,8 +192,7 @@
 										<table id="basic-datatables" class="display table table-striped table-hover" >
 											<thead>
 												<tr>
-                                                    <th ><input type="checkbox" onclick="toggleAll(this)"></th>
-													<th scope="col">Company ID</th>
+                                                    <!-- <th ><input type="checkbox" onclick="toggleAll(this)"></th> -->
 													<th scope="col">Device ID</th>
 													<th scope="col">Sample Name</th>
                                                     <th scope="col">Date</th>
@@ -265,9 +200,10 @@
                                                     <th scope="col">Start Time</th>
                                                     <th scope="col">End Time</th>
 													<th scope="col">Channel ID</th>
-													<th scope="col">End Progress</th>
-													<th scope="col">Device Readings</th>
-													
+													<!-- <th scope="col">End Progress</th> -->
+													<th scope="col">Test Count</th>
+
+													<!-- <th scope="col">Device Readings</th> -->
 												</tr>
 											</thead>                                  
                                             <tbody id="tableBody"></tbody>
@@ -299,51 +235,213 @@
 	<script src="<?php echo base_url(); ?>assets/js/setting-demo2.js"></script>
 	<script >
 		$(document).ready(function() {
-			$('#basic-datatables').DataTable({
-			});
+			var response; 
 
-			$('#multi-filter-select').DataTable( {
-				"pageLength": 5,
-				initComplete: function () {
-					this.api().columns().every( function () {
-						var column = this;
-						var select = $('<select class="form-control"><option value=""></option></select>')
-						.appendTo( $(column.footer()).empty() )
-						.on( 'change', function () {
-							var val = $.fn.dataTable.util.escapeRegex(
-								$(this).val()
-								);
+			function formatDate(date) {
+				var year = date.getFullYear();
+				var month = ('0' + (date.getMonth() + 1)).slice(-2);
+				var day = ('0' + date.getDate()).slice(-2);
 
-							column
-							.search( val ? '^'+val+'$' : '', true, false )
-							.draw();
-						} );
+				return year + '-' + month + '-' + day;
+			}
 
-						column.data().unique().sort().each( function ( d, j ) {
-							select.append( '<option value="'+d+'">'+d+'</option>' )
-						} );
-					} );
+			function calculateDecolorizedTime(startTime, endTime) {
+				var startDate = new Date(startTime);
+				var endDate = new Date(endTime);
+				var timeDiff = endDate - startDate;
+				var decolorizedTime = Math.round(timeDiff / (1000 * 60));
+
+				return decolorizedTime + ' minutes';
+			}
+
+			function populateDataTable(data) {
+
+				var table = $('#basic-datatables').DataTable();
+				if (table) {
+					// If DataTable instance exists, destroy it
+					table.destroy();
+				}
+				$('#basic-datatables').DataTable({
+					data: data,
+					columns: [
+						// {
+						// 	// Adding a checkbox in the first column
+						// 	data: null,
+						// 	render: function(data, type, row, meta) {
+						// 		return '<input type="checkbox" class="checkbox">';
+						// 	}
+						// },
+						{ data: 'device_id' },
+						{ data: 'sample_name' },
+						{
+							data: 'start_time',
+							render: function(data, type, row, meta) {
+								var startDate = new Date(data);
+								return formatDate(startDate);
+							}
+						},
+						{
+							data: 'end_time',
+							render: function(data, type, row, meta) {
+								var endDate = new Date(data);
+								var startDate = new Date(row.start_time);
+								return calculateDecolorizedTime(startDate, endDate);
+							}
+						},
+						{ data: 'start_time' },
+						{ data: 'end_time' },
+						{ data: 'channel_id' },
+						{ data: 'test_count_id' }
+					],
+					order: [[2, 'desc'], [4, 'desc']] // Sort by start_time (3rd column) first and end_time (5th column) second, both in descending order
+
+				});
+			}
+
+
+			$.ajax({
+				url: '/mbscan/client/getUser',
+				type: 'GET',
+				success: function(data) {
+					response = data;
+					console.log(response);
+					if (response.length > 0) {
+						console.log("client_name: ", response[0].client_name);
+						$('#companyName').text(response[0].client_name);
+
+						// Clear existing dropdown items
+						$('#deviceDropdown').empty();
+
+						// Add "All Devices" option
+						$('#deviceDropdown').append('<a class="dropdown-item" href="#" data-id="all">All Devices</a>');
+
+						// Add device IDs and names from the response
+						response.forEach(function(data) {
+							var deviceIds = data.device_ids.substring(1, data.device_ids.length - 1).split(',');
+							var deviceNames = data.device_names.substring(1, data.device_names.length - 1).split(',');
+
+							// Assuming device_ids and device_names have the same length
+							for (var i = 0; i < deviceIds.length; i++) {
+								var deviceId = deviceIds[i].trim();
+								var deviceName = deviceNames[i].trim();
+								$('#deviceDropdown').append('<a class="dropdown-item" href="#" data-id="' + deviceId + '">' + deviceName + '</a>');
+							}
+						});
+
+						$('#dropdownMenuButton').text('All Devices');
+						$('#deviceDropdown').find('[data-id="all"]').click();
+					}
+				},
+				error: function(xhr, status, error) {
+					console.error(xhr.responseText);
 				}
 			});
 
-			// Add Row
-			$('#add-row').DataTable({
-				"pageLength": 5,
-			});
+			// Update button text when an option is clicked
+			$('#deviceDropdown').on('click', '.dropdown-item', function(e) {
+				e.preventDefault();
+				var selectedDeviceId = $(this).attr('data-id');
+				var selectedDeviceName = $(this).text();
+				$('#dropdownMenuButton').text(selectedDeviceId === 'all' ? 'All Devices' : selectedDeviceName);
 
-			var action = '<td> <div class="form-button-action"> <button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Edit Task"> <i class="fa fa-edit"></i> </button> <button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Remove"> <i class="fa fa-times"></i> </button> </div> </td>';
+				var userId = response[0].user_id;
 
-			$('#addRowButton').click(function() {
-				$('#add-row').dataTable().fnAddData([
-					$("#addName").val(),
-					$("#addPosition").val(),
-					$("#addOffice").val(),
-					action
-					]);
-				$('#addRowModal').modal('hide');
-
+				if (selectedDeviceId !== 'all') {
+					// Make AJAX call to get data for selected device and client
+					var clientId = response[0].client_id;
+					$.ajax({
+						url: '/mbscan/client/getSelectedUserData',
+						type: 'GET',
+						data: {
+							device_id: selectedDeviceId,
+							client_id: clientId,
+							user_id: userId // Pass the userId to the AJAX call
+						},
+						success: function(data) {
+							// Process the data as needed
+							populateDataTable(data);
+							console.log('Data for selected device:', data);
+						},
+						error: function(xhr, status, error) {
+							console.error(xhr.responseText);
+						}
+					});
+				} else {
+					// If "All Devices" is selected, make AJAX call to get all device data
+					var clientId = response[0].client_id;
+					$.ajax({
+						url: '/mbscan/client/getAllDeviceData',
+						type: 'GET',
+						data: { client_id: clientId, user_id: userId }, // Pass the userId to the AJAX call
+						success: function(data) {
+							// Process the data as needed
+							populateDataTable(data);
+							console.log('All device data:', data);
+						},
+						error: function(xhr, status, error) {
+							console.error(xhr.responseText);
+						}
+					});
+				}
 			});
 		});
+		function DownloadData() {
+    // Get the DataTable instance
+    var table = $('#basic-datatables').DataTable();
+
+    // Get the data from the DataTable
+    var data = [];
+    table.rows().nodes().each(function (node, index) {
+        var rowData = [];
+        $(node).find('td').each(function () {
+            rowData.push($(this).text());
+        });
+        data.push(rowData);
+    });
+
+    // Prepare workbook and worksheet
+    var workbook = XLSX.utils.book_new();
+    var worksheet = XLSX.utils.aoa_to_sheet([]);
+
+    // Add column headers
+    var headers = table.columns().header().toArray().map(header => header.innerText);
+    XLSX.utils.sheet_add_aoa(worksheet, [headers], {origin: 'A1'});
+
+    // Add data rows
+    XLSX.utils.sheet_add_aoa(worksheet, data, {origin: 'A2'});
+
+    // Add worksheet to workbook
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
+
+    // Convert workbook to binary Excel file
+    var excelFile = XLSX.write(workbook, { bookType: 'xlsx', type: 'binary' });
+
+    // Convert binary Excel file to blob
+    var blob = new Blob([s2ab(excelFile)], { type: 'application/octet-stream' });
+
+    // Create a download link
+    var link = document.createElement("a");
+    link.href = window.URL.createObjectURL(blob);
+    link.download = "datatable_data.xlsx";
+
+    // Append the link to the body and trigger the download
+    document.body.appendChild(link);
+    link.click();
+
+    // Cleanup
+    document.body.removeChild(link);
+}
+
+// Utility function to convert string to ArrayBuffer
+function s2ab(s) {
+    var buf = new ArrayBuffer(s.length);
+    var view = new Uint8Array(buf);
+    for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
+    return buf;
+}
+
+
+
 		function logout(){
 			$.ajax({
 			type: "GET",
@@ -351,59 +449,12 @@
 			success: function(response) {
 				window.location.href = '/mbscan/client/login';
 			},
-			error: function(xhr, status, error) {
+			error: function(xhr, status, error) {ss
 				console.error(xhr.responseText);
 			}
 			});
 
 		}
 	</script>
-	<!-- <script>
-		function fetchDataServer() {
-			if ( document.getElementById('deviceIdInput').value != '' ) {
-				$.ajax({
-					url: 'result.php?id='+document.getElementById('deviceIdInput').value ,
-					type: 'GET',
-					dataType: 'json',
-					success: function(response) {
-						var table = $('#basic-datatables').DataTable();
-						table.rows().remove().draw();
-						if (response.code === '200') {
-							populateDatatable(response.data);
-						} else {
-							console.error('Error: Unable to fetch data.');
-						}
-					},
-					error: function(xhr, status, error) {
-						console.error('Error: ' + error);
-					}
-				});
-			}
-		}
-
-		// Function to populate datatable
-		function populateDatatable(data) {
-			var table = $('#basic-datatables').DataTable();
-			table.rows().remove().draw();
-			data.forEach(function(row) {
-				table.row.add([
-					row.company_id,
-					row.device_id,
-					row.sample_name,
-					row.date,
-					row.decolorized_time,
-					row.start_time,
-					row.end_time,
-					row.channel_id,
-					row.end_progress,
-					row.test_count_id
-				]).draw(false);
-			});
-		}
-
-		$(document).ready(function() {
-			var intervalId = setInterval(fetchDataServer, 10000);
-		});
-	</script> -->
 </body>
 </html>

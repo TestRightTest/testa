@@ -1,15 +1,12 @@
 <?php
 
-namespace App\Modules\SuperAdmin\Models;
+namespace App\Modules\client\Models;
 
 use CodeIgniter\Model;
 
-class AdminLoginModel extends Model
+class clientLoginModel extends Model
 {
-    protected $table = 'user_login';
-    protected $primaryKey = 'id'; 
-    protected $allowedFields = ['name', 'user_name', 'password', 'status','client_id','c_admin_id','c_user_id','updated_on','date_created']; 
-
+    protected $table = 'master.user_login';
     public function authenticate($username, $password)
     {
         // Fetch user data from database
@@ -24,4 +21,24 @@ class AdminLoginModel extends Model
         }
         return false;
     }
+
+    public function getUserData($userId)
+    {
+        // Fetch required data from user_login, user_role, device_details, device, and client_details tables based on user_id
+        $userData = $this->select('master.user_login.client_id, client_details.client_name, array_agg(device.id) as device_ids, array_agg(device.device_name) as device_names, master.user_login.name, user_role.role_details, master.user_login.status, master.user_login.id as user_id')
+            ->join('master.user_role', 'master.user_login.id = master.user_role.user_id')
+            ->join('master.device_details', 'master.user_login.id = master.device_details.user_id')
+            ->join('master.device', 'master.device_details.device_id = master.device.id') // Join the device table
+            ->join('master.client_details', 'master.user_login.client_id = master.client_details.id')
+            ->where('master.user_login.id', $userId)
+            ->groupBy('master.user_login.client_id, client_details.client_name, master.user_login.name, user_role.role_details, master.user_login.status, master.user_login.id')
+            ->findAll();
+    
+        return $userData;
+    }
+    
+    
+    
+    
+    
 }

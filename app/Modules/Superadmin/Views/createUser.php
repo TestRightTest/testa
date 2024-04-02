@@ -417,7 +417,7 @@
             $('#deleteCheckbox').prop('checked', false);
                 // Reset Select2 dropdown
             $('#addDeviceID').empty().select2({
-                placeholder: "Select a device",
+                // placeholder: "Select a device",
                 allowClear: true // Option to allow clearing selection
             });
         });
