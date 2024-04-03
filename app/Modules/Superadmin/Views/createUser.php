@@ -72,6 +72,12 @@
                                 </a>
                             </li>
                             <li class="nav-item">
+                                <a href="<?= base_url('superAdmin/createdevice') ?>" class="collapsed" aria-expanded="false">
+                                    <i class="fas fa-plus"></i>
+                                    <p>Create/Edit Device</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
                                 <a href="<?= base_url('superAdmin/otaupdate') ?>" class="collapsed" aria-expanded="false">
                                     <i class="fas fa-sync-alt"></i>
                                     <p>OTA Update</p>
@@ -124,11 +130,12 @@
 														<div class="row">
 															<div class="col-sm-12">
 																<div class="form-group form-group-default">
-																	<label>Device ID</label>
-																	<input id="addDeviceID" type="text" class="form-control" placeholder="Enter Device ID">
+                                                                    <label for="addclientID">Select Client</label>
+                                                                    <select id="addclientID" class="form-control">
+                                                                    </select>
 																</div>
 															</div>
-															<div class="col-md-6 pr-0">
+															<div class="col-md-6">
 																<div class="form-group form-group-default">
 																	<label>Name</label>
 																	<input id="addName" type="text" class="form-control" placeholder="Enter Name">
@@ -153,29 +160,38 @@
 																	<div id="password_error" style="color: red;"></div>
 																</div>
 															</div>
-															<div class="col-sm-12">
+                                                            <div class="col-md-6">
 																<div class="form-group form-group-default">
-																	<label>Role</label>
-																	<div class="row">
-																		<div class="col-sm-3">
-																			<input type="checkbox" id="createCheckbox" value="create">
-																			<label for="roleCreate">Create</label>
-																		</div>
-																		<div class="col-sm-3">
-																			<input type="checkbox" id="updateCheckbox" value="edit">
-																			<label for="roleEdit">Edit</label>
-																		</div>
-																		<div class="col-sm-3">
-																			<input type="checkbox" id="viewCheckbox" value="view">
-																			<label for="roleView">View</label>
-																		</div>
-																		<div class="col-sm-3">
-																			<input type="checkbox" id="deleteCheckbox" value="delete">
-																			<label for="roleDelete">Delete</label>
-																		</div>
-																	</div>
+																	<label>Status</label>
+																	<select id="addStatus" class="form-control">
+																		<option value="Active">Active</option>
+																		<option value="InActive">InActive</option>
+																	</select>
 																</div>
 															</div>
+                                                            <div class="col-sm-12">
+                                                                <div class="form-group form-group-default">
+                                                                    <label>Role</label>
+                                                                    <div class="row">
+                                                                        <div class="col-sm-3">
+                                                                            <input type="checkbox" id="createCheckbox" value="create">
+                                                                            <label for="createCheckbox" id="createLabel">Create</label>
+                                                                        </div>
+                                                                        <div class="col-sm-3">
+                                                                            <input type="checkbox" id="updateCheckbox" value="edit">
+                                                                            <label for="updateCheckbox" id="updateLabel">Edit</label>
+                                                                        </div>
+                                                                        <div class="col-sm-3">
+                                                                            <input type="checkbox" id="viewCheckbox" value="view">
+                                                                            <label for="viewCheckbox" id="viewLabel">View</label>
+                                                                        </div>
+                                                                        <div class="col-sm-3">
+                                                                            <input type="checkbox" id="deleteCheckbox" value="delete">
+                                                                            <label for="deleteCheckbox" id="deleteLabel">Delete</label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
 														</div>
 													</form>
 												</div>
@@ -186,14 +202,83 @@
 											</div>
 										</div>
 									</div>
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="updateTable" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-body">
+                                                    <p class="small">Edit Client Details</p>
+                                                    <form>
+                                                        <div class="row">
+                                                            <div class="col-sm-12">
+                                                                <div class="form-group form-group-default">
+                                                                    <label>Client ID</label>
+                                                                    <input id="updateClient" type="text" class="form-control" readonly>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-12">
+                                                                <div class="form-group form-group-default">
+                                                                    <label>Name</label>
+                                                                    <input id="updateName" type="text" class="form-control" placeholder="Enter name" readonly>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group form-group-default">
+                                                                    <label>Username</label>
+                                                                    <input id="updateUserName" type="text" class="form-control" placeholder="Enter Username" readonly>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group form-group-default">
+                                                                    <label>Status</label>
+                                                                    <select id="updateStatus" class="form-control">
+                                                                        <option value="Active">Active</option>
+                                                                        <option value="InActive">InActive</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-12">
+                                                                <div class="form-group form-group-default" id = "updateRole">
+                                                                    <label>Role</label>
+                                                                    <div class="row">
+                                                                        <div class="col-sm-3">
+                                                                            <input type="checkbox" id="updateCreateCheckbox" data-role="create" value="create">
+                                                                            <label for="roleCreate" id= "updateCheckboxLabel">Create</label>
+                                                                        </div>
+                                                                        <div class="col-sm-3">
+                                                                            <input type="checkbox" id="updateRoleCheckbox" data-role="edit" value="edit">
+                                                                            <label for="roleEdit" id= "editRoleLabel">Edit</label>
+                                                                        </div>
+                                                                        <div class="col-sm-3">
+                                                                            <input type="checkbox" id="updateViewCheckbox" data-role="view" value="view">
+                                                                            <label for="roleView" id="viewRoleLabel">View</label>
+                                                                        </div>
+                                                                        <div class="col-sm-3">
+                                                                            <input type="checkbox" id="updateDeleteRole" data-role="delete" value="delete">
+                                                                            <label for="roleDelete" id="deleteRoleLabel">Delete</label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                <div class="modal-footer no-bd">
+                                                    <button type="button" id="updateButton" class="btn btn-primary" onclick= "updateUserDetails()">Update</button>
+                                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
 									<div class="table-responsive">
 										<table id="add-row" class="display table table-striped table-hover" >
 											<thead>
 												<tr>
-													<th>Device ID</th>
+													<th>Client ID</th>
 													<th>Name</th>
 													<th>Username</th>
 													<th>Role</th>
+                                                    <th>Status</th>
 													<th style="width: 10%">Action</th>
 												</tr>
 											</thead>
@@ -226,202 +311,317 @@
 	<script src="<?php echo base_url(); ?>assets/js/setting-demo2.js"></script>
 	
 	<script>
-		$(document).ready(function () {
-    const table = $('#add-row').DataTable({
-        pageLength: 10
-    });
+        $(document).ready(function () {
+        const table = $('#add-row').DataTable({
+            pageLength: 10
+        });
 
-    const $addUserButton = $('#addUserButton');
-    const $addRowModal = $('#addRowModal');
-    const $password = $('#password');
-    const $confirmPassword = $('#confirm_password');
-    const $passwordError = $('#password_error');
-    const $addDeviceID = $('#addDeviceID');
-    const $addName = $('#addName');
-    const $addUsername = $('#addUsername');
-
-    function initTooltips() {
-        $('[data-toggle="tooltip"]').tooltip();
-    }
-
-	function makeFieldsEditable(row) {
-    const editableColumns = [0, 1, 2, 3];
-    row.find('td').each((index, td) => {
-        if (editableColumns.includes(index)) {
-            let htmlContent = '';
-            const currentValue = $(td).text().trim();
-            if (index === 3) { // If it's the role column
-                const checkboxOptions = ['Create', 'Edit', 'Delete', 'View'];
-                checkboxOptions.forEach(option => {
-                    const isChecked = currentValue.includes(option);
-                    htmlContent += `<label class="checkbox-inline"><input type="checkbox" value="${option}" ${isChecked ? 'checked' : ''}> ${option}</label>`;
-                });
-            } else {
-                htmlContent = `<input type="text" class="form-control" value="${currentValue}">`;
-            }
-            $(td).data('original-text', currentValue).html(htmlContent);
+        const $addUserButton = $('#addUserButton');
+        const $addRowModal = $('#addRowModal');
+        const $password = $('#password');
+        const $confirmPassword = $('#confirm_password');
+        const $passwordError = $('#password_error');
+        const $addclientID = $('#addclientID');
+        const $addName = $('#addName');
+        const $addUsername = $('#addUsername');
+        
+        function initTooltips() {
+            $('[data-toggle="tooltip"]').tooltip();
         }
-    });
+        
+        $(document).on('click', '.edit-btn', function () {
+            const $row = $(this).closest('tr');
+            var clientId = $row.find('td:eq(0)').text();
+            var name = $row.find('td:eq(1)').text();
+            var userName = $row.find('td:eq(2)').text();
+            var roles = $row.find('td:eq(3)').text().split(', '); 
+            var status = $row.find('td:eq(4)').text();
+			var userId = $row.data('user-id'); 
+			console.log("User ID:", userId); 
+            $('#updateClient').val(clientId);
+            $('#updateName').val(name);
+            $('#updateUserName').val(userName);
+			$('#updateStatus').val(status);
+            updateUserId = userId;
+            // Uncheck all checkboxes first
+            $('input[type="checkbox"]').prop('checked', false);
 
-    const actionCell = row.find('td:last');
-    actionCell.html(`<div class="btn-group" role="group">
-        <button type="button" data-toggle="tooltip" title="Cancel" class="btn btn-link btn-danger cancel-btn">
-            <i class="fa fa-times"></i>
-        </button>
-        <button type="button" data-toggle="tooltip" title="Submit" class="btn btn-link btn-success btn-lg submit-btn" id="submitProgress">
-            <i class="fa fa-check"></i>
-        </button>
-    </div>`);
-	}
+            // Check checkboxes based on roles
+            roles.forEach(function(role) {
+                $('input[type="checkbox"][data-role="' + role + '"]').prop('checked', true);
+            });
 
+            $('#updateCreateCheckbox, #updateCheckboxLabel, #updateRoleCheckbox, #editRoleLabel, #updateViewCheckbox, #viewRoleLabel, #updateDeleteRole, #deleteRoleLabel').hide();
 
-    function makeFieldsNonEditable(row) {
-        row.find('td').each(function () {
-            const originalText = $(this).data('original-text');
-            $(this).html(originalText);
+            var clientRoleDetails = $('#addclientID option[value="' + clientId + '"]').data('role_details');
+
+            if (clientRoleDetails) {
+                clientRoleDetails = JSON.parse(clientRoleDetails);
+                if (clientRoleDetails.can_create) {
+                    $('#updateCreateCheckbox, #updateCheckboxLabel').show();
+                }
+                if (clientRoleDetails.can_update) {
+                    $('#updateRoleCheckbox, #editRoleLabel').show();
+                }
+                if (clientRoleDetails.can_view) {
+                    $('#updateViewCheckbox, #viewRoleLabel').show();
+                }
+                if (clientRoleDetails.can_delete) {
+                    $('#updateDeleteRole, #deleteRoleLabel').show();
+                }
+            }
+            $('#updateTable').modal('show');
+
         });
-		
-        const actionCell = row.find('td:last');
-        actionCell.html(`<div class="form-button-action">
-            <button type="button" data-toggle="tooltip" " class="btn btn-link btn-primary btn-lg edit-btn">
-                <i class="fa fa-edit"></i>
-            </button>
-        </div>`);
-    }
+        
+        $addRowModal.on('show.bs.modal', function (e) {
+            // Clear input fields and remove validation classes
+            [ $addclientID, $addName, $addUsername, $password, $confirmPassword ].forEach(field => {
+                field.val('').removeClass('is-invalid');
+            });
 
-    $(document).on('click', '.edit-btn', function () {
-        const $row = $(this).closest('tr');
-        makeFieldsEditable($row);
-    });
+            // Clear password error message
+            $passwordError.text('');
+            $('#createCheckbox, #createLabel, #updateCheckbox, #updateLabel, #viewCheckbox, #viewLabel, #deleteCheckbox, #deleteLabel').hide();
 
-    $(document).on('click', '.cancel-btn', function () {
-        const $row = $(this).closest('tr');
-        makeFieldsNonEditable($row);
-    });
+            // Uncheck checkboxes
+            $('#createCheckbox').prop('checked', false);
+            $('#updateCheckbox').prop('checked', false);
+            $('#viewCheckbox').prop('checked', false);
+            $('#deleteCheckbox').prop('checked', false);
+        });
 
-    $addUserButton.click(function () {
-        const fields = [$addDeviceID, $addName, $addUsername, $password, $confirmPassword];
-        let isValid = true;
-        fields.forEach(field => {
-            if (field.val().trim() === '') {
-                field.addClass('is-invalid');
-                isValid = false;
+
+        $confirmPassword.on('input', function () {
+            if ($password.val() !== $confirmPassword.val()) {
+                $passwordError.text("Passwords do not match");
+                $confirmPassword.addClass('is-invalid');
             } else {
-                field.removeClass('is-invalid');
+                $passwordError.empty();
+                $confirmPassword.removeClass('is-invalid');
             }
         });
 
-        if (!isValid) return;
-
-        $addRowModal.modal('hide');
-    });
-
-    $addRowModal.on('show.bs.modal', function (e) {
-        [ $addDeviceID, $addName, $addUsername, $password, $confirmPassword ].forEach(field => {
-            field.val('').removeClass('is-invalid');
-        });
-        $passwordError.text('');
-    });
-
-    $confirmPassword.on('input', function () {
-        if ($password.val() !== $confirmPassword.val()) {
-            $passwordError.text("Passwords do not match");
-            $confirmPassword.addClass('is-invalid');
-        } else {
-            $passwordError.empty();
-            $confirmPassword.removeClass('is-invalid');
-        }
-    });
-
-    // Load users and populate DataTable
-    $.ajax({
-        type: 'GET',
-        url: '/mbscan/superAdmin/getUsers',
-        success: function (response) {
+        
+        $.ajax({
+            type: 'GET',
+            url: '/mbscan/superAdmin/getUsers',
+            success: function (response) {
             table.clear().draw();
             response.forEach(user => {
+                var roles = '';
+                if (user.role_details) {
+                    var roleDetails = JSON.parse(user.role_details);
+                    if (roleDetails.can_create) roles += 'create, ';
+                    if (roleDetails.can_edit) roles += 'edit, ';
+                    if (roleDetails.can_delete) roles += 'delete, ';
+                    if (roleDetails.can_view) roles += 'view, ';
+                }
+                roles = roles.replace(/,\s*$/, '');
                 const rowData = [
-                    user.device_id || '-',
+                    user.client_id || '-',
                     user.name || '-',
                     user.user_name || '-',
-                    user.role || '-',
+                    roles || '-', // Include role details here
+                    user.status || '-',
                     `<div class="form-button-action">
-                        <button type="button" data-toggle="tooltip" " class="btn btn-link btn-primary btn-lg edit-btn">
+                        <button type="button" data-toggle="tooltip" class="btn btn-link btn-primary btn-lg edit-btn">
                             <i class="fa fa-edit"></i>
                         </button>
                     </div>`
                 ];
+                console.log('User ID:', user.id); // Log user_id to console
                 initTooltips();
-                table.row.add(rowData).draw(false);
+                var row =  table.row.add(rowData).draw(false).node();
+                $(row).data('roles', roles);
+                $(row).data('user-id', user.id); 
+
+                // Create invisible row containing client_id only
+                var invisibleRow = '<tr class="invisible-row" data-user-id="' + user.id + '"></tr>';
+                $(row).after(invisibleRow);
+                });
+        },
+
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+
+        });
+        // Populate the dropdown with client names
+        $.ajax({
+            url: '/mbscan/superAdmin/getClientId',
+            type: "GET",
+            dataType: "json",
+            success: function(data) {
+                // Iterate over client data
+                $.each(data, function(index, value) {
+                    // Append option elements to select element
+                    var $option = $('<option value="' + value.id + '">' + value.client_name + '</option>');
+                    $option.data('role_details', value.role_details); // Set role_details as data attribute
+                    $('#addclientID').append($option);
+                });
+            }
+        });
+
+        // Initially hide all checkboxes and their associated labels
+        $('#createCheckbox, #createLabel, #updateCheckbox, #updateLabel, #viewCheckbox, #viewLabel, #deleteCheckbox, #deleteLabel').hide();
+
+        // Handle change event of the dropdown
+        $('#addclientID').change(function() {
+            var selectedOption = $(this).find('option:selected');
+            var selectedClientRoleDetails = selectedOption.data('role_details');
+
+            // Hide all checkboxes and their associated labels
+            $('#createCheckbox, #createLabel, #updateCheckbox, #updateLabel, #viewCheckbox, #viewLabel, #deleteCheckbox, #deleteLabel').hide();
+
+            // Check the roles in role_details and show corresponding checkboxes and labels
+            if (selectedClientRoleDetails) {
+                selectedClientRoleDetails = JSON.parse(selectedClientRoleDetails);
+                if (selectedClientRoleDetails.can_create) {
+                    $('#createCheckbox, #createLabel').show();
+                }
+                if (selectedClientRoleDetails.can_update) {
+                    $('#updateCheckbox, #updateLabel').show();
+                }
+                if (selectedClientRoleDetails.can_view) {
+                    $('#viewCheckbox, #viewLabel').show();
+                }
+                if (selectedClientRoleDetails.can_delete) {
+                    $('#deleteCheckbox, #deleteLabel').show();
+                }
+            }
+        });
+
+        // $('#updateclientID').change(function() {
+        //     var selectedOption = $(this).find('option:selected');
+        //     var selectedClientRoleDetails = selectedOption.data('role_details');
+
+        //     $('#updateCreateCheckbox, #updateCheckboxLabel, #updateRoleCheckbox, #editRoleLabel, #updateViewCheckbox, #viewRoleLabel, #updateDeleteRole, #deleteRoleLabel').hide();
+
+            // if (selectedClientRoleDetails) {
+            //     selectedClientRoleDetails = JSON.parse(selectedClientRoleDetails);
+            //     if (selectedClientRoleDetails.can_create) {
+            //         $('#updateCreateCheckbox, #updateCheckboxLabel').show();
+            //     }
+            //     if (selectedClientRoleDetails.can_update) {
+            //         $('#updateRoleCheckbox, #editRoleLabel').show();
+            //     }
+            //     if (selectedClientRoleDetails.can_view) {
+            //         $('#updateViewCheckbox, #viewRoleLabel').show();
+            //     }
+            //     if (selectedClientRoleDetails.can_delete) {
+            //         $('#updateDeleteRole, #deleteRoleLabel').show();
+            //     }
+            // }
+        // });
+
+        function addUser() {
+            var clientID = $('#addclientID').val();
+            var name = $('#addName').val();
+            var username = $('#addUsername').val();
+            var password = $('#password').val();
+            var confirmPassword = $('#confirm_password').val();
+            var status = $('#addStatus').val();
+            var createCheckbox = $('#createCheckbox').prop('checked');
+            var updateCheckbox = $('#updateCheckbox').prop('checked');
+            var viewCheckbox = $('#viewCheckbox').prop('checked');
+            var deleteCheckbox = $('#deleteCheckbox').prop('checked');
+            // Perform client-side validation
+            if (!clientID || !name || !username || !password || !confirmPassword || !status) {
+                alert("Please fill out all required fields.");
+                return;
+            }
+            if (password !== confirmPassword) {
+                $('#password_error').text('Passwords do not match');
+                return;
+            }
+            $('#addRowModal').modal('hide');
+            // AJAX request to send data to the controller
+            $.ajax({
+                type: 'POST',
+                url: '/mbscan/superAdmin/adduser',
+                data: {
+                    client_id: clientID,
+                    name: name,
+                    username: username,
+                    password: password,
+                    create: createCheckbox,
+                    update: updateCheckbox,
+                    view: viewCheckbox,
+                    delete: deleteCheckbox,
+                    role_name: '',
+                    status: status,
+                },
+                success: function(response) {
+                    console.log(response);
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
             });
-        },
-        error: function (xhr, status, error) {
-            console.error(xhr.responseText);
         }
-    });
-});
 
 
+        var updateUserId;
+        function updateUserDetails(){
+            $('#updateTable').modal('hide');
+            // Get the updated status and role details
 
-	function addUser() {
-    var deviceID = $('#addDeviceID').val();
-    var name = $('#addName').val();
-    var username = $('#addUsername').val();
-    var password = $('#password').val();
-    var confirmPassword = $('#confirm_password').val();
-    var createCheckbox = $('#roleCreate').prop('checked');
-    var updateCheckbox = $('#roleEdit').prop('checked');
-    var viewCheckbox = $('#roleView').prop('checked');
-    var deleteCheckbox = $('#roleDelete').prop('checked');
-    // Perform client-side validation
-    if (!deviceID || !name || !username || !password || !confirmPassword) {
-        alert("Please fill out all required fields.");
-        return;
-    }
-    if (password !== confirmPassword) {
-        $('#password_error').text('Passwords do not match');
-        return;
-    }
+            var status = $('#updateStatus').val();
+            var clientId = $('#updateClient').val();
+            var username = $('#updateUserName').val();
+            // Get boolean values for role details
+            var roles = {
+                can_create: $('#updateRole input[data-role="create"]').prop('checked'),
+                can_edit: $('#updateRole input[data-role="edit"]').prop('checked'),
+                can_delete: $('#updateRole input[data-role="delete"]').prop('checked'),
+                can_view: $('#updateRole input[data-role="view"]').prop('checked')
+            };
 
-    // AJAX request to send data to the controller
-    $.ajax({
-        type: 'POST',
-        url: '/mbscan/superAdmin/adduser',
-        data: {
-            device_id: deviceID,
-            name: name,
-            username: username,
-            password: password,
-            create: createCheckbox,
-            update: updateCheckbox,
-            view: viewCheckbox,
-            delete: deleteCheckbox,
-            role_name: '',
-            status:'',
-        },
-        success: function(response) {
-            console.log(response);
-        },
-        error: function(xhr, status, error) {
-            console.error(xhr.responseText);
+            console.log("status", status);
+            console.log("roles",roles);
+            // Convert boolean values to strings
+            for (var key in roles) {
+                if (roles.hasOwnProperty(key)) {
+                    roles[key] = roles[key] ? 'true' : 'false';
+                }
+            }
+            var data = {
+                // clientId: clientId,
+                userId: updateUserId,
+                status: status,
+                roleDetails: roles,
+                user_name: username 
+            };
+            console.log("data",data);
+
+            $.ajax({
+                type: 'POST',
+                url: '/mbscan/superAdmin/updateUserRole',
+                data: data,
+                success: function (response) {
+                    $('#updateTable').modal('hide');
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error updating client details:', error);
+                }
+            });
         }
-    });
-}
+        function logout(){
+                $.ajax({
+                type: "GET",
+                url: "/mbscan/superAdmin/logout",
+                success: function(response) {
+                    // Redirect to login page after successful logout
+                    window.location.href = '/mbscan/superAdmin/login';
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
 
-function logout(){
-		$.ajax({
-        type: "GET",
-        url: "/mbscan/superAdmin/logout",
-        success: function(response) {
-            // Redirect to login page after successful logout
-			window.location.href = '/mbscan/superAdmin/login';
-        },
-        error: function(xhr, status, error) {
-            console.error(xhr.responseText);
         }
-    });
-
-	}
 	</script>
 </body>
 </html>

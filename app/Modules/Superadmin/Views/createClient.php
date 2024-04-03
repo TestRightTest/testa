@@ -69,6 +69,12 @@
                             <p>Create/Edit User</p>
                         </a>
                     </li>
+					<li class="nav-item">
+                        <a href="<?= base_url('superAdmin/createdevice') ?>" class="collapsed" aria-expanded="false">
+                            <i class="fas fa-plus"></i>
+                            <p>Create/Edit Device</p>
+                        </a>
+                    </li>
                     <li class="nav-item">
                         <a href="<?= base_url('superAdmin/otaupdate') ?>" class="collapsed" aria-expanded="false">
                             <i class="fas fa-sync-alt"></i>
@@ -121,7 +127,7 @@
 																	<input id="addName" type="text" class="form-control" placeholder="Enter name" >
 																</div>
 															</div>
-															<div class="col-md-6 pr-0">
+															<div class="col-md-6">
 																<div class="form-group form-group-default">
 																	<label>Status</label>
 																	<select id="addStatus" class="form-control">
@@ -140,7 +146,7 @@
 																		</div>
 																		<div class="col-sm-3">
 																			<input type="checkbox" id="roleEdit" value="edit">
-																			<label for="roleEdit">Edit</label>
+																			<label for="roleEdit">Update</label>
 																		</div>
 																		<div class="col-sm-3">
 																			<input type="checkbox" id="roleView" value="view">
@@ -163,7 +169,63 @@
 											</div>
 										</div>
 									</div>
+								<!-- Modal -->
+								<div class="modal fade" id="updateTable" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+									<div class="modal-dialog" role="document">
+										<div class="modal-content">
+											<div class="modal-body">
+												<p class="small">Edit Client Details</p>
+												<form>
+													<div class="row">
+														<div class="col-sm-12">
+															<div class="form-group form-group-default">
+																<label>Name</label>
+																<input id="updateName" type="text" class="form-control" placeholder="Enter name" readonly>
+															</div>
+														</div>
+														<div class="col-md-6">
+															<div class="form-group form-group-default">
+																<label>Status</label>
+																<select id="updateStatus" class="form-control">
+																	<option value="Active">Active</option>
+																	<option value="InActive">InActive</option>
+																</select>
+															</div>
+														</div>
+														<div class="col-sm-12">
+															<div class="form-group form-group-default" id = "updateRole">
+																<label>Role</label>
+																<div class="row">
+																	<div class="col-sm-3">
+																		<input type="checkbox" data-role="create" value="create">
+																		<label for="roleCreate">Create</label>
+																	</div>
+																	<div class="col-sm-3">
+																		<input type="checkbox" data-role="edit" value="edit">
+																		<label for="roleEdit">Edit</label>
+																	</div>
+																	<div class="col-sm-3">
+																		<input type="checkbox" data-role="view" value="view">
+																		<label for="roleView">View</label>
+																	</div>
+																	<div class="col-sm-3">
+																		<input type="checkbox" data-role="delete" value="delete">
+																		<label for="roleDelete">Delete</label>
+																	</div>
 
+																</div>
+															</div>
+														</div>
+													</div>
+												</form>
+											</div>
+											<div class="modal-footer no-bd">
+												<button type="button" id="updateButton" class="btn btn-primary" onclick= "updateClientDetails()">Update</button>
+												<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+											</div>
+										</div>
+									</div>
+								</div>
 									<div class="table-responsive">
 										<table id="add-row" class="display table table-striped table-hover" >
 											<thead>
@@ -220,156 +282,74 @@
 			$('[data-toggle="tooltip"]').tooltip();
 		}
 
-		// Function to make fields editable
-		function makeFieldsEditable(row) {
-			// console.log("Making fields editable.");
-			var editableColumns = [0, 1, 2, 3];
-			row.find('td').each(function (index) {
-				if (editableColumns.includes(index)) {
-					var currentValue = $(this).text().trim();
-					if (index === 1) { // Check if the column is the status column
-						// console.log("Status column found.");
-						var selectOptions = ['Active', 'Inactive'];
-						var dropdown = '<select class="form-control">';
-						selectOptions.forEach(option => {
-							dropdown += '<option value="' + option + '"';
-							if (option === currentValue) {
-								dropdown += ' selected';
-							}
-							dropdown += '>' + option + '</option>';
-						});
-						dropdown += '</select>';
-						$(this).data('original-text', currentValue); // Store original text
-						$(this).html(dropdown);
-					} else if (index === 2) { // Check if the column is the role column
-						// console.log("Role column found.");
-						var roles = ['Create', 'Update', 'Delete', 'View'];
-						var checkboxes = '';
-						roles.forEach(role => {
-							var checked = currentValue.includes(role) ? 'checked' : '';
-							checkboxes += '<label><input type="checkbox" value="' + role + '" ' + checked + '> ' + role + '</label><br>';
-						});
-						$(this).data('original-text', currentValue); // Store original text
-						$(this).html(checkboxes);
-					} else {
-						// console.log("Other column found.");
-						$(this).data('original-text', currentValue); // Store original text
-						$(this).html('<input type="text" class="form-control" value="' + currentValue + '">');
-					}
-				}
-			});
-			var actionCell = row.find('td:last');
-			actionCell.html('<div class="btn-group" role="group"><button type="button" data-toggle="tooltip" title="Cancel" class="btn btn-link btn-danger cancel-btn"><i class="fa fa-times"></i></button> <button type="button" data-toggle="tooltip" title="Submit" class="btn btn-link btn-success btn-lg submit-btn" id="submitProgress"><i class="fa fa-check"></i></button></div>');
-		}
-
-		// Function to make fields non-editable
-		function makeFieldsNonEditable(row) {
-			// console.log("Making fields non-editable.");
-			row.find('td').each(function () {
-				var originalText = $(this).data('original-text');
-				$(this).html(originalText);
-			});
-			var actionCell = row.find('td:last');
-			actionCell.html('<div class="form-button-action"><button type="button" data-toggle="tooltip" title="Edit Task" class="btn btn-link btn-primary btn-lg edit-btn"><i class="fa fa-edit"></i></button></div>');
-		}
-
-		// Event listener for edit button
 		$(document).on('click', '.edit-btn', function () {
-			// console.log("Edit button clicked.");
 			var $row = $(this).closest('tr');
-			makeFieldsEditable($row);
-		});
+			var name = $row.find('td:eq(0)').text(); 
+			var status = $row.find('td:eq(1)').text();
+			var rolesData = $row.data('roles');
+			var clientId = $row.data('client-id'); 
+			console.log("Client ID:", clientId); 
+			var roles = rolesData ? rolesData.split(', ') : []; 
+			$('#updateName').val(name); 
+			$('#updateStatus').val(status);
+			updateClientId = clientId;
+			// Uncheck all checkboxes first
+			$('input[type="checkbox"]').prop('checked', false);
 
-		// Event listener for cancel button
-		$(document).on('click', '.cancel-btn', function () {
-			// console.log("Cancel button clicked.");
-			var $row = $(this).closest('tr');
-			makeFieldsNonEditable($row);
-		});
-		// Event listener for edit button
-		$(document).on('click', '.submit-btn', function () {
-			var $row = $(this).closest('tr');
-			var client_id = $row.find('.client-id').text();
-			var role_name = $row.find('.role-name').text();
-			var can_view = $row.find('.can-view').text();
-			var can_create = $row.find('.can-create').text();
-			var can_delete = $row.find('.can-delete').text();
-			var can_edit = $row.find('.can-edit').text();
-			var status = $row.find('.status').text();
-
-			$.ajax({
-				url: '/mbscan/superAdmin/updateClient',
-				method: 'POST',
-				dataType: 'json',
-				data: {
-					client_id: client_id,
-					role_name: role_name,
-					can_view: can_view,
-					can_create: can_create,
-					can_delete: can_delete,
-					can_edit: can_edit,
-					status: status
-				},
-				success: function (response) {
-					console.log(response);
-					// Handle success response
-				},
-				error: function (xhr, status, error) {
-					console.error(xhr.responseText);
-					// Handle error response
-				}
+			// Check checkboxes based on roles
+			roles.forEach(function(role) {
+				$('input[type="checkbox"][data-role="' + role + '"]').prop('checked', true);
 			});
+
+			$('#updateTable').modal('show');
 		});
 
-// AJAX request to get client data
-$.ajax({
-    type: 'GET',
-    url: '/mbscan/superAdmin/getClient',
-    success: function (response) {
-        table.clear().draw();
-        response.forEach(function (client) {
-            // Populate visible row
-            var roles = '';
-            if (client.role_details) {
-                var roleDetails = JSON.parse(client.role_details);
-                if (roleDetails.can_create) roles += 'Create, ';
-                if (roleDetails.can_update) roles += 'Update, ';
-                if (roleDetails.can_delete) roles += 'Delete, ';
-                if (roleDetails.can_view) roles += 'View, ';
-            }
-            roles = roles.replace(/,\s*$/, '');
+		// AJAX request to get client data
+		$.ajax({
+			type: 'GET',
+			url: '/mbscan/superAdmin/getClient',
+			success: function (response) {
+				table.clear().draw();
+				response.forEach(function (client) {
+				// Populate visible row
+				var roles = '';
+				if (client.role_details) {
+					var roleDetails = JSON.parse(client.role_details);
+					if (roleDetails.can_create) roles += 'create, ';
+					if (roleDetails.can_update) roles += 'edit, ';
+					if (roleDetails.can_delete) roles += 'delete, ';
+					if (roleDetails.can_view) roles += 'view, ';
+				}
+				roles = roles.replace(/,\s*$/, '');
+				var rowData = [
+				client.client_name || '-',
+				client.status || '-',
+				roles || '-',
+				'<td><div class="form-button-action"><button type="button" data-toggle="tooltip" title="Edit Task" class="btn btn-link btn-primary btn-lg edit-btn"><i class="fa fa-edit"></i></button></div></td>'
+			];
 
-            var rowData = [
-                client.client_name || '-',
-                client.status || '-',
-                roles || '-',
-                '<td><div class="form-button-action"><button type="button" data-toggle="tooltip" title="Edit Task" class="btn btn-link btn-primary btn-lg edit-btn"><i class="fa fa-edit"></i></button></div></td>'
-            ];
-            var row = table.row.add(rowData).draw(false).node();
-            
-            // Create invisible row containing client_id only
-            var invisibleRow = '<tr class="invisible-row" data-client-id="' + client.id + '"></tr>';
-            $(row).after(invisibleRow);
+			var row = table.row.add(rowData).draw(false).node();
+			$(row).data('roles', roles);
+			$(row).data('client-id', client.id); 
 
-            // Log client ID
-            console.log("Client ID:", client.id);
-        });
-    },
-    error: function (xhr, status, error) {
-        console.error("AJAX request failed with error:", error);
-    }
-});
+			// Create invisible row containing client_id only
+			var invisibleRow = '<tr class="invisible-row" data-client-id="' + client.id + '"></tr>';
+			$(row).after(invisibleRow);
 
+			});
 
+			},
+			error: function (xhr, status, error) {
+				console.error("AJAX request failed with error:", error);
+			}
+		});
 
 		// Event listener for add admin button
 		$('#addAdminButton').click(function () {
-			// console.log("Add admin button clicked.");
 			var addName = $('#addName');
 			var addStatus = $('#addStatus');
 			var roles = $('#roleCreate, #roleEdit, #roleView, #roleDelete');
 			if (addName.val().trim() === '' || addStatus.val().trim() === '' || !roles.is(':checked')) {
-				// console.log("Validation failed. Required fields are empty or checkboxes are not checked.");
 				addName.addClass('is-invalid');
 				addStatus.addClass('is-invalid');
 				roles.addClass('is-invalid');
@@ -389,36 +369,38 @@ $.ajax({
 
 	// Function to add client
 	function addClient() {
-	var name = $('#addName').val();
-	var status = $('#addStatus').val();
-	var createCheckbox = $('#roleCreate').prop('checked');
-	var updateCheckbox = $('#roleEdit').prop('checked');
-	var viewCheckbox = $('#roleView').prop('checked');
-	var deleteCheckbox = $('#roleDelete').prop('checked');
+		var name = $('#addName').val();
+		var status = $('#addStatus').val();
+		var createCheckbox = $('#roleCreate').prop('checked');
+		var updateCheckbox = $('#roleEdit').prop('checked');
+		var viewCheckbox = $('#roleView').prop('checked');
+		var deleteCheckbox = $('#roleDelete').prop('checked');
 
-	if (!name || !status) {
-		alert("Please fill out all required fields.");
-		return;
-	}
+		if (!name || !status) {
+			alert("Please fill out all required fields.");
+			return;
+		}
 
-	$.ajax({
-		type: 'POST',
-		url: '/mbscan/superAdmin/addclient',
-		data: {
-			name: name,
-			status: status,
-			can_create: createCheckbox,
-			can_edit: updateCheckbox,
-			can_view: viewCheckbox,
-			can_delete: deleteCheckbox,
-			role_name: ''
-		},
-		success: function (response) {
-			// console.log("Client added with name: " + response);
+		$.ajax({
+			type: 'POST',
+			url: '/mbscan/superAdmin/addclient',
+			data: {
+				name: name,
+				status: status,
+				can_create: createCheckbox,
+				can_edit: updateCheckbox,
+				can_view: viewCheckbox,
+				can_delete: deleteCheckbox,
+				role_name: ''
+			},
+			success: function (response) {
+			if (response === "duplicate") {
+				alert("Client name already exists. Please choose a different name.");
+				return;
+            }
 			var responseParts = response.split('|');
 			var clientId = responseParts[0];
 			var clientName = responseParts[1];
-			// console.log("Client ID: " + clientId);
 			$.ajax({
 				type: 'POST',
 				url: '/mbscan/superAdmin/createSchemaAndTables',
@@ -436,7 +418,45 @@ $.ajax({
 		error: function (xhr, status, error) {
 			console.error(xhr.responseText);
 		}
-	});
+		});
+	}
+		var updateClientId;
+		
+	function updateClientDetails() {
+		// Get the updated status and role details
+		var status = $('#updateStatus').val();
+		
+		// Get boolean values for role details
+		var roles = {
+			can_create: $('#updateRole input[data-role="create"]').prop('checked'),
+			can_update: $('#updateRole input[data-role="edit"]').prop('checked'),
+			can_delete: $('#updateRole input[data-role="delete"]').prop('checked'),
+			can_view: $('#updateRole input[data-role="view"]').prop('checked')
+		};
+
+		// Convert boolean values to strings
+		for (var key in roles) {
+			if (roles.hasOwnProperty(key)) {
+				roles[key] = roles[key] ? 'true' : 'false';
+			}
+		}
+		var data = {
+			clientId: updateClientId,
+			status: status,
+			roleDetails: roles 
+		};
+
+		$.ajax({
+			type: 'POST',
+			url: '/mbscan/superAdmin/updateClient',
+			data: data,
+			success: function (response) {
+				$('#updateTable').modal('hide');
+			},
+			error: function (xhr, status, error) {
+				console.error('Error updating client details:', error);
+			}
+		});
 	}
 
 	function logout(){
@@ -444,7 +464,6 @@ $.ajax({
 	type: "GET",
 	url: "/mbscan/superAdmin/logout",
 	success: function(response) {
-		// Redirect to login page after successful logout
 		window.location.href = '/mbscan/superAdmin/login';
 	},
 	error: function(xhr, status, error) {

@@ -64,6 +64,12 @@
                                     <p>Create/Edit User</p>
                                 </a>
                             </li>
+							<li class="nav-item">
+								<a href="<?= base_url('superAdmin/createdevice') ?>" class="collapsed" aria-expanded="false">
+									<i class="fas fa-plus"></i>
+									<p>Create/Edit Device</p>
+								</a>
+							</li>
                             <li class="nav-item active">
                                 <a href="<?= base_url('superAdmin/otaupdate') ?>" class="collapsed" aria-expanded="false">
                                     <i class="fas fa-sync-alt"></i>

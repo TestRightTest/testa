@@ -13,5 +13,11 @@ $routes->group("superAdmin", ["namespace" => "App\Modules\SuperAdmin\Controllers
     $routes->post('updateClient', 'SuperAdminController::updateClient');
     $routes->post("createSchemaAndTables", "SuperAdminController::createSchemaAndTables");
     $routes->get("logout", "SuperAdminController::logout");
+    $routes->get("createdevice", "SuperAdminController::createDevice");
+    $routes->post("addDevice", "SuperAdminController::addDevice");
+    $routes->get("getDevices", "SuperAdminController::getDevices");
+    $routes->get("getClientId", "SuperAdminController::getClientId");
+    $routes->post("updateUserRole", "SuperAdminController::updateUserRole");
+
 });
 ?>
