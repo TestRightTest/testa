@@ -74,7 +74,6 @@ class SuperAdminController extends BaseController
         $builder->where('username', $username);
         $builder->where('password', $password);
         $query = $builder->get();
-
         if ($row = $query->getRow()) {
             // Start session and set isLoggedIn to true
             session()->set('isLoggedIn', true);
@@ -108,7 +107,7 @@ class SuperAdminController extends BaseController
         $username = $this->request->getPost('username');
         $password = $this->request->getPost('password');
         $status = $this->request->getPost('status');
-
+        $device_id = $this->request->getPost('device_id');
         // Convert checkbox values to boolean
         $create = $this->request->getPost('create') === 'true' ? true : false;
         $update = $this->request->getPost('update') === 'true' ? true : false;
@@ -155,6 +154,32 @@ class SuperAdminController extends BaseController
             return "Error adding user";
         }
     
+        // Retrieve user_id for the inserted user
+        $userId = $insertResult;
+
+        // Convert device_id to string if it's an array
+        if (is_array($device_id)) {
+            $device_id = implode(',', $device_id);
+        }
+
+        // Split device_id string into an array
+        $deviceIds = explode(',', $device_id);
+
+        foreach ($deviceIds as $deviceId) {
+            $deviceData = [
+                'device_id' => $deviceId,
+                'user_id' => $userId
+            ];
+
+            // Insert device data into the database
+            $insertDeviceResult = $createUserModel->db->table('master.device_details')->insert($deviceData);
+
+            if ($insertDeviceResult === false) {
+                log_message('error', 'Error inserting device data into the database');
+            }
+        }
+
+
         // Insert role-related data into the role_list table
         $roleInsertResult = $createUserModel->addRole($roleData);
     
@@ -286,36 +311,25 @@ class SuperAdminController extends BaseController
                         ->where('schema_name', $schemaName)
                         ->get();
         $result = $schemaQuery->getResult();
-
         if (empty($result)) {
             // Create the schema
             $db->query("CREATE SCHEMA {$schemaName}");
         }
 
-        // Create tables within the schema
-        $db->query("
-            CREATE TABLE IF NOT EXISTS {$schemaName}.device (
-                id SERIAL PRIMARY KEY,
-                log_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                device_name VARCHAR(255),
-                status VARCHAR(50)
-            )
-        ");
-
         $db->query("
             CREATE TABLE IF NOT EXISTS {$schemaName}.device_log (
                 id SERIAL PRIMARY KEY,
-                log_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                device_id INT,
                 channel_id INT,
+                test_count_id INT,
+                sample_name VARCHAR(255), 
                 progress_value FLOAT,
                 start_time TIMESTAMP,
                 end_time TIMESTAMP,
-                first_reading FLOAT,
-                sample_name VARCHAR(255),
+                log_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,                
                 data_extra JSONB
             )
         ");
-
         $db->query("
             CREATE TABLE IF NOT EXISTS {$schemaName}.device_parameter (
                 id SERIAL PRIMARY KEY,
@@ -361,7 +375,7 @@ class SuperAdminController extends BaseController
         }
     }
 
-    public function updateUserRole(){
+    public function updateUser(){
         $clientId = $this->request->getPost('clientId');
         $userId = $this->request->getPost('userId');
 
@@ -402,13 +416,14 @@ class SuperAdminController extends BaseController
             $name = $this->request->getPost('name');
             $status = $this->request->getPost('status');
             $macId = $this->request->getPost('mac_id');
-
+            $clientId = $this->request ->getpost('client_id');
             // Prepare data array
             $data = [
                 'log_time' => date('Y-m-d H:i:s'),
                 'device_name' => $name,
                 'mac_id' => $macId,
-                'status' => $status
+                'status' => $status,
+                'client_id' => $clientId
             ];
 
             // Insert data into the database
@@ -425,7 +440,6 @@ class SuperAdminController extends BaseController
         }
     }
 
-    // Method to get devices
     public function getDevices() {
         // Fetch devices from the database
         $devices = $this->createDeviceModel->findAll();
@@ -440,5 +454,19 @@ class SuperAdminController extends BaseController
     
         return $this->response->setJSON($clients);
     }
-    
+
+    public function getDevicesByClientId()
+    {
+        $clientId = $this->request->getGet('clientId'); // Get the client ID from the request
+        
+        // Instantiate the CreateClientModel
+        $createClientModel = new CreateClientModel();
+        
+        // Call the getDevicesByClientId method to fetch devices based on the client ID
+        $devices = $createClientModel->getDevicesByClientId($clientId);
+        
+        // Return devices as JSON response
+        return $this->response->setJSON($devices);
+    }
+
 }

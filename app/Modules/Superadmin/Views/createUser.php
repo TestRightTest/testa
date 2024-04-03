@@ -23,6 +23,18 @@
 		.is-invalid {
 			border: 1px solid red !important;
 		}
+
+    /* Custom Select2 styling to remove the border around the main dropdown */
+    .select2-container--default .select2-selection--multiple {
+        width:200%;
+    }
+    .selected-devices {
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 	</style>
 
 	<!-- CSS Files -->
@@ -128,10 +140,17 @@
 													<p class="small">Create a new User</p>
 													<form>
 														<div class="row">
-															<div class="col-sm-12">
+															<div class="col-md-6">
 																<div class="form-group form-group-default">
                                                                     <label for="addclientID">Select Client</label>
-                                                                    <select id="addclientID" class="form-control">
+                                                                    <select id="addclientID" class="form-control" >
+                                                                    </select>
+																</div>
+															</div>
+                                                            <div class="col-md-6">
+																<div class="form-group form-group-default">
+                                                                    <label for="addDeviceID">Select Device</label>
+                                                                    <select id="addDeviceID" class="selected-devices" multiple>
                                                                     </select>
 																</div>
 															</div>
@@ -309,12 +328,18 @@
 	<script src="<?php echo base_url(); ?>assets/js/atlantis.min.js"></script>
 	<!-- Atlantis DEMO methods, don't include it in your project! -->
 	<script src="<?php echo base_url(); ?>assets/js/setting-demo2.js"></script>
-	
+    <!-- Select2 CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
+    <!-- Select2 JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
 	<script>
         $(document).ready(function () {
         const table = $('#add-row').DataTable({
             pageLength: 10
         });
+        $('#addDeviceID').select2();
 
         const $addUserButton = $('#addUserButton');
         const $addRowModal = $('#addRowModal');
@@ -324,7 +349,8 @@
         const $addclientID = $('#addclientID');
         const $addName = $('#addName');
         const $addUsername = $('#addUsername');
-        
+        const $addDeviceID = $('#addDeviceID');
+
         function initTooltips() {
             $('[data-toggle="tooltip"]').tooltip();
         }
@@ -376,7 +402,7 @@
         
         $addRowModal.on('show.bs.modal', function (e) {
             // Clear input fields and remove validation classes
-            [ $addclientID, $addName, $addUsername, $password, $confirmPassword ].forEach(field => {
+            [ $addclientID, $addName, $addUsername, $password, $confirmPassword,$addDeviceID ].forEach(field => {
                 field.val('').removeClass('is-invalid');
             });
 
@@ -389,6 +415,11 @@
             $('#updateCheckbox').prop('checked', false);
             $('#viewCheckbox').prop('checked', false);
             $('#deleteCheckbox').prop('checked', false);
+                // Reset Select2 dropdown
+            $('#addDeviceID').empty().select2({
+                // placeholder: "Select a device",
+                allowClear: true // Option to allow clearing selection
+            });
         });
 
 
@@ -448,21 +479,49 @@
         });
 
         });
-        // Populate the dropdown with client names
-        $.ajax({
-            url: '/mbscan/superAdmin/getClientId',
-            type: "GET",
-            dataType: "json",
-            success: function(data) {
-                // Iterate over client data
-                $.each(data, function(index, value) {
-                    // Append option elements to select element
-                    var $option = $('<option value="' + value.id + '">' + value.client_name + '</option>');
-                    $option.data('role_details', value.role_details); // Set role_details as data attribute
-                    $('#addclientID').append($option);
+            // Populate the dropdown with client names
+            $.ajax({
+                url: '/mbscan/superAdmin/getClientId',
+                type: "GET",
+                dataType: "json",
+                success: function(data) {
+                    // Iterate over client data
+                    $.each(data, function(index, value) {
+                        // Append option elements to select element
+                        var $option = $('<option value="' + value.id + '">' + value.client_name + '</option>');
+                        $option.data('role_details', value.role_details); // Set role_details as data attribute
+                        $('#addclientID').append($option);
+                    });
+                }
+            });
+
+            // Event listener for dropdown change
+            $('#addclientID').on('change', function() {
+                var selectedClientId = $(this).val();
+
+                // AJAX request to fetch device data based on selected client ID
+                $.ajax({
+                    url: '/mbscan/superAdmin/getDevicesByClientId',
+                    type: "GET",
+                    dataType: "json",
+                    data: {
+                        clientId: selectedClientId
+                    },
+                    success: function(devices) {
+                    $('#addDeviceID').empty();
+                    $('#addDeviceID').append('<option value="">All Devices</option>');
+                    devices.forEach(function(device) {
+                        var $option = $('<option value="' + device.id + '">' + device.device_name + '</option>');
+                        $('#addDeviceID').append($option);
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
                 });
-            }
-        });
+            });
+
+
 
         // Initially hide all checkboxes and their associated labels
         $('#createCheckbox, #createLabel, #updateCheckbox, #updateLabel, #viewCheckbox, #viewLabel, #deleteCheckbox, #deleteLabel').hide();
@@ -492,30 +551,6 @@
                 }
             }
         });
-
-        // $('#updateclientID').change(function() {
-        //     var selectedOption = $(this).find('option:selected');
-        //     var selectedClientRoleDetails = selectedOption.data('role_details');
-
-        //     $('#updateCreateCheckbox, #updateCheckboxLabel, #updateRoleCheckbox, #editRoleLabel, #updateViewCheckbox, #viewRoleLabel, #updateDeleteRole, #deleteRoleLabel').hide();
-
-            // if (selectedClientRoleDetails) {
-            //     selectedClientRoleDetails = JSON.parse(selectedClientRoleDetails);
-            //     if (selectedClientRoleDetails.can_create) {
-            //         $('#updateCreateCheckbox, #updateCheckboxLabel').show();
-            //     }
-            //     if (selectedClientRoleDetails.can_update) {
-            //         $('#updateRoleCheckbox, #editRoleLabel').show();
-            //     }
-            //     if (selectedClientRoleDetails.can_view) {
-            //         $('#updateViewCheckbox, #viewRoleLabel').show();
-            //     }
-            //     if (selectedClientRoleDetails.can_delete) {
-            //         $('#updateDeleteRole, #deleteRoleLabel').show();
-            //     }
-            // }
-        // });
-
         function addUser() {
             var clientID = $('#addclientID').val();
             var name = $('#addName').val();
@@ -527,6 +562,8 @@
             var updateCheckbox = $('#updateCheckbox').prop('checked');
             var viewCheckbox = $('#viewCheckbox').prop('checked');
             var deleteCheckbox = $('#deleteCheckbox').prop('checked');
+            var device_id = $('#addDeviceID').val();
+            console.log("selected device ids: ",device_id);
             // Perform client-side validation
             if (!clientID || !name || !username || !password || !confirmPassword || !status) {
                 alert("Please fill out all required fields.");
@@ -550,6 +587,7 @@
                     update: updateCheckbox,
                     view: viewCheckbox,
                     delete: deleteCheckbox,
+                    device_id: device_id,
                     role_name: '',
                     status: status,
                 },
@@ -561,7 +599,6 @@
                 }
             });
         }
-
 
         var updateUserId;
         function updateUserDetails(){
@@ -598,7 +635,7 @@
 
             $.ajax({
                 type: 'POST',
-                url: '/mbscan/superAdmin/updateUserRole',
+                url: '/mbscan/superAdmin/updateUser',
                 data: data,
                 success: function (response) {
                     $('#updateTable').modal('hide');
