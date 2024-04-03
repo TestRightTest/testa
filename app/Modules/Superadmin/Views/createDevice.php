@@ -35,7 +35,7 @@
 		<div class="main-header">			
 			<!-- Logo Header -->
 			<div class="logo-header" style="background-color: #133B62;">
-				<a href="<?= base_url('superAdmin/dashboard') ?>" class="logo">
+				<a href="<?= base_url('superadmin/dashboard') ?>" class="logo">
 					<img src="<?php echo base_url(); ?>assets/img/MbScanLogo.png" alt="navbar brand" class="navbar-brand">
 				</a>
 				<button class="navbar-toggler sidenav-toggler ml-auto" type="button" data-toggle="collapse" data-target="collapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -58,25 +58,25 @@
             <div class="sidebar-content">
                 <ul class="nav nav-primary">
                     <li class="nav-item ">
-                        <a href="<?= base_url('superAdmin/dashboard') ?>" class="collapsed" aria-expanded="false">
+                        <a href="<?= base_url('superadmin/dashboard') ?>" class="collapsed" aria-expanded="false">
                             <i class="fas fa-plus"></i>
                             <p>Create/Edit Client</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="<?= base_url('superAdmin/createuser') ?>" class="collapsed" aria-expanded="false">
+                        <a href="<?= base_url('superadmin/createuser') ?>" class="collapsed" aria-expanded="false">
                             <i class="fas fa-plus"></i>
                             <p>Create/Edit User</p>
                         </a>
                     </li>
                     <li class="nav-item active">
-                        <a href="<?= base_url('superAdmin/createdevice') ?>" class="collapsed" aria-expanded="false">
+                        <a href="<?= base_url('superadmin/createdevice') ?>" class="collapsed" aria-expanded="false">
                             <i class="fas fa-plus"></i>
                             <p>Create/Edit Device</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="<?= base_url('superAdmin/otaupdate') ?>" class="collapsed" aria-expanded="false">
+                        <a href="<?= base_url('superadmin/otaupdate') ?>" class="collapsed" aria-expanded="false">
                             <i class="fas fa-sync-alt"></i>
                             <p>OTA Update</p>
                         </a>
@@ -200,87 +200,6 @@
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/select/1.3.4/js/dataTables.select.min.js"></script>
 <script>
-	// $(document).ready(function() {
-	// 	var table = $('#add-row').DataTable({
-	// 		"pageLength": 10,
-	// 	});
-
-	// 	const $addclientID = $('#addclientID');
-
-	// 	// Function to fetch data and populate the table
-	// 	function populateTable() {
-	// 		$.ajax({
-	// 			url: '/mbscan/superAdmin/getDevices', // Adjust the URL according to your routing
-	// 			type: 'GET',
-	// 			success: function(response) {
-	// 				// Clear existing rows
-	// 				table.clear();
-
-	// 				// Add new rows from the response data
-	// 				response.forEach(function(device) {
-	// 					table.row.add([
-	// 						device.device_name,
-	// 						device.status,
-	// 						device.mac_id
-	// 					]).draw(false);
-	// 				});
-	// 			},
-	// 			error: function(xhr, status, error) {
-	// 				console.error(xhr.responseText);
-	// 			}
-	// 		});
-	// 	}
-
-	// 	// Call the populateTable function to initially populate the table
-	// 	populateTable();
-	// });
-
-	// function addDevice() {
-    // var name = $('#addName').val();
-    // var status = $('#addStatus').val();
-    // var macId = $('#addMacId').val();
-
-    // // AJAX call
-    // $.ajax({
-    //     type: 'POST',
-    //     url: '/mbscan/superAdmin/addDevice', // Adjust the URL according to your routing
-    //     data: {
-    //         name: name,
-    //         status: status,
-    //         mac_id: macId
-    //     },
-    //     success: function(response) {
-    //         if (response.status === 'success') {
-	// 			$('#addRowModal').modal('hide');
-    //             // alert(response.message);
-    //             // Optionally, reload the page or do something else
-    //         } else {
-    //             alert('Failed to add device. Please try again.');
-    //         }
-    //     },
-    //     error: function(xhr, status, error) {
-    //         console.error(xhr.responseText);
-    //         alert('Failed to add device. Please try again.');
-    //     }
-    // });
-
-	// 	// Populate the dropdown with client names
-	// 	$.ajax({
-	// 	url: '/mbscan/superAdmin/getClientId',
-	// 	type: "GET",
-	// 	dataType: "json",
-	// 	success: function(data) {
-	// 		// Iterate over client data
-	// 		$.each(data, function(index, value) {
-	// 			console.log("Client ID: ", data);
-	// 			// Append option elements to select element
-	// 			var $option = $('<option value="' + value.id + '">' + value.client_name + '</option>');
-	// 			$option.data('role_details', value.role_details); // Set role_details as data attribute
-	// 			$('#addclientID').append($option);
-	// 		});
-	// 	}
-	// });
-	// }
 	$(document).ready(function() {
         var table = $('#add-row').DataTable({
             "pageLength": 10,
@@ -299,7 +218,7 @@
         // Function to fetch data and populate the table
         function populateTable() {
             $.ajax({
-                url: '/mbscan/superAdmin/getDevices',
+                url: '/mbscan/superadmin/getDevices',
                 type: 'GET',
                 success: function(response) {
                     table.clear();
@@ -323,7 +242,7 @@
         // Populate the dropdown with client names
         function populateClientDropdown() {
             $.ajax({
-                url: '/mbscan/superAdmin/getClientId',
+                url: '/mbscan/superadmin/getClientId',
                 type: "GET",
                 dataType: "json",
                 success: function(data) {
@@ -351,7 +270,7 @@
         // AJAX call
         $.ajax({
             type: 'POST',
-            url: '/mbscan/superAdmin/addDevice', 
+            url: '/mbscan/superadmin/addDevice', 
             data: {
 				client_id: clientId,
                 name: name,

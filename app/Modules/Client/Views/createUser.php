@@ -67,34 +67,55 @@
 			</nav>
         </div>
 		<div>
+		<div>
             <div class="sidebar sidebar-style-2" background-color="white">			
                 <div class="sidebar-wrapper scrollbar scrollbar-inner">
                     <div class="sidebar-content">
+						<div class="user">
+							<div class="info">
+								<a data-toggle="collapse" href="#collapseExample" aria-expanded="true">
+									<span>
+										<span id="companyName" style="font-weight: bold; font-size: larger;">Company Name</span>
+									</span>
+								</a>
+								<div class="clearfix"></div>
+							</div>
+						</div>
+						
                         <ul class="nav nav-primary">
                             <li class="nav-item">
-                                <a href="<?= base_url('superadmin/dashboard') ?>" class="collapsed" aria-expanded="false">
-                                    <i class="fas fa-plus"></i>
-                                    <p>Create/Edit Client</p>
+                                <a href="<?= base_url('client/dashboard') ?>" class="collapsed" aria-expanded="false">
+                                    <i class="fas fa-home"></i>
+                                    <p>Home</p>
                                 </a>
                             </li>
-                            <li class="nav-item active">
-                                <a href="<?= base_url('superadmin/createuser') ?>" class="collapsed" aria-expanded="false">
-                                    <i class="fas fa-plus"></i>
-                                    <p>Create/Edit User</p>
+                            <!-- <li class="nav-item ">
+                                <a href="<?= base_url('client/dashboard/settings') ?>" class="collapsed" aria-expanded="false">
+                                    <i class="fas fa-cog"></i>
+                                    <p>Settings</p>
                                 </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="<?= base_url('superadmin/createdevice') ?>" class="collapsed" aria-expanded="false">
-                                    <i class="fas fa-plus"></i>
-                                    <p>Create/Edit Device</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="<?= base_url('superadmin/otaupdate') ?>" class="collapsed" aria-expanded="false">
-                                    <i class="fas fa-sync-alt"></i>
-                                    <p>OTA Update</p>
-                                </a>
-                            </li>		
+                            </li> -->
+							<li class="nav-item active submenu">
+								<a data-toggle="collapse" href="#settings">
+									<i class="fas fa-cog"></i>
+									<p>Settings</p>
+									<span class="caret"></span>
+								</a>
+								<div class="collapse show" id="settings">
+									<ul class="nav nav-collapse">
+										<li >
+											<a href="<?= base_url('client/dashboard/settings') ?>">
+												<span class="sub-item">Device Settings</span>
+											</a>
+										</li>
+										<li class="active">
+											<a href="<?= base_url('client/dashboard/settings/createuser') ?>">
+												<span class="sub-item">Create/ Edit User</span>
+											</a>
+										</li>
+									</ul>
+								</div>
+							</li>	
 							<hr class="light-line">
 
 							<li class="nav-item">
@@ -113,6 +134,7 @@
                 </div>
             </div>
 		</div>
+		</div>
 		<div class="main-panel">
 			<div class="content">
 				<!-- <div id="loadingScreen">
@@ -125,7 +147,7 @@
 								<div class="card-header">
 									<div class="d-flex align-items-center">
 										<h4 class="card-title">Add User</h4>
-										<button class="btn btn-primary btn-round ml-auto" data-toggle="modal" data-target="#addRowModal">
+										<button class="btn btn-primary btn-round ml-auto" data-toggle="modal" data-target="#addRowModal" id="addUserId" style="display: none;">
 											<i class="fa fa-plus"></i>
 											Add User
 										</button>
@@ -229,13 +251,8 @@
                                                     <p class="small">Edit Client Details</p>
                                                     <form>
                                                         <div class="row">
-                                                            <div class="col-sm-12">
-                                                                <div class="form-group form-group-default">
-                                                                    <label>Client ID</label>
-                                                                    <input id="updateClient" type="text" class="form-control" readonly>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-12">
+
+                                                            <div class="col-md-6">
                                                                 <div class="form-group form-group-default">
                                                                     <label>Name</label>
                                                                     <input id="updateName" type="text" class="form-control" placeholder="Enter name" readonly>
@@ -245,6 +262,12 @@
                                                                 <div class="form-group form-group-default">
                                                                     <label>Username</label>
                                                                     <input id="updateUserName" type="text" class="form-control" placeholder="Enter Username" readonly>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group form-group-default">
+                                                                    <label>Devices</label>
+                                                                    <input id="updateClient" type="text" class="form-control" readonly>
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-6">
@@ -293,12 +316,13 @@
 										<table id="add-row" class="display table table-striped table-hover" >
 											<thead>
 												<tr>
-													<th>Client ID</th>
+													
 													<th>Name</th>
 													<th>Username</th>
+                                                    <th>Devices</th>
 													<th>Role</th>
                                                     <th>Status</th>
-													<th style="width: 10%">Action</th>
+													<th  id= "action" style="display: none;">Action</th>
 												</tr>
 											</thead>
 											<tbody></tbody>
@@ -350,6 +374,7 @@
         const $addName = $('#addName');
         const $addUsername = $('#addUsername');
         const $addDeviceID = $('#addDeviceID');
+        var clientRoleDetails;
 
         function initTooltips() {
             $('[data-toggle="tooltip"]').tooltip();
@@ -357,9 +382,9 @@
         
         $(document).on('click', '.edit-btn', function () {
             const $row = $(this).closest('tr');
-            var clientId = $row.find('td:eq(0)').text();
-            var name = $row.find('td:eq(1)').text();
-            var userName = $row.find('td:eq(2)').text();
+            var name = $row.find('td:eq(0)').text();
+            var userName = $row.find('td:eq(1)').text();
+            var clientId = $row.find('td:eq(2)').text();
             var roles = $row.find('td:eq(3)').text().split(', '); 
             var status = $row.find('td:eq(4)').text();
 			var userId = $row.data('user-id'); 
@@ -379,14 +404,14 @@
 
             $('#updateCreateCheckbox, #updateCheckboxLabel, #updateRoleCheckbox, #editRoleLabel, #updateViewCheckbox, #viewRoleLabel, #updateDeleteRole, #deleteRoleLabel').hide();
 
-            var clientRoleDetails = $('#addclientID option[value="' + clientId + '"]').data('role_details');
-
+            // var clientRoleDetails = $('#addclientID option[value="' + clientId + '"]').data('role_details');
+            console.log("client role details: ",clientRoleDetails);
             if (clientRoleDetails) {
-                clientRoleDetails = JSON.parse(clientRoleDetails);
+                // clientRoleDetails = JSON.parse(clientRoleDetails);
                 if (clientRoleDetails.can_create) {
                     $('#updateCreateCheckbox, #updateCheckboxLabel').show();
                 }
-                if (clientRoleDetails.can_update) {
+                if (clientRoleDetails.can_edit) {
                     $('#updateRoleCheckbox, #editRoleLabel').show();
                 }
                 if (clientRoleDetails.can_view) {
@@ -433,71 +458,126 @@
             }
         });
 
-        
         $.ajax({
+            url: '/mbscan/client/getUser',
             type: 'GET',
-            url: '/mbscan/superadmin/getUsers',
-            success: function (response) {
-            table.clear().draw();
-            response.forEach(user => {
-                var roles = '';
-                if (user.role_details) {
-                    var roleDetails = JSON.parse(user.role_details);
-                    if (roleDetails.can_create) roles += 'create, ';
-                    if (roleDetails.can_edit) roles += 'edit, ';
-                    if (roleDetails.can_delete) roles += 'delete, ';
-                    if (roleDetails.can_view) roles += 'view, ';
-                }
-                roles = roles.replace(/,\s*$/, '');
-                const rowData = [
-                    user.client_id || '-',
-                    user.name || '-',
-                    user.user_name || '-',
-                    roles || '-', // Include role details here
-                    user.status || '-',
-                    `<div class="form-button-action">
-                        <button type="button" data-toggle="tooltip" class="btn btn-link btn-primary btn-lg edit-btn">
-                            <i class="fa fa-edit"></i>
-                        </button>
-                    </div>`
-                ];
-                console.log('User ID:', user.id); // Log user_id to console
-                initTooltips();
-                var row =  table.row.add(rowData).draw(false).node();
-                $(row).data('roles', roles);
-                $(row).data('user-id', user.id); 
+            success: function(data) {
+                response = data;
+                console.log("user_details: ",response);
+                console.log("role details: ", response[0].role_details);
+                if (response.length > 0) {
+                    console.log("client_name: ", response[0].client_name);
+                    $('#companyName').text(response[0].client_name);
+                    console.log("client ID: ", response[0].client_id);
+                    // var clientId = response[0].client_id;
+                    // Parse role details
+                    var roleDetails = JSON.parse(response[0].role_details);
+                    clientRoleDetails = JSON.parse(response[0].role_details);
+                    console.log("Parsed role details:", roleDetails);
 
-                // Create invisible row containing client_id only
-                var invisibleRow = '<tr class="invisible-row" data-user-id="' + user.id + '"></tr>';
-                $(row).after(invisibleRow);
-                });
-        },
-
-            error: function (xhr, status, error) {
-                console.error(xhr.responseText);
-            }
-        });
-
-        });
-            // Populate the dropdown with client names
-            $.ajax({
-                url: '/mbscan/superadmin/getClientId',
-                type: "GET",
-                dataType: "json",
-                success: function(data) {
-                    // Iterate over client data
+                    // Check if the user has the "can_create" role
+                    var hasCreateRole = roleDetails && roleDetails.can_create;
+                    var hasUpdateRole = roleDetails && roleDetails.can_edit;
+                    // Show or hide the "Add Client" button based on the role
+                    if (hasCreateRole) {
+                        $('#addUserId').show();
+                    } else {
+                        $('#addUserId').hide();
+                    }
+                    // Show or hide the "Action" column based on the role
+                    if (hasUpdateRole) {
+                        $('#action').show(); // Show the "Action" column
+                    } else {
+                        $('#action').hide(); // Hide the "Action" column
+                    }
                     $.each(data, function(index, value) {
                         // Append option elements to select element
                         var $option = $('<option value="' + value.id + '">' + value.client_name + '</option>');
                         $option.data('role_details', value.role_details); // Set role_details as data attribute
                         $('#addclientID').append($option);
                     });
+                    
+                    // Now make the second AJAX call inside this success callback
+                    $.ajax({
+                        type: 'GET',
+                        url: '/mbscan/client/getclientusers',
+                        data: {
+                            client_id: response[0].client_id // Pass the client_id obtained from the first call
+                        },
+                        success: function(response) {
+                            console.log("get users response: ", response);
+                            table.clear().draw();
+                            response.forEach(user => {
+                                var roles = '';
+                                if (user.role_details) {
+                                    var roleDetails = JSON.parse(user.role_details);
+                                    if (roleDetails.can_create) roles += 'create, ';
+                                    if (roleDetails.can_edit) roles += 'edit, ';
+                                    if (roleDetails.can_delete) roles += 'delete, ';
+                                    if (roleDetails.can_view) roles += 'view, ';
+                                }
+                                roles = roles.replace(/,\s*$/, '');
+                                const rowData = [
+                                    user.name || '-',
+                                    user.user_name || '-',
+                                    user.device_names || '-',
+                                    roles || '-', // Include role details here
+                                    user.status || '-',
+                                    `<div class="form-button-action">
+                                        <button type="button" data-toggle="tooltip" class="btn btn-link btn-primary btn-lg edit-btn">
+                                            <i class="fa fa-edit"></i>
+                                        </button>
+                                    </div>`
+                                ];
+
+                                
+                                // console.log('User ID:', user.id); // Log user_id to console
+                                initTooltips();
+                                var row = table.row.add(rowData).draw(false).node();
+                                $(row).data('roles', roles);
+                                $(row).data('user-id', user.id);
+
+                                // Create invisible row containing client_id only
+                                var invisibleRow = '<tr class="invisible-row" data-user-id="' + user.id + '"></tr>';
+                                $(row).after(invisibleRow);
+                                if (!hasUpdateRole) {
+                                    $(row).find('.form-button-action').hide(); // Hide the "Action" button
+                                }
+                            });
+                        },
+
+                        error: function(xhr, status, error) {
+                            console.error(xhr.responseText);
+                        }
+                    });
                 }
-            });
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+
+
+        });
+            // // // Populate the dropdown with client names
+            // $.ajax({
+            //     url: '/mbscan/superadmin/getClientId',
+            //     type: "GET",
+            //     dataType: "json",
+            //     success: function(data) {
+            //         // Iterate over client data
+            //         $.each(data, function(index, value) {
+            //             // Append option elements to select element
+            //             var $option = $('<option value="' + value.id + '">' + value.client_name + '</option>');
+            //             $option.data('role_details', value.role_details); // Set role_details as data attribute
+            //             $('#addclientID').append($option);
+            //         });
+            //     }
+            // });
 
             // Event listener for dropdown change
             $('#addclientID').on('change', function() {
-                var selectedClientId = $(this).val();
+                var selectedClientId = 145;
 
                 // AJAX request to fetch device data based on selected client ID
                 $.ajax({
@@ -526,7 +606,6 @@
         // Initially hide all checkboxes and their associated labels
         $('#createCheckbox, #createLabel, #updateCheckbox, #updateLabel, #viewCheckbox, #viewLabel, #deleteCheckbox, #deleteLabel').hide();
 
-        // Handle change event of the dropdown
         $('#addclientID').change(function() {
             var selectedOption = $(this).find('option:selected');
             var selectedClientRoleDetails = selectedOption.data('role_details');
@@ -540,7 +619,7 @@
                 if (selectedClientRoleDetails.can_create) {
                     $('#createCheckbox, #createLabel').show();
                 }
-                if (selectedClientRoleDetails.can_update) {
+                if (selectedClientRoleDetails.can_edit) {
                     $('#updateCheckbox, #updateLabel').show();
                 }
                 if (selectedClientRoleDetails.can_view) {
@@ -551,6 +630,7 @@
                 }
             }
         });
+
         function addUser() {
             var clientID = $('#addclientID').val();
             var name = $('#addName').val();
@@ -639,6 +719,7 @@
                 data: data,
                 success: function (response) {
                     $('#updateTable').modal('hide');
+                    
                 },
                 error: function (xhr, status, error) {
                     console.error('Error updating client details:', error);
@@ -648,10 +729,10 @@
         function logout(){
                 $.ajax({
                 type: "GET",
-                url: "/mbscan/superadmin/logout",
+                url: "/mbscan/client/logout",
                 success: function(response) {
                     // Redirect to login page after successful logout
-                    window.location.href = '/mbscan/superadmin/login';
+                    window.location.href = '/mbscan/client/login';
                 },
                 error: function(xhr, status, error) {
                     console.error(xhr.responseText);

@@ -35,7 +35,7 @@
 		<div class="main-header">			
 			<!-- Logo Header -->
 			<div class="logo-header" style="background-color: #133B62;">
-				<a href="<?= base_url('superAdmin/dashboard') ?>" class="logo">
+				<a href="<?= base_url('superadmin/dashboard') ?>" class="logo">
 					<img src="<?php echo base_url(); ?>assets/img/MbScanLogo.png" alt="navbar brand" class="navbar-brand">
 				</a>
 				<button class="navbar-toggler sidenav-toggler ml-auto" type="button" data-toggle="collapse" data-target="collapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -58,25 +58,25 @@
             <div class="sidebar-content">
                 <ul class="nav nav-primary">
                     <li class="nav-item active">
-                        <a href="<?= base_url('superAdmin/dashboard') ?>" class="collapsed" aria-expanded="false">
+                        <a href="<?= base_url('superadmin/dashboard') ?>" class="collapsed" aria-expanded="false">
                             <i class="fas fa-plus"></i>
                             <p>Create/Edit Client</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="<?= base_url('superAdmin/createuser') ?>" class="collapsed" aria-expanded="false">
+                        <a href="<?= base_url('superadmin/createuser') ?>" class="collapsed" aria-expanded="false">
                             <i class="fas fa-plus"></i>
                             <p>Create/Edit User</p>
                         </a>
                     </li>
 					<li class="nav-item">
-                        <a href="<?= base_url('superAdmin/createdevice') ?>" class="collapsed" aria-expanded="false">
+                        <a href="<?= base_url('superadmin/createdevice') ?>" class="collapsed" aria-expanded="false">
                             <i class="fas fa-plus"></i>
                             <p>Create/Edit Device</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="<?= base_url('superAdmin/otaupdate') ?>" class="collapsed" aria-expanded="false">
+                        <a href="<?= base_url('superadmin/otaupdate') ?>" class="collapsed" aria-expanded="false">
                             <i class="fas fa-sync-alt"></i>
                             <p>OTA Update</p>
                         </a>
@@ -307,7 +307,7 @@
 		// AJAX request to get client data
 		$.ajax({
 			type: 'GET',
-			url: '/mbscan/superAdmin/getClient',
+			url: '/mbscan/superadmin/getClient',
 			success: function (response) {
 				table.clear().draw();
 				response.forEach(function (client) {
@@ -383,7 +383,7 @@
 
 		$.ajax({
 			type: 'POST',
-			url: '/mbscan/superAdmin/addclient',
+			url: '/mbscan/superadmin/addclient',
 			data: {
 				name: name,
 				status: status,
@@ -403,7 +403,7 @@
 			var clientName = responseParts[1];
 			$.ajax({
 				type: 'POST',
-				url: '/mbscan/superAdmin/createSchemaAndTables',
+				url: '/mbscan/superadmin/createSchemaAndTables',
 				data: {
 					clientId: clientId
 				},
@@ -448,7 +448,7 @@
 
 		$.ajax({
 			type: 'POST',
-			url: '/mbscan/superAdmin/updateClient',
+			url: '/mbscan/superadmin/updateClient',
 			data: data,
 			success: function (response) {
 				$('#updateTable').modal('hide');
@@ -462,9 +462,9 @@
 	function logout(){
 	$.ajax({
 	type: "GET",
-	url: "/mbscan/superAdmin/logout",
+	url: "/mbscan/superadmin/logout",
 	success: function(response) {
-		window.location.href = '/mbscan/superAdmin/login';
+		window.location.href = '/mbscan/superadmin/login';
 	},
 	error: function(xhr, status, error) {
 		console.error(xhr.responseText);

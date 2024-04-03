@@ -17,24 +17,6 @@
 				sessionStorage.fonts = true;
 			}
 		});
-		document.addEventListener('DOMContentLoaded', function() {
-		var passwordInput = document.getElementById('password-input');
-		var submitButton = document.getElementById('submit-button');
-
-		submitButton.addEventListener('click', function() {
-			var enteredPassword = passwordInput.value;
-
-			// Get the currently signed-in user
-			if (user) {
-					//logic for user sign in
-			} else {
-				// User is not signed in, handle accordingly
-				console.log('User is not logged in');
-				// You may want to redirect to the login page or show a message
-			}
-		});
-	});
-	
 	</script>
 
 	<!-- CSS Files -->
@@ -45,28 +27,6 @@
 <body>
 
 	<div class="wrapper">
-		<!-- Modal -->
-		<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-			<div class="modal-dialog modal-dialog-centered" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h2 class="modal-title" id="exampleModalLongTitle">Enter Settings Password</h2>
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-					</div>
-					<div class="modal-body">
-						<input type="password" id="password-input" class="form-control input-sm" placeholder="Enter Password" aria-label="" aria-describedby="basic-addon1" style="border-width: 3px;">
-						<div id="error-message" style="color: red; font-size: 12px;"></div>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn" data-dismiss="modal">Close</button>
-						<button type="button" class="btn" id="submit-button" style="background-color: #2dbd85; color: white;">Submit</button>
-					</div>
-				</div>
-			</div>
-		</div>
-		
 		<div class="main-header">			
 			<!-- Logo Header -->
 			<div class="logo-header" style="background-color: #133B62;">
@@ -97,8 +57,6 @@
 								<a data-toggle="collapse" href="#collapseExample" aria-expanded="true">
 									<span>
 										<span id="companyName" style="font-weight: bold; font-size: larger;">Company Name</span>
-										<!-- <span id="AccType" style=" font-size: small">Account Type</span> -->
-										<!-- <span id="companyId" style=" font-size: small">Company ID</span> -->
 									</span>
 								</a>
 								<div class="clearfix"></div>
@@ -112,13 +70,33 @@
                                     <p>Home</p>
                                 </a>
                             </li>
-							<li class="nav-item"   id="settingsItem" style="display: none;" data-toggle="modal" data-target="#exampleModalCenter">
-								<a data-toggle="collapse" href="<?= base_url('client/dashboard/settings') ?>" class="collapsed" aria-expanded="false">
+                            <!-- <li class="nav-item ">
+                                <a href="<?= base_url('client/dashboard/settings') ?>" class="collapsed" aria-expanded="false">
+                                    <i class="fas fa-cog"></i>
+                                    <p>Settings</p>
+                                </a>
+                            </li> -->
+							<li class="nav-item" id="settingsOption" style="display: none;" >
+								<a data-toggle="collapse" href="#settings">
 									<i class="fas fa-cog"></i>
 									<p>Settings</p>
-									<!-- <span class="caret"></span> -->
+									<span class="caret"></span>
 								</a>
-							</li>		
+								<div class="collapse " id="settings">
+									<ul class="nav nav-collapse">
+										<li >
+											<a href="<?= base_url('client/dashboard/settings') ?>">
+												<span class="sub-item">Device Settings</span>
+											</a>
+										</li>
+										<li >
+											<a href="<?= base_url('client/dashboard/settings/createuser') ?>">
+												<span class="sub-item">Create/ Edit User</span>
+											</a>
+										</li>
+									</ul>
+								</div>
+							</li>	
 							<hr class="light-line">
 
 							<li class="nav-item">
@@ -308,6 +286,19 @@
 					if (response.length > 0) {
 						console.log("client_name: ", response[0].client_name);
 						$('#companyName').text(response[0].client_name);
+						// console.log("role details: ",response[0].role_details );
+						console.log("role details: ");
+						var roleDetails = JSON.parse(response[0].role_details);
+						console.log(roleDetails);
+						
+						// Check if the user has permission to view only
+						if (roleDetails.can_view && !roleDetails.can_edit && !roleDetails.can_create && !roleDetails.can_delete) {
+							// Hide the entire settings option
+							$('#settingsOption').hide();
+						} else {
+							// Show the settings option
+							$('#settingsOption').show();
+						}
 
 						// Clear existing dropdown items
 						$('#deviceDropdown').empty();

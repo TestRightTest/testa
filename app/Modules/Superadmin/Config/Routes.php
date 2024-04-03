@@ -1,26 +1,26 @@
 <?php
-$routes->group("superAdmin", ["namespace" => "App\Modules\SuperAdmin\Controllers"], function ($routes) {
-    $routes->get("/", "SuperAdminController::login");
-    $routes->get("login", "SuperAdminController::login");
-    $routes->get("dashboard", "SuperAdminController::dashboard");
-    $routes->get("createuser", "SuperAdminController::createUser");
-    $routes->get("otaupdate", "SuperAdminController::otaUpdate");
-    $routes->get("getUsers", "SuperAdminController::getUsers");
-    $routes->get("getClient", "SuperAdminController::getClient");
-    $routes->get("logout", "SuperAdminController::logout");
-    $routes->get("createdevice", "SuperAdminController::createDevice");
-    $routes->get("getDevices", "SuperAdminController::getDevices");
-    $routes->get("getClientId", "SuperAdminController::getClientId");
-    $routes->get("getDevicesByClientId", "SuperAdminController::getDevicesByClientId");
+$routes->group("superadmin", ["namespace" => "App\Modules\superadmin\Controllers"], function ($routes) {
+    $routes->get("/", "superadminController::login");
+    $routes->get("login", "superadminController::login");
+    $routes->get("dashboard", "superadminController::dashboard");
+    $routes->get("createuser", "superadminController::createUser");
+    $routes->get("otaupdate", "superadminController::otaUpdate");
+    $routes->get("getUsers", "superadminController::getUsers");
+    $routes->get("getClient", "superadminController::getClient");
+    $routes->get("logout", "superadminController::logout");
+    $routes->get("createdevice", "superadminController::createDevice");
+    $routes->get("getDevices", "superadminController::getDevices");
+    $routes->get("getClientId", "superadminController::getClientId");
+    $routes->get("getDevicesByClientId", "superadminController::getDevicesByClientId");
 
 
-    $routes->post("loginAuth", "SuperAdminController::loginAuth");
-    $routes->post('adduser', 'SuperAdminController::addUser');
-    $routes->post('addclient', 'SuperAdminController::addClient');
-    $routes->post("createSchemaAndTables", "SuperAdminController::createSchemaAndTables");
-    $routes->post("addDevice", "SuperAdminController::addDevice");
-    $routes->post("updateUser", "SuperAdminController::updateUser");
-    $routes->post("updateClient", "SuperAdminController::updateClient");
+    $routes->post("loginAuth", "superadminController::loginAuth");
+    $routes->post('adduser', 'superadminController::addUser');
+    $routes->post('addclient', 'superadminController::addClient');
+    $routes->post("createSchemaAndTables", "superadminController::createSchemaAndTables");
+    $routes->post("addDevice", "superadminController::addDevice");
+    $routes->post("updateUser", "superadminController::updateUser");
+    $routes->post("updateClient", "superadminController::updateClient");
 
 });
 ?>

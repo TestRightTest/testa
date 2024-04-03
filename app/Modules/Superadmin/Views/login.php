@@ -37,7 +37,7 @@
 //     var password = document.getElementById('password').value;
 
 //     // Send an AJAX request to the server to handle login
-//     fetch('/mbscan/superAdmin/loginAuth', {
+//     fetch('/mbscan/superadmin/loginAuth', {
 //         method: 'POST',
 //         headers: {
 //             'Content-Type': 'application/json',
@@ -52,7 +52,7 @@
 //             // Log that the login was successful
 //             console.log('Login successful');
 
-//             window.location.href = '/mbscan/superAdmin/dashboard';
+//             window.location.href = '/mbscan/superadmin/dashboard';
 //         } else {
 //             console.log('Login failed');
 
@@ -76,14 +76,14 @@ function login() {
     // AJAX request
     $.ajax({
         type: "POST",
-        url: "/mbscan/superAdmin/loginAuth",
+        url: "/mbscan/superadmin/loginAuth",
         data: JSON.stringify(formData),
         contentType: "application/json",
         dataType: "json",
         success: function(response) {
             if (response.status === 'success') {
                 // Redirect or do something upon successful login
-                window.location.href = '/mbscan/superAdmin/dashboard';
+                window.location.href = '/mbscan/superadmin/dashboard';
                 console.log(response.message);
             } else {
                 document.getElementById("loginStatusLabel").innerHTML = response.message;

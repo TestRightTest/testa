@@ -1,7 +1,0 @@
-CRITICAL - 2024-03-28 13:22:00 --> ErrorException: Undefined property: App\Modules\SuperAdmin\Controllers\SuperAdminController::$deviceModel
-in APPPATH\Modules\Superadmin\Controllers\SuperAdminController.php on line 394.
- 1 APPPATH\Modules\Superadmin\Controllers\SuperAdminController.php(394): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined property: App\\Modules\\SuperAdmin\\Controllers\\SuperAdminController::$deviceModel', 'C:\\xampp\\htdocs\\mbscan\\app\\Modules\\Superadmin\\Controllers\\SuperAdminController.php', 394)
- 2 SYSTEMPATH\CodeIgniter.php(941): App\Modules\SuperAdmin\Controllers\SuperAdminController->getDevices()
- 3 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Modules\SuperAdmin\Controllers\SuperAdminController))
- 4 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
- 5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()

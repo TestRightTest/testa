@@ -1,12 +1,12 @@
 <?php
-namespace App\Modules\SuperAdmin\Controllers;
+namespace App\Modules\superadmin\Controllers;
 use App\Controllers\BaseController;
-use App\Modules\SuperAdmin\Models\AdminLoginModel;
-use App\Modules\SuperAdmin\Models\createUserModel;
-use App\Modules\SuperAdmin\Models\createClientModel;
-use App\Modules\SuperAdmin\Models\CreateDeviceModel;
+use App\Modules\superadmin\Models\AdminLoginModel;
+use App\Modules\superadmin\Models\createUserModel;
+use App\Modules\superadmin\Models\createClientModel;
+use App\Modules\superadmin\Models\CreateDeviceModel;
 
-class SuperAdminController extends BaseController
+class superadminController extends BaseController
 {
     protected $adminLoginModel;
     protected $createUserModel;
@@ -22,43 +22,43 @@ class SuperAdminController extends BaseController
     }
 
     public function index(): string {
-        return view('\App\Modules\SuperAdmin\Views\welcome_message');
+        return view('\App\Modules\superadmin\Views\welcome_message');
     }
 
     public function login():string {
-        return view('\App\Modules\SuperAdmin\Views\login');
+        return view('\App\Modules\superadmin\Views\login');
     }
 
     public function dashboard() {
         // Check if user is logged in
         if (!session()->get('isLoggedIn')) {
-            return redirect()->to(base_url('superAdmin/login'));
+            return redirect()->to(base_url('superadmin/login'));
         }
-        return view('\App\Modules\SuperAdmin\Views\createClient');
+        return view('\App\Modules\superadmin\Views\createClient');
     }
 
     public function createUser() {
         // Check if user is logged in
         if (!session()->get('isLoggedIn')) {
-            return redirect()->to(base_url('superAdmin/login'));
+            return redirect()->to(base_url('superadmin/login'));
         }
-        return view('\App\Modules\SuperAdmin\Views\createUser');
+        return view('\App\Modules\superadmin\Views\createUser');
     }
 
     public function createDevice() {
         // Check if user is logged in
         if (!session()->get('isLoggedIn')) {
-            return redirect()->to(base_url('superAdmin/login'));
+            return redirect()->to(base_url('superadmin/login'));
         }
-        return view('\App\Modules\SuperAdmin\Views\createDevice');
+        return view('\App\Modules\superadmin\Views\createDevice');
     }
 
     public function otaUpdate() {
         // Check if user is logged in
         if (!session()->get('isLoggedIn')) {
-            return redirect()->to(base_url('superAdmin/login'));
+            return redirect()->to(base_url('superadmin/login'));
         }
-        return view('\App\Modules\SuperAdmin\Views\otaUpdate');
+        return view('\App\Modules\superadmin\Views\otaUpdate');
     }
 
     public function loginAuth() {
@@ -92,12 +92,12 @@ class SuperAdminController extends BaseController
     public function logout(){
         // Destroy session on logout
         session()->destroy();
-        return redirect()->to(base_url('superAdmin/login'));
+        return redirect()->to(base_url('superadmin/login'));
     }
 
     public function addUser(){
         if (!session()->get('isLoggedIn')) {
-            return redirect()->to(base_url('superAdmin/login'));
+            return redirect()->to(base_url('superadmin/login'));
         }
         $createUserModel = new CreateUserModel();
     
@@ -210,7 +210,7 @@ class SuperAdminController extends BaseController
     
     public function getUsers(){
         if (!session()->get('isLoggedIn')) {
-            return redirect()->to(base_url('superAdmin/login'));
+            return redirect()->to(base_url('superadmin/login'));
         }
     
         // Fetch users with role details from the model
@@ -222,7 +222,7 @@ class SuperAdminController extends BaseController
     
     public function getClient(){
         if (!session()->get('isLoggedIn')) {
-            return redirect()->to(base_url('superAdmin/login'));
+            return redirect()->to(base_url('superadmin/login'));
         }
     
         // Use $this->createClientModel to access the model
@@ -232,7 +232,7 @@ class SuperAdminController extends BaseController
 
     public function addClient(){
         if (!session()->get('isLoggedIn')) {
-            return redirect()->to(base_url('superAdmin/login'));
+            return redirect()->to(base_url('superadmin/login'));
         }
     
         // Get the current user's ID
@@ -295,7 +295,7 @@ class SuperAdminController extends BaseController
     public function createSchemaAndTables() {
 
         if (!session()->get('isLoggedIn')) {
-            return redirect()->to(base_url('superAdmin/login'));
+            return redirect()->to(base_url('superadmin/login'));
         }
 
         $clientId = $this->request->getPost('clientId');
