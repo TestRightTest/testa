@@ -113,7 +113,8 @@ class superadminController extends BaseController
         $update = $this->request->getPost('update') === 'true' ? true : false;
         $view = $this->request->getPost('view') === 'true' ? true : false;
         $delete = $this->request->getPost('delete') === 'true' ? true : false;
-    
+        $adjust = $this->request->getPost('adjust') === 'true' ? true : false;
+
         // Check if the username already exists
         $existingUser = $createUserModel->where('user_name', $username)->first();
         if ($existingUser) {
@@ -143,7 +144,9 @@ class superadminController extends BaseController
             'can_view' => $view,
             'can_create' => $create,
             'can_delete' => $delete,
-            'can_edit' => $update
+            'can_edit' => $update,
+            'can_adjust' => $adjust
+
         ];
         
         // Insert data into the database
@@ -254,6 +257,7 @@ class superadminController extends BaseController
             'can_create' => $this->request->getPost('can_create') == 'true' ? true : false,
             'can_delete' => $this->request->getPost('can_delete') == 'true' ? true : false,
             'can_edit' => $this->request->getPost('can_edit') == 'true' ? true : false,
+            'can_adjust' => $this->request->getPost('can_adjust') == 'true' ? true : false,
             'status' => $this->request->getPost('status'),
         ];
     
@@ -367,7 +371,7 @@ class superadminController extends BaseController
                 'success' => true,
                 'message' => 'Client details updated successfully',
                 'clientId' => $clientId,
-                'updatedData' => $data // Include the updated data in the response
+                'updatedData' => $data 
             ];
             return $this->response->setJSON($response);
         } else {

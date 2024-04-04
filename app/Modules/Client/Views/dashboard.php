@@ -63,49 +63,53 @@
 							</div>
 						</div>
 						
-                        <ul class="nav nav-primary">
-                            <li class="nav-item active">
-                                <a href="<?= base_url('client/dashboard') ?>" class="collapsed" aria-expanded="false">
-                                    <i class="fas fa-home"></i>
-                                    <p>Home</p>
-                                </a>
-                            </li>
-                            <!-- <li class="nav-item ">
+						<ul class="nav nav-primary">
+							<!-- Home link -->
+							<li class="nav-item active">
+								<a href="<?= base_url('client/dashboard') ?>" class="collapsed" aria-expanded="false">
+									<i class="fas fa-home"></i>
+									<p>Home</p>
+								</a>
+							</li>
+							<?php
+
+							use Config\Constants; // Import the Constants class
+
+							?>
+							<?php if (isset($roleDetails[Constants::CAN_ADJUST]) && $roleDetails[Constants::CAN_ADJUST]): ?>
+								<!-- If user has "can_adjust" permission, show the Device Settings option -->
+								<li class="nav-item">
                                 <a href="<?= base_url('client/dashboard/settings') ?>" class="collapsed" aria-expanded="false">
                                     <i class="fas fa-cog"></i>
-                                    <p>Settings</p>
-                                </a>
-                            </li> -->
-							<li class="nav-item" id="settingsOption" style="display: none;" >
-								<a data-toggle="collapse" href="#settings">
-									<i class="fas fa-cog"></i>
-									<p>Settings</p>
-									<span class="caret"></span>
-								</a>
-								<div class="collapse " id="settings">
-									<ul class="nav nav-collapse">
-										<li >
-											<a href="<?= base_url('client/dashboard/settings') ?>">
-												<span class="sub-item">Device Settings</span>
-											</a>
-										</li>
-										<li >
-											<a href="<?= base_url('client/dashboard/settings/createuser') ?>">
-												<span class="sub-item">Create/ Edit User</span>
-											</a>
-										</li>
-									</ul>
-								</div>
-							</li>	
-							<hr class="light-line">
-
-							<li class="nav-item">
-                                <a href="#signout function" class="collapsed" aria-expanded="false" onclick="logout()">
-                                    <i class="fas fa-sign-out-alt"></i>
-                                    <p>Logout</p>
+                                    <p>Device Settings</p>
                                 </a>
                             </li>
-                        </ul>
+							<?php endif; ?>
+
+							<?php if (
+								isset($roleDetails[Constants::CAN_CREATE]) &&
+								$roleDetails[Constants::CAN_CREATE] ||
+								isset($roleDetails[Constants::CAN_EDIT]) &&
+								$roleDetails[Constants::CAN_EDIT] ||
+								isset($roleDetails[Constants::CAN_DELETE]) &&
+								$roleDetails[Constants::CAN_DELETE]
+							): ?>
+								<!-- If user has "can_create", "can_edit", and "can_delete" permissions, show the Create/Edit User option -->
+							<li class="nav-item">
+                                <a href="<?= base_url('client/dashboard/settings/createuser') ?>" class="collapsed" aria-expanded="false">
+                                    <i class="fas fa-users"></i>
+                                    <p>Create/ Edit User</p>
+                                </a>
+                            </li>
+							<?php endif; ?>
+							<!-- Logout link -->
+							<li class="nav-item">
+								<a href="#signout function" class="collapsed" aria-expanded="false" onclick="logout()">
+									<i class="fas fa-sign-out-alt"></i>
+									<p>Logout</p>
+								</a>
+							</li>
+						</ul>
                     </div>
 					<div style="position: absolute; bottom: 10px; width: 100%; text-align: center;">
 						<a href="https://www.testright.in/" class="collapsed" aria-expanded="false">
@@ -292,13 +296,13 @@
 						console.log(roleDetails);
 						
 						// Check if the user has permission to view only
-						if (roleDetails.can_view && !roleDetails.can_edit && !roleDetails.can_create && !roleDetails.can_delete) {
-							// Hide the entire settings option
-							$('#settingsOption').hide();
-						} else {
-							// Show the settings option
-							$('#settingsOption').show();
-						}
+						// if (roleDetails.can_view && !roleDetails.can_edit && !roleDetails.can_create && !roleDetails.can_delete) {
+						// 	// Hide the entire settings option
+						// 	$('#settingsOption').hide();
+						// } else {
+						// 	// Show the settings option
+						// 	$('#settingsOption').show();
+						// }
 
 						// Clear existing dropdown items
 						$('#deviceDropdown').empty();
@@ -377,59 +381,59 @@
 			});
 		});
 		function DownloadData() {
-    // Get the DataTable instance
-    var table = $('#basic-datatables').DataTable();
+			// Get the DataTable instance
+			var table = $('#basic-datatables').DataTable();
 
-    // Get the data from the DataTable
-    var data = [];
-    table.rows().nodes().each(function (node, index) {
-        var rowData = [];
-        $(node).find('td').each(function () {
-            rowData.push($(this).text());
-        });
-        data.push(rowData);
-    });
+			// Get the data from the DataTable
+			var data = [];
+			table.rows().nodes().each(function (node, index) {
+				var rowData = [];
+				$(node).find('td').each(function () {
+					rowData.push($(this).text());
+				});
+				data.push(rowData);
+			});
 
-    // Prepare workbook and worksheet
-    var workbook = XLSX.utils.book_new();
-    var worksheet = XLSX.utils.aoa_to_sheet([]);
+			// Prepare workbook and worksheet
+			var workbook = XLSX.utils.book_new();
+			var worksheet = XLSX.utils.aoa_to_sheet([]);
 
-    // Add column headers
-    var headers = table.columns().header().toArray().map(header => header.innerText);
-    XLSX.utils.sheet_add_aoa(worksheet, [headers], {origin: 'A1'});
+			// Add column headers
+			var headers = table.columns().header().toArray().map(header => header.innerText);
+			XLSX.utils.sheet_add_aoa(worksheet, [headers], {origin: 'A1'});
 
-    // Add data rows
-    XLSX.utils.sheet_add_aoa(worksheet, data, {origin: 'A2'});
+			// Add data rows
+			XLSX.utils.sheet_add_aoa(worksheet, data, {origin: 'A2'});
 
-    // Add worksheet to workbook
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
+			// Add worksheet to workbook
+			XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
 
-    // Convert workbook to binary Excel file
-    var excelFile = XLSX.write(workbook, { bookType: 'xlsx', type: 'binary' });
+			// Convert workbook to binary Excel file
+			var excelFile = XLSX.write(workbook, { bookType: 'xlsx', type: 'binary' });
 
-    // Convert binary Excel file to blob
-    var blob = new Blob([s2ab(excelFile)], { type: 'application/octet-stream' });
+			// Convert binary Excel file to blob
+			var blob = new Blob([s2ab(excelFile)], { type: 'application/octet-stream' });
 
-    // Create a download link
-    var link = document.createElement("a");
-    link.href = window.URL.createObjectURL(blob);
-    link.download = "datatable_data.xlsx";
+			// Create a download link
+			var link = document.createElement("a");
+			link.href = window.URL.createObjectURL(blob);
+			link.download = "datatable_data.xlsx";
 
-    // Append the link to the body and trigger the download
-    document.body.appendChild(link);
-    link.click();
+			// Append the link to the body and trigger the download
+			document.body.appendChild(link);
+			link.click();
 
-    // Cleanup
-    document.body.removeChild(link);
-}
+			// Cleanup
+			document.body.removeChild(link);
+		}
 
-// Utility function to convert string to ArrayBuffer
-function s2ab(s) {
-    var buf = new ArrayBuffer(s.length);
-    var view = new Uint8Array(buf);
-    for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
-    return buf;
-}
+		// Utility function to convert string to ArrayBuffer
+		function s2ab(s) {
+			var buf = new ArrayBuffer(s.length);
+			var view = new Uint8Array(buf);
+			for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
+			return buf;
+		}
 
 
 

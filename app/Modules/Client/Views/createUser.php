@@ -24,16 +24,16 @@
 			border: 1px solid red !important;
 		}
 
-    /* Custom Select2 styling to remove the border around the main dropdown */
-    .select2-container--default .select2-selection--multiple {
-        width:200%;
-    }
-    .selected-devices {
-    width: 100%;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
+        /* Custom Select2 styling to remove the border around the main dropdown */
+        .select2-container--default .select2-selection--multiple {
+            width:200%;
+        }
+        .selected-devices {
+            width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
 
 	</style>
 
@@ -67,7 +67,6 @@
 			</nav>
         </div>
 		<div>
-		<div>
             <div class="sidebar sidebar-style-2" background-color="white">			
                 <div class="sidebar-wrapper scrollbar scrollbar-inner">
                     <div class="sidebar-content">
@@ -82,49 +81,54 @@
 							</div>
 						</div>
 						
-                        <ul class="nav nav-primary">
-                            <li class="nav-item">
-                                <a href="<?= base_url('client/dashboard') ?>" class="collapsed" aria-expanded="false">
-                                    <i class="fas fa-home"></i>
-                                    <p>Home</p>
-                                </a>
-                            </li>
-                            <!-- <li class="nav-item ">
+						<ul class="nav nav-primary">
+							<!-- Home link -->
+							<li class="nav-item">
+								<a href="<?= base_url('client/dashboard') ?>" class="collapsed" aria-expanded="false">
+									<i class="fas fa-home"></i>
+									<p>Home</p>
+								</a>
+							</li>
+							<?php
+
+							use Config\Constants; // Import the Constants class
+
+							?>
+							<?php if (isset($roleDetails[Constants::CAN_ADJUST]) && $roleDetails[Constants::CAN_ADJUST]): ?>
+								<!-- If user has "can_adjust" permission, show the Device Settings option -->
+								<li class="nav-item">
                                 <a href="<?= base_url('client/dashboard/settings') ?>" class="collapsed" aria-expanded="false">
                                     <i class="fas fa-cog"></i>
-                                    <p>Settings</p>
+                                    <p>Device Settings</p>
                                 </a>
-                            </li> -->
-							<li class="nav-item active submenu">
-								<a data-toggle="collapse" href="#settings">
-									<i class="fas fa-cog"></i>
-									<p>Settings</p>
-									<span class="caret"></span>
-								</a>
-								<div class="collapse show" id="settings">
-									<ul class="nav nav-collapse">
-										<li >
-											<a href="<?= base_url('client/dashboard/settings') ?>">
-												<span class="sub-item">Device Settings</span>
-											</a>
-										</li>
-										<li class="active">
-											<a href="<?= base_url('client/dashboard/settings/createuser') ?>">
-												<span class="sub-item">Create/ Edit User</span>
-											</a>
-										</li>
-									</ul>
-								</div>
-							</li>	
-							<hr class="light-line">
+                                
+                            </li>
+							<?php endif; ?>
 
-							<li class="nav-item">
-                                <a href="#signout function" class="collapsed" aria-expanded="false" onclick="logout()">
-                                    <i class="fas fa-sign-out-alt"></i>
-                                    <p>Logout</p>
+							<?php if (
+								isset($roleDetails[Constants::CAN_CREATE]) &&
+								$roleDetails[Constants::CAN_CREATE] ||
+								isset($roleDetails[Constants::CAN_EDIT]) &&
+								$roleDetails[Constants::CAN_EDIT] ||
+								isset($roleDetails[Constants::CAN_DELETE]) &&
+								$roleDetails[Constants::CAN_DELETE]
+							): ?>
+								<!-- If user has "can_create", "can_edit", and "can_delete" permissions, show the Create/Edit User option -->
+							<li class="nav-item active">
+                                <a href="<?= base_url('client/dashboard/settings/createuser') ?>" class="collapsed" aria-expanded="false">
+                                    <i class="fas fa-users"></i>
+                                    <p>Create/ Edit User</p>
                                 </a>
                             </li>
-                        </ul>
+							<?php endif; ?>
+							<!-- Logout link -->
+							<li class="nav-item">
+								<a href="#signout function" class="collapsed" aria-expanded="false" onclick="logout()">
+									<i class="fas fa-sign-out-alt"></i>
+									<p>Logout</p>
+								</a>
+							</li>
+						</ul>
                     </div>
 					<div style="position: absolute; bottom: 10px; width: 100%; text-align: center;">
 						<a href="https://www.testright.in/" class="collapsed" aria-expanded="false">
@@ -133,7 +137,6 @@
 					</div>
                 </div>
             </div>
-		</div>
 		</div>
 		<div class="main-panel">
 			<div class="content">
@@ -144,15 +147,17 @@
 
 					<div class="col-md-12">
 							<div class="card">
+                            <?php if (isset($roleDetails[Constants::CAN_CREATE]) && $roleDetails[Constants::CAN_CREATE]): ?>
 								<div class="card-header">
 									<div class="d-flex align-items-center">
 										<h4 class="card-title">Add User</h4>
-										<button class="btn btn-primary btn-round ml-auto" data-toggle="modal" data-target="#addRowModal" id="addUserId" style="display: none;">
+										<button class="btn btn-primary btn-round ml-auto" data-toggle="modal" data-target="#addRowModal" id="addUserId">
 											<i class="fa fa-plus"></i>
 											Add User
 										</button>
 									</div>
 								</div>
+                                <?php endif; ?>
 								<div class="card-body">
 									<!-- Modal -->
 									<div class="modal fade" id="addRowModal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -322,7 +327,9 @@
                                                     <th>Devices</th>
 													<th>Role</th>
                                                     <th>Status</th>
-													<th  id= "action" style="display: none;">Action</th>
+                                                    <?php if (isset($roleDetails[Constants::CAN_EDIT]) && $roleDetails[Constants::CAN_EDIT]): ?>
+													<th  id= "action">Action</th>
+                                                    <?php endif; ?>
 												</tr>
 											</thead>
 											<tbody></tbody>
@@ -468,35 +475,6 @@
                 if (response.length > 0) {
                     console.log("client_name: ", response[0].client_name);
                     $('#companyName').text(response[0].client_name);
-                    console.log("client ID: ", response[0].client_id);
-                    // var clientId = response[0].client_id;
-                    // Parse role details
-                    var roleDetails = JSON.parse(response[0].role_details);
-                    clientRoleDetails = JSON.parse(response[0].role_details);
-                    console.log("Parsed role details:", roleDetails);
-
-                    // Check if the user has the "can_create" role
-                    var hasCreateRole = roleDetails && roleDetails.can_create;
-                    var hasUpdateRole = roleDetails && roleDetails.can_edit;
-                    // Show or hide the "Add Client" button based on the role
-                    if (hasCreateRole) {
-                        $('#addUserId').show();
-                    } else {
-                        $('#addUserId').hide();
-                    }
-                    // Show or hide the "Action" column based on the role
-                    if (hasUpdateRole) {
-                        $('#action').show(); // Show the "Action" column
-                    } else {
-                        $('#action').hide(); // Hide the "Action" column
-                    }
-                    $.each(data, function(index, value) {
-                        // Append option elements to select element
-                        var $option = $('<option value="' + value.id + '">' + value.client_name + '</option>');
-                        $option.data('role_details', value.role_details); // Set role_details as data attribute
-                        $('#addclientID').append($option);
-                    });
-                    
                     // Now make the second AJAX call inside this success callback
                     $.ajax({
                         type: 'GET',
@@ -530,8 +508,6 @@
                                     </div>`
                                 ];
 
-                                
-                                // console.log('User ID:', user.id); // Log user_id to console
                                 initTooltips();
                                 var row = table.row.add(rowData).draw(false).node();
                                 $(row).data('roles', roles);
@@ -540,9 +516,6 @@
                                 // Create invisible row containing client_id only
                                 var invisibleRow = '<tr class="invisible-row" data-user-id="' + user.id + '"></tr>';
                                 $(row).after(invisibleRow);
-                                if (!hasUpdateRole) {
-                                    $(row).find('.form-button-action').hide(); // Hide the "Action" button
-                                }
                             });
                         },
 

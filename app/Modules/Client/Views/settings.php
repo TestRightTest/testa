@@ -72,7 +72,7 @@
 		<div>
             <div class="sidebar sidebar-style-2" background-color="white">			
                 <div class="sidebar-wrapper scrollbar scrollbar-inner">
-				<div class="sidebar-content">
+                    <div class="sidebar-content">
 						<div class="user">
 							<div class="info">
 								<a data-toggle="collapse" href="#collapseExample" aria-expanded="true">
@@ -84,49 +84,53 @@
 							</div>
 						</div>
 						
-                        <ul class="nav nav-primary">
-                            <li class="nav-item">
-                                <a href="<?= base_url('client/dashboard') ?>" class="collapsed" aria-expanded="false">
-                                    <i class="fas fa-home"></i>
-                                    <p>Home</p>
-                                </a>
-                            </li>
-                            <!-- <li class="nav-item ">
+						<ul class="nav nav-primary">
+							<!-- Home link -->
+							<li class="nav-item">
+								<a href="<?= base_url('client/dashboard') ?>" class="collapsed" aria-expanded="false">
+									<i class="fas fa-home"></i>
+									<p>Home</p>
+								</a>
+							</li>
+							<?php
+
+							use Config\Constants; // Import the Constants class
+
+							?>
+							<?php if (isset($roleDetails[Constants::CAN_ADJUST]) && $roleDetails[Constants::CAN_ADJUST]): ?>
+								<!-- If user has "can_adjust" permission, show the Device Settings option -->
+								<li class="nav-item active">
                                 <a href="<?= base_url('client/dashboard/settings') ?>" class="collapsed" aria-expanded="false">
                                     <i class="fas fa-cog"></i>
-                                    <p>Settings</p>
-                                </a>
-                            </li> -->
-							<li class="nav-item active submenu">
-								<a data-toggle="collapse" href="#settings">
-									<i class="fas fa-cog"></i>
-									<p>Settings</p>
-									<span class="caret"></span>
-								</a>
-								<div class="collapse show" id="settings">
-									<ul class="nav nav-collapse">
-										<li class="active">
-											<a href="<?= base_url('client/dashboard/settings') ?>">
-												<span class="sub-item">Device Settings</span>
-											</a>
-										</li>
-										<li>
-											<a href="<?= base_url('client/dashboard/settings/createuser') ?>">
-												<span class="sub-item">Create/ Edit User</span>
-											</a>
-										</li>
-									</ul>
-								</div>
-							</li>	
-							<hr class="light-line">
-
-							<li class="nav-item">
-                                <a href="#signout function" class="collapsed" aria-expanded="false" onclick="logout()">
-                                    <i class="fas fa-sign-out-alt"></i>
-                                    <p>Logout</p>
+                                    <p>Device Settings</p>
                                 </a>
                             </li>
-                        </ul>
+							<?php endif; ?>
+
+							<?php if (
+								isset($roleDetails[Constants::CAN_CREATE]) &&
+								$roleDetails[Constants::CAN_CREATE] ||
+								isset($roleDetails[Constants::CAN_EDIT]) &&
+								$roleDetails[Constants::CAN_EDIT] ||
+								isset($roleDetails[Constants::CAN_DELETE]) &&
+								$roleDetails[Constants::CAN_DELETE]
+							): ?>
+								<!-- If user has "can_create", "can_edit", and "can_delete" permissions, show the Create/Edit User option -->
+							<li class="nav-item">
+                                <a href="<?= base_url('client/dashboard/settings/createuser') ?>" class="collapsed" aria-expanded="false">
+                                    <i class="fas fa-users"></i>
+                                    <p>Create/ Edit User</p>
+                                </a>
+                            </li>
+							<?php endif; ?>
+							<!-- Logout link -->
+							<li class="nav-item">
+								<a href="#signout function" class="collapsed" aria-expanded="false" onclick="logout()">
+									<i class="fas fa-sign-out-alt"></i>
+									<p>Logout</p>
+								</a>
+							</li>
+						</ul>
                     </div>
 					<div style="position: absolute; bottom: 10px; width: 100%; text-align: center;">
 						<a href="https://www.testright.in/" class="collapsed" aria-expanded="false">

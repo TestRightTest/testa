@@ -17,6 +17,7 @@ class CreateUserModel extends Model
             'can_create' => $data['can_create'],
             'can_delete' => $data['can_delete'],
             'can_edit' => $data['can_edit'],
+            'can_adjust' => $data['can_adjust'],
         ];
 
         // Insert role data into the role_list table

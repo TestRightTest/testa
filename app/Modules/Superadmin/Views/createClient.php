@@ -156,6 +156,10 @@
 																			<input type="checkbox" id="roleDelete" value="delete">
 																			<label for="roleDelete">Delete</label>
 																		</div>
+																		<div class="col-sm-3">
+																			<input type="checkbox" id="roleAdjust" value="adjust">
+																			<label for="roleAdjust">Adjust</label>
+																		</div>
 																	</div>
 																</div>
 															</div>
@@ -212,7 +216,10 @@
 																		<input type="checkbox" data-role="delete" value="delete">
 																		<label for="roleDelete">Delete</label>
 																	</div>
-
+																	<div class="col-sm-3">
+																		<input type="checkbox" data-role="adjust" value="adjust">
+																		<label for="roleAdjust">Adjust</label>
+																	</div>
 																</div>
 															</div>
 														</div>
@@ -319,6 +326,8 @@
 					if (roleDetails.can_update) roles += 'edit, ';
 					if (roleDetails.can_delete) roles += 'delete, ';
 					if (roleDetails.can_view) roles += 'view, ';
+					if (roleDetails.can_adjust) roles += 'adjust, ';
+
 				}
 				roles = roles.replace(/,\s*$/, '');
 				var rowData = [
@@ -348,7 +357,7 @@
 		$('#addAdminButton').click(function () {
 			var addName = $('#addName');
 			var addStatus = $('#addStatus');
-			var roles = $('#roleCreate, #roleEdit, #roleView, #roleDelete');
+			var roles = $('#roleCreate, #roleEdit, #roleView, #roleDelete, #roleAdjust');
 			if (addName.val().trim() === '' || addStatus.val().trim() === '' || !roles.is(':checked')) {
 				addName.addClass('is-invalid');
 				addStatus.addClass('is-invalid');
@@ -362,7 +371,7 @@
 		$('#addRowModal').on('show.bs.modal', function (e) {
 			$('#addName').val('').removeClass('is-invalid');
 			$('#addStatus').val('Active').removeClass('is-invalid');
-			$('#createCheckbox, #updateCheckbox, #deleteCheckbox, #viewCheckbox').prop('checked', false).removeClass('is-invalid');
+			$('#createCheckbox, #updateCheckbox, #deleteCheckbox, #viewCheckbox, #adjustCheckbox').prop('checked', false).removeClass('is-invalid');
 		});
 
 	});
@@ -375,6 +384,8 @@
 		var updateCheckbox = $('#roleEdit').prop('checked');
 		var viewCheckbox = $('#roleView').prop('checked');
 		var deleteCheckbox = $('#roleDelete').prop('checked');
+		var adjustCheckbox = $('#roleAdjust').prop('checked');
+
 
 		if (!name || !status) {
 			alert("Please fill out all required fields.");
@@ -391,6 +402,8 @@
 				can_edit: updateCheckbox,
 				can_view: viewCheckbox,
 				can_delete: deleteCheckbox,
+				can_adjust: adjustCheckbox,
+
 				role_name: ''
 			},
 			success: function (response) {
@@ -431,7 +444,9 @@
 			can_create: $('#updateRole input[data-role="create"]').prop('checked'),
 			can_update: $('#updateRole input[data-role="edit"]').prop('checked'),
 			can_delete: $('#updateRole input[data-role="delete"]').prop('checked'),
-			can_view: $('#updateRole input[data-role="view"]').prop('checked')
+			can_view: $('#updateRole input[data-role="view"]').prop('checked'),
+			can_adjust: $('#updateRole input[data-role="adjust"]').prop('checked')
+
 		};
 
 		// Convert boolean values to strings

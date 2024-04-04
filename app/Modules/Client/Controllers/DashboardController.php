@@ -3,19 +3,19 @@ namespace App\Modules\Client\Controllers;
 use App\Controllers\BaseController; 
 use App\Modules\client\Models\ClientLoginModel;
 use App\Modules\client\Models\createUserModel;
-use App\Modules\Client\Models\deviceParametersModel;
-
+use Config\Constants;
 class DashboardController extends BaseController 
 { 
     protected $db; // Define the $db property
     protected $createUserModel;
-    protected $deviceParametersModel;
+    protected $clientLoginModel;
+
     public function __construct()
     {
         // Load the database service
         $this->db = \Config\Database::connect();
         $this->createUserModel = new CreateUserModel();
-        $this->deviceParametersModel = new deviceParametersModel();
+        $this->clientLoginModel = new clientLoginModel();
     }
     public function index(): string 
     { 
@@ -40,6 +40,10 @@ class DashboardController extends BaseController
             session()->set('isLoggedIn', true);
             // Store the user's ID in the session
             session()->set('userId', $authenticatedUser['id']);
+                    // Store role_details in the session if available
+        if (isset($authenticatedUser['role_details'])) {
+            session()->set('roleDetails', $authenticatedUser['role_details']);
+        }
             $data['status'] = 'success';
             $data['message'] = 'Login successful';
         } else {
@@ -77,27 +81,96 @@ class DashboardController extends BaseController
     }
 
 
+    // public function dashboard()
+    // { 
+    //     if (!session()->get('isLoggedIn')) {
+    //         return redirect()->to(base_url('client/login'));
+    //     }
+    //     return view('\App\Modules\Client\Views\dashboard'); 
+    // } 
+
     public function dashboard()
     { 
+        // Check if the user is logged in
         if (!session()->get('isLoggedIn')) {
             return redirect()->to(base_url('client/login'));
         }
-        return view('\App\Modules\Client\Views\dashboard'); 
-    } 
+        
+        // Get user's role details
+        $roleDetails = $this->getUserRoleDetails();
+        
+        // Pass role details to the view
+        return view('\App\Modules\Client\Views\dashboard', ['roleDetails' => $roleDetails]); 
+    }
+
+    // Method to fetch user's role details
+    // private function getUserRoleDetails() {
+    //     // Fetch user's role details from session or database
+    //     // Implement your logic to retrieve role details
+    //     $roleDetails = [
+    //         Constants::CAN_VIEW => true, 
+    //         Constants::CAN_EDIT => false, 
+    //         Constants::CAN_DELETE => false, 
+    //         Constants::CAN_CREATE => false, 
+    //         Constants::CAN_ADJUST => false, 
+
+    //         // Add other role permissions here
+    //     ];
+
+    //     return $roleDetails;
+    // }
+
+    // Method to fetch user's role details
+// Method to fetch user's role details
+private function getUserRoleDetails() {
+    // Check if roleDetails is available in the session
+    $roleDetails = session()->get('roleDetails');
+
+    if ($roleDetails !== null) {
+        return $roleDetails;
+    }
+
+    // If roleDetails is not available in the session, fetch it from the database
+    $userId = session()->get('userId'); // Assuming you have stored user ID in the session
+
+    // Fetch role details for the user from the database
+    $model = new ClientLoginModel();
+    $userData = $model->getUserData($userId);
+
+    // Initialize empty array to hold role details
+    $roleDetails = [];
+
+    // Check if user data exists
+    if (!empty($userData)) {
+        // Parse JSON data for role details
+        $roleDetailsJson = $userData[0]['role_details'];
+
+        // Decode JSON data into associative array
+        $roleDetails = json_decode($roleDetailsJson, true);
+    }
+
+    return $roleDetails;
+}
+
+
 
     public function settings()
     { 
         if (!session()->get('isLoggedIn')) {
             return redirect()->to(base_url('client/login'));
         }
-        return view('\App\Modules\Client\Views\settings'); 
+        // Get user's role details
+        $roleDetails = $this->getUserRoleDetails();
+        return view('\App\Modules\Client\Views\settings', ['roleDetails' => $roleDetails]); 
     } 
     public function createuser()
     { 
         if (!session()->get('isLoggedIn')) {
             return redirect()->to(base_url('client/login'));
         }
-        return view('\App\Modules\Client\Views\createuser'); 
+        // Get user's role details
+        $roleDetails = $this->getUserRoleDetails();
+        return view('\App\Modules\Client\Views\createuser', ['roleDetails' => $roleDetails]); 
     } 
     public function getSelectedUserData()
     {
