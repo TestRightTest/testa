@@ -17,24 +17,6 @@
 				sessionStorage.fonts = true;
 			}
 		});
-		document.addEventListener('DOMContentLoaded', function() {
-		var passwordInput = document.getElementById('password-input');
-		var submitButton = document.getElementById('submit-button');
-
-		submitButton.addEventListener('click', function() {
-			var enteredPassword = passwordInput.value;
-
-			// Get the currently signed-in user
-			if (user) {
-					//logic for user sign in
-			} else {
-				// User is not signed in, handle accordingly
-				console.log('User is not logged in');
-				// You may want to redirect to the login page or show a message
-			}
-		});
-	});
-	
 	</script>
 
 	<!-- CSS Files -->
@@ -45,28 +27,6 @@
 <body>
 
 	<div class="wrapper">
-		<!-- Modal -->
-		<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-			<div class="modal-dialog modal-dialog-centered" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h2 class="modal-title" id="exampleModalLongTitle">Enter Settings Password</h2>
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-					</div>
-					<div class="modal-body">
-						<input type="password" id="password-input" class="form-control input-sm" placeholder="Enter Password" aria-label="" aria-describedby="basic-addon1" style="border-width: 3px;">
-						<div id="error-message" style="color: red; font-size: 12px;"></div>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn" data-dismiss="modal">Close</button>
-						<button type="button" class="btn" id="submit-button" style="background-color: #2dbd85; color: white;">Submit</button>
-					</div>
-				</div>
-			</div>
-		</div>
-		
 		<div class="main-header">			
 			<!-- Logo Header -->
 			<div class="logo-header" style="background-color: #133B62;">
@@ -97,37 +57,59 @@
 								<a data-toggle="collapse" href="#collapseExample" aria-expanded="true">
 									<span>
 										<span id="companyName" style="font-weight: bold; font-size: larger;">Company Name</span>
-										<!-- <span id="AccType" style=" font-size: small">Account Type</span> -->
-										<!-- <span id="companyId" style=" font-size: small">Company ID</span> -->
 									</span>
 								</a>
 								<div class="clearfix"></div>
 							</div>
 						</div>
 						
-                        <ul class="nav nav-primary">
-                            <li class="nav-item active">
-                                <a href="<?= base_url('client/dashboard') ?>" class="collapsed" aria-expanded="false">
-                                    <i class="fas fa-home"></i>
-                                    <p>Home</p>
-                                </a>
-                            </li>
-							<li class="nav-item"   id="settingsItem" style="display: none;" data-toggle="modal" data-target="#exampleModalCenter">
-								<a data-toggle="collapse" href="<?= base_url('client/dashboard/settings') ?>" class="collapsed" aria-expanded="false">
-									<i class="fas fa-cog"></i>
-									<p>Settings</p>
-									<!-- <span class="caret"></span> -->
+						<ul class="nav nav-primary">
+							<!-- Home link -->
+							<li class="nav-item active">
+								<a href="<?= base_url('client/dashboard') ?>" class="collapsed" aria-expanded="false">
+									<i class="fas fa-home"></i>
+									<p>Home</p>
 								</a>
-							</li>		
-							<hr class="light-line">
+							</li>
+							<?php
 
-							<li class="nav-item">
-                                <a href="#signout function" class="collapsed" aria-expanded="false" onclick="logout()">
-                                    <i class="fas fa-sign-out-alt"></i>
-                                    <p>Logout</p>
+							use Config\Constants; // Import the Constants class
+
+							?>
+							<?php if (isset($roleDetails[Constants::CAN_ADJUST]) && $roleDetails[Constants::CAN_ADJUST]): ?>
+								<!-- If user has "can_adjust" permission, show the Device Settings option -->
+								<li class="nav-item">
+                                <a href="<?= base_url('client/dashboard/settings') ?>" class="collapsed" aria-expanded="false">
+                                    <i class="fas fa-cog"></i>
+                                    <p>Device Settings</p>
                                 </a>
                             </li>
-                        </ul>
+							<?php endif; ?>
+
+							<?php if (
+								isset($roleDetails[Constants::CAN_CREATE]) &&
+								$roleDetails[Constants::CAN_CREATE] ||
+								isset($roleDetails[Constants::CAN_EDIT]) &&
+								$roleDetails[Constants::CAN_EDIT] ||
+								isset($roleDetails[Constants::CAN_DELETE]) &&
+								$roleDetails[Constants::CAN_DELETE]
+							): ?>
+								<!-- If user has "can_create", "can_edit", and "can_delete" permissions, show the Create/Edit User option -->
+							<li class="nav-item">
+                                <a href="<?= base_url('client/dashboard/settings/createuser') ?>" class="collapsed" aria-expanded="false">
+                                    <i class="fas fa-users"></i>
+                                    <p>Create/ Edit User</p>
+                                </a>
+                            </li>
+							<?php endif; ?>
+							<!-- Logout link -->
+							<li class="nav-item">
+								<a href="#signout function" class="collapsed" aria-expanded="false" onclick="logout()">
+									<i class="fas fa-sign-out-alt"></i>
+									<p>Logout</p>
+								</a>
+							</li>
+						</ul>
                     </div>
 					<div style="position: absolute; bottom: 10px; width: 100%; text-align: center;">
 						<a href="https://www.testright.in/" class="collapsed" aria-expanded="false">
@@ -308,6 +290,19 @@
 					if (response.length > 0) {
 						console.log("client_name: ", response[0].client_name);
 						$('#companyName').text(response[0].client_name);
+						// console.log("role details: ",response[0].role_details );
+						console.log("role details: ");
+						var roleDetails = JSON.parse(response[0].role_details);
+						console.log(roleDetails);
+						
+						// Check if the user has permission to view only
+						// if (roleDetails.can_view && !roleDetails.can_edit && !roleDetails.can_create && !roleDetails.can_delete) {
+						// 	// Hide the entire settings option
+						// 	$('#settingsOption').hide();
+						// } else {
+						// 	// Show the settings option
+						// 	$('#settingsOption').show();
+						// }
 
 						// Clear existing dropdown items
 						$('#deviceDropdown').empty();
@@ -386,59 +381,59 @@
 			});
 		});
 		function DownloadData() {
-    // Get the DataTable instance
-    var table = $('#basic-datatables').DataTable();
+			// Get the DataTable instance
+			var table = $('#basic-datatables').DataTable();
 
-    // Get the data from the DataTable
-    var data = [];
-    table.rows().nodes().each(function (node, index) {
-        var rowData = [];
-        $(node).find('td').each(function () {
-            rowData.push($(this).text());
-        });
-        data.push(rowData);
-    });
+			// Get the data from the DataTable
+			var data = [];
+			table.rows().nodes().each(function (node, index) {
+				var rowData = [];
+				$(node).find('td').each(function () {
+					rowData.push($(this).text());
+				});
+				data.push(rowData);
+			});
 
-    // Prepare workbook and worksheet
-    var workbook = XLSX.utils.book_new();
-    var worksheet = XLSX.utils.aoa_to_sheet([]);
+			// Prepare workbook and worksheet
+			var workbook = XLSX.utils.book_new();
+			var worksheet = XLSX.utils.aoa_to_sheet([]);
 
-    // Add column headers
-    var headers = table.columns().header().toArray().map(header => header.innerText);
-    XLSX.utils.sheet_add_aoa(worksheet, [headers], {origin: 'A1'});
+			// Add column headers
+			var headers = table.columns().header().toArray().map(header => header.innerText);
+			XLSX.utils.sheet_add_aoa(worksheet, [headers], {origin: 'A1'});
 
-    // Add data rows
-    XLSX.utils.sheet_add_aoa(worksheet, data, {origin: 'A2'});
+			// Add data rows
+			XLSX.utils.sheet_add_aoa(worksheet, data, {origin: 'A2'});
 
-    // Add worksheet to workbook
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
+			// Add worksheet to workbook
+			XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
 
-    // Convert workbook to binary Excel file
-    var excelFile = XLSX.write(workbook, { bookType: 'xlsx', type: 'binary' });
+			// Convert workbook to binary Excel file
+			var excelFile = XLSX.write(workbook, { bookType: 'xlsx', type: 'binary' });
 
-    // Convert binary Excel file to blob
-    var blob = new Blob([s2ab(excelFile)], { type: 'application/octet-stream' });
+			// Convert binary Excel file to blob
+			var blob = new Blob([s2ab(excelFile)], { type: 'application/octet-stream' });
 
-    // Create a download link
-    var link = document.createElement("a");
-    link.href = window.URL.createObjectURL(blob);
-    link.download = "datatable_data.xlsx";
+			// Create a download link
+			var link = document.createElement("a");
+			link.href = window.URL.createObjectURL(blob);
+			link.download = "datatable_data.xlsx";
 
-    // Append the link to the body and trigger the download
-    document.body.appendChild(link);
-    link.click();
+			// Append the link to the body and trigger the download
+			document.body.appendChild(link);
+			link.click();
 
-    // Cleanup
-    document.body.removeChild(link);
-}
+			// Cleanup
+			document.body.removeChild(link);
+		}
 
-// Utility function to convert string to ArrayBuffer
-function s2ab(s) {
-    var buf = new ArrayBuffer(s.length);
-    var view = new Uint8Array(buf);
-    for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
-    return buf;
-}
+		// Utility function to convert string to ArrayBuffer
+		function s2ab(s) {
+			var buf = new ArrayBuffer(s.length);
+			var view = new Uint8Array(buf);
+			for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
+			return buf;
+		}
 
 
 

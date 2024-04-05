@@ -26,9 +26,9 @@ class Database extends Config
      */
     public array $default = [
         'DSN'          => '',
-        'hostname'     => '43.204.189.245',
+        'hostname'     => 'localhost',
         'username'     => 'postgres',
-        'password'     => 'TTgo54EEfd@1',
+        'password'     => '',
         'database'     => 'uat_mbscan',
         'DBDriver'     => 'Postgre',
         'DBPrefix'     => '',

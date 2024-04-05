@@ -208,6 +208,10 @@
                                                                             <input type="checkbox" id="deleteCheckbox" value="delete">
                                                                             <label for="deleteCheckbox" id="deleteLabel">Delete</label>
                                                                         </div>
+                                                                        <div class="col-sm-3">
+                                                                            <input type="checkbox" id="adjustCheckbox" value="adjust">
+                                                                            <label for="adjustCheckbox" id="adjustLabel">Adjust</label>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -275,6 +279,10 @@
                                                                         <div class="col-sm-3">
                                                                             <input type="checkbox" id="updateDeleteRole" data-role="delete" value="delete">
                                                                             <label for="roleDelete" id="deleteRoleLabel">Delete</label>
+                                                                        </div>
+                                                                        <div class="col-sm-3">
+                                                                            <input type="checkbox" id="updateAdjustRole" data-role="adjust" value="adjust">
+                                                                            <label for="roleAdjust" id="adjustRoleLabel">Adjust</label>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -377,7 +385,7 @@
                 $('input[type="checkbox"][data-role="' + role + '"]').prop('checked', true);
             });
 
-            $('#updateCreateCheckbox, #updateCheckboxLabel, #updateRoleCheckbox, #editRoleLabel, #updateViewCheckbox, #viewRoleLabel, #updateDeleteRole, #deleteRoleLabel').hide();
+            $('#updateCreateCheckbox, #updateCheckboxLabel, #updateRoleCheckbox, #editRoleLabel, #updateViewCheckbox, #viewRoleLabel, #updateDeleteRole, #deleteRoleLabel , #updateAdjustRole, #adjustRoleLabel').hide();
 
             var clientRoleDetails = $('#addclientID option[value="' + clientId + '"]').data('role_details');
 
@@ -395,6 +403,9 @@
                 if (clientRoleDetails.can_delete) {
                     $('#updateDeleteRole, #deleteRoleLabel').show();
                 }
+                if (clientRoleDetails.can_adjust) {
+                    $('#updateAdjustRole, #adjustRoleLabel').show();
+                }
             }
             $('#updateTable').modal('show');
 
@@ -408,13 +419,14 @@
 
             // Clear password error message
             $passwordError.text('');
-            $('#createCheckbox, #createLabel, #updateCheckbox, #updateLabel, #viewCheckbox, #viewLabel, #deleteCheckbox, #deleteLabel').hide();
+            $('#createCheckbox, #createLabel, #updateCheckbox, #updateLabel, #viewCheckbox, #viewLabel, #deleteCheckbox, #deleteLabel, #adjustCheckbox, #adjustLabel').hide();
 
             // Uncheck checkboxes
             $('#createCheckbox').prop('checked', false);
             $('#updateCheckbox').prop('checked', false);
             $('#viewCheckbox').prop('checked', false);
             $('#deleteCheckbox').prop('checked', false);
+            $('#adjustCheckbox').prop('checked', false);
                 // Reset Select2 dropdown
             $('#addDeviceID').empty().select2({
                 // placeholder: "Select a device",
@@ -447,6 +459,7 @@
                     if (roleDetails.can_edit) roles += 'edit, ';
                     if (roleDetails.can_delete) roles += 'delete, ';
                     if (roleDetails.can_view) roles += 'view, ';
+                    if (roleDetails.can_adjust) roles += 'adjust, ';
                 }
                 roles = roles.replace(/,\s*$/, '');
                 const rowData = [
@@ -524,7 +537,7 @@
 
 
         // Initially hide all checkboxes and their associated labels
-        $('#createCheckbox, #createLabel, #updateCheckbox, #updateLabel, #viewCheckbox, #viewLabel, #deleteCheckbox, #deleteLabel').hide();
+        $('#createCheckbox, #createLabel, #updateCheckbox, #updateLabel, #viewCheckbox, #viewLabel, #deleteCheckbox, #deleteLabel, #adjustCheckbox, #adjustLabel').hide();
 
         // Handle change event of the dropdown
         $('#addclientID').change(function() {
@@ -532,7 +545,7 @@
             var selectedClientRoleDetails = selectedOption.data('role_details');
 
             // Hide all checkboxes and their associated labels
-            $('#createCheckbox, #createLabel, #updateCheckbox, #updateLabel, #viewCheckbox, #viewLabel, #deleteCheckbox, #deleteLabel').hide();
+            $('#createCheckbox, #createLabel, #updateCheckbox, #updateLabel, #viewCheckbox, #viewLabel, #deleteCheckbox, #deleteLabel, #adjustCheckbox, #adjustLabel').hide();
 
             // Check the roles in role_details and show corresponding checkboxes and labels
             if (selectedClientRoleDetails) {
@@ -549,6 +562,9 @@
                 if (selectedClientRoleDetails.can_delete) {
                     $('#deleteCheckbox, #deleteLabel').show();
                 }
+                if (selectedClientRoleDetails.can_delete) {
+                    $('#adjustCheckbox, #adjustLabel').show();
+                }
             }
         });
         function addUser() {
@@ -562,8 +578,11 @@
             var updateCheckbox = $('#updateCheckbox').prop('checked');
             var viewCheckbox = $('#viewCheckbox').prop('checked');
             var deleteCheckbox = $('#deleteCheckbox').prop('checked');
+            var adjustCheckbox = $('#adjustCheckbox').prop('checked');
             var device_id = $('#addDeviceID').val();
             console.log("selected device ids: ",device_id);
+            console.log("adjust ",adjustCheckbox);
+            console.log("status ",status);
             // Perform client-side validation
             if (!clientID || !name || !username || !password || !confirmPassword || !status) {
                 alert("Please fill out all required fields.");
@@ -587,6 +606,7 @@
                     update: updateCheckbox,
                     view: viewCheckbox,
                     delete: deleteCheckbox,
+                    adjust: adjustCheckbox,
                     device_id: device_id,
                     role_name: '',
                     status: status,
@@ -613,7 +633,8 @@
                 can_create: $('#updateRole input[data-role="create"]').prop('checked'),
                 can_edit: $('#updateRole input[data-role="edit"]').prop('checked'),
                 can_delete: $('#updateRole input[data-role="delete"]').prop('checked'),
-                can_view: $('#updateRole input[data-role="view"]').prop('checked')
+                can_view: $('#updateRole input[data-role="view"]').prop('checked'),
+                can_adjust: $('#updateRole input[data-role="adjust"]').prop('checked')
             };
 
             console.log("status", status);

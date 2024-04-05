@@ -1,5 +1,18 @@
 <?php
 
+
+namespace Config;
+
+class Constants
+{
+    // Define constants for role permissions
+    public const CAN_CREATE = 'can_create';
+    public const CAN_EDIT = 'can_edit';
+    public const CAN_DELETE = 'can_delete';
+    public const CAN_VIEW = 'can_view';
+    public const CAN_ADJUST = 'can_adjust';
+}
+
 /*
  | --------------------------------------------------------------------
  | App Namespace
@@ -92,3 +105,5 @@ define('EVENT_PRIORITY_NORMAL', 100);
  * @deprecated Use \CodeIgniter\Events\Events::PRIORITY_HIGH instead.
  */
 define('EVENT_PRIORITY_HIGH', 10);
+
+

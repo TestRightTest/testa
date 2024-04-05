@@ -1,0 +1,414 @@
+INFO - 2024-04-05 01:59:14 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2024-04-05 01:59:14 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2024-04-05 01:59:15 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2024-04-05 01:59:32 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2024-04-05 01:59:32 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2024-04-05 02:00:06 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2024-04-05 02:00:06 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2024-04-05 02:00:07 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2024-04-05 02:00:08 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2024-04-05 02:00:13 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2024-04-05 02:00:14 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2024-04-05 02:00:16 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2024-04-05 02:00:16 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2024-04-05 02:00:17 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2024-04-05 02:00:30 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2024-04-05 02:00:30 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2024-04-05 02:00:31 --> ErrorException: pg_query(): Query failed: ERROR:  relation &quot;master.device_details&quot; does not exist
+LINE 4: JOIN &quot;master&quot;.&quot;device_details&quot; ON &quot;master&quot;.&quot;user_login&quot;.&quot;id&quot;...
+             ^ in /Applications/XAMPP/xamppfiles/htdocs/mbscan/system/Database/Postgre/Connection.php:187
+Stack trace:
+#0 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'pg_query(): Que...', '/Applications/X...', 187)
+#1 /Applications/XAMPP/xamppfiles/htdocs/mbscan/system/Database/Postgre/Connection.php(187): pg_query(Object(PgSql\Connection), 'SELECT "master"...')
+#2 /Applications/XAMPP/xamppfiles/htdocs/mbscan/system/Database/BaseConnection.php(693): CodeIgniter\Database\Postgre\Connection->execute('SELECT "master"...')
+#3 /Applications/XAMPP/xamppfiles/htdocs/mbscan/system/Database/BaseConnection.php(607): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT "master"...')
+#4 /Applications/XAMPP/xamppfiles/htdocs/mbscan/system/Database/BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT "master"...', Array, false)
+#5 /Applications/XAMPP/xamppfiles/htdocs/mbscan/system/Model.php(242): CodeIgniter\Database\BaseBuilder->get()
+#6 /Applications/XAMPP/xamppfiles/htdocs/mbscan/system/BaseModel.php(638): CodeIgniter\Model->doFindAll(0, 0)
+#7 /Applications/XAMPP/xamppfiles/htdocs/mbscan/app/Modules/client/Models/ClientLoginModel.php(35): CodeIgniter\BaseModel->findAll()
+#8 /Applications/XAMPP/xamppfiles/htdocs/mbscan/app/Modules/Client/Controllers/DashboardController.php(138): App\Modules\client\Models\clientLoginModel->getUserData('68')
+#9 /Applications/XAMPP/xamppfiles/htdocs/mbscan/app/Modules/Client/Controllers/DashboardController.php(100): App\Modules\Client\Controllers\DashboardController->getUserRoleDetails()
+#10 /Applications/XAMPP/xamppfiles/htdocs/mbscan/system/CodeIgniter.php(941): App\Modules\Client\Controllers\DashboardController->dashboard()
+#11 /Applications/XAMPP/xamppfiles/htdocs/mbscan/system/CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Modules\Client\Controllers\DashboardController))
+#12 /Applications/XAMPP/xamppfiles/htdocs/mbscan/system/CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#13 /Applications/XAMPP/xamppfiles/htdocs/mbscan/index.php(79): CodeIgniter\CodeIgniter->run()
+#14 {main}
+CRITICAL - 2024-04-05 02:00:31 --> CodeIgniter\Database\Exceptions\DatabaseException: pg_query(): Query failed: ERROR:  relation &quot;master.device_details&quot; does not exist
+LINE 4: JOIN &quot;master&quot;.&quot;device_details&quot; ON &quot;master&quot;.&quot;user_login&quot;.&quot;id&quot;...
+             ^
+in SYSTEMPATH/Database/BaseConnection.php on line 647.
+ 1 SYSTEMPATH/Database/BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT "master"."user_login"."client_id", "client_details"."client_name", array_agg(device.id) as device_ids, array_agg(device.device_name) as device_names, "master"."user_login"."name", "user_role"."role_details", "master"."user_login"."status", "master"."user_login"."id" as "user_id"
+FROM "master"."user_login"
+JOIN "master"."user_role" ON "master"."user_login"."id" = "master"."user_role"."user_id"
+JOIN "master"."device_details" ON "master"."user_login"."id" = "master"."device_details"."user_id"
+JOIN "master"."device" ON "master"."device_details"."device_id" = "master"."device"."id"
+JOIN "master"."client_details" ON "master"."user_login"."client_id" = "master"."client_details"."id"
+WHERE "master"."user_login"."id" = :master.user_login.id:
+GROUP BY "master"."user_login"."client_id", "client_details"."client_name", "master"."user_login"."name", "user_role"."role_details", "master"."user_login"."status", "master"."user_login"."id"', [...], false)
+ 2 SYSTEMPATH/Model.php(242): CodeIgniter\Database\BaseBuilder->get()
+ 3 SYSTEMPATH/BaseModel.php(638): CodeIgniter\Model->doFindAll(0, 0)
+ 4 APPPATH/Modules/client/Models/ClientLoginModel.php(35): CodeIgniter\BaseModel->findAll()
+ 5 APPPATH/Modules/Client/Controllers/DashboardController.php(138): App\Modules\client\Models\clientLoginModel->getUserData('68')
+ 6 APPPATH/Modules/Client/Controllers/DashboardController.php(100): App\Modules\Client\Controllers\DashboardController->getUserRoleDetails()
+ 7 SYSTEMPATH/CodeIgniter.php(941): App\Modules\Client\Controllers\DashboardController->dashboard()
+ 8 SYSTEMPATH/CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Modules\Client\Controllers\DashboardController))
+ 9 SYSTEMPATH/CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 FCPATH/index.php(79): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-04-05 02:00:31 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: pg_query(): Query failed: ERROR:  relation &quot;master.device_details&quot; does not exist
+LINE 4: JOIN &quot;master&quot;.&quot;device_details&quot; ON &quot;master&quot;.&quot;user_login&quot;.&quot;id&quot;...
+             ^
+in SYSTEMPATH/Database/Postgre/Connection.php on line 192.
+ 1 SYSTEMPATH/Database/BaseConnection.php(693): CodeIgniter\Database\Postgre\Connection->execute('SELECT "master"."user_login"."client_id", "client_details"."client_name", array_agg(device.id) as device_ids, array_agg(device.device_name) as device_names, "master"."user_login"."name", "user_role"."role_details", "master"."user_login"."status", "master"."user_login"."id" as "user_id"
+FROM "master"."user_login"
+JOIN "master"."user_role" ON "master"."user_login"."id" = "master"."user_role"."user_id"
+JOIN "master"."device_details" ON "master"."user_login"."id" = "master"."device_details"."user_id"
+JOIN "master"."device" ON "master"."device_details"."device_id" = "master"."device"."id"
+JOIN "master"."client_details" ON "master"."user_login"."client_id" = "master"."client_details"."id"
+WHERE "master"."user_login"."id" = \'68\'
+GROUP BY "master"."user_login"."client_id", "client_details"."client_name", "master"."user_login"."name", "user_role"."role_details", "master"."user_login"."status", "master"."user_login"."id"')
+ 2 SYSTEMPATH/Database/BaseConnection.php(607): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT "master"."user_login"."client_id", "client_details"."client_name", array_agg(device.id) as device_ids, array_agg(device.device_name) as device_names, "master"."user_login"."name", "user_role"."role_details", "master"."user_login"."status", "master"."user_login"."id" as "user_id"
+FROM "master"."user_login"
+JOIN "master"."user_role" ON "master"."user_login"."id" = "master"."user_role"."user_id"
+JOIN "master"."device_details" ON "master"."user_login"."id" = "master"."device_details"."user_id"
+JOIN "master"."device" ON "master"."device_details"."device_id" = "master"."device"."id"
+JOIN "master"."client_details" ON "master"."user_login"."client_id" = "master"."client_details"."id"
+WHERE "master"."user_login"."id" = \'68\'
+GROUP BY "master"."user_login"."client_id", "client_details"."client_name", "master"."user_login"."name", "user_role"."role_details", "master"."user_login"."status", "master"."user_login"."id"')
+ 3 SYSTEMPATH/Database/BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT "master"."user_login"."client_id", "client_details"."client_name", array_agg(device.id) as device_ids, array_agg(device.device_name) as device_names, "master"."user_login"."name", "user_role"."role_details", "master"."user_login"."status", "master"."user_login"."id" as "user_id"
+FROM "master"."user_login"
+JOIN "master"."user_role" ON "master"."user_login"."id" = "master"."user_role"."user_id"
+JOIN "master"."device_details" ON "master"."user_login"."id" = "master"."device_details"."user_id"
+JOIN "master"."device" ON "master"."device_details"."device_id" = "master"."device"."id"
+JOIN "master"."client_details" ON "master"."user_login"."client_id" = "master"."client_details"."id"
+WHERE "master"."user_login"."id" = :master.user_login.id:
+GROUP BY "master"."user_login"."client_id", "client_details"."client_name", "master"."user_login"."name", "user_role"."role_details", "master"."user_login"."status", "master"."user_login"."id"', [...], false)
+ 4 SYSTEMPATH/Model.php(242): CodeIgniter\Database\BaseBuilder->get()
+ 5 SYSTEMPATH/BaseModel.php(638): CodeIgniter\Model->doFindAll(0, 0)
+ 6 APPPATH/Modules/client/Models/ClientLoginModel.php(35): CodeIgniter\BaseModel->findAll()
+ 7 APPPATH/Modules/Client/Controllers/DashboardController.php(138): App\Modules\client\Models\clientLoginModel->getUserData('68')
+ 8 APPPATH/Modules/Client/Controllers/DashboardController.php(100): App\Modules\Client\Controllers\DashboardController->getUserRoleDetails()
+ 9 SYSTEMPATH/CodeIgniter.php(941): App\Modules\Client\Controllers\DashboardController->dashboard()
+10 SYSTEMPATH/CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Modules\Client\Controllers\DashboardController))
+11 SYSTEMPATH/CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 FCPATH/index.php(79): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-04-05 02:00:31 --> [Caused by] ErrorException: pg_query(): Query failed: ERROR:  relation &quot;master.device_details&quot; does not exist
+LINE 4: JOIN &quot;master&quot;.&quot;device_details&quot; ON &quot;master&quot;.&quot;user_login&quot;.&quot;id&quot;...
+             ^
+in SYSTEMPATH/Database/Postgre/Connection.php on line 187.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'pg_query(): Query failed: ERROR:  relation &quot;master.device_details&quot; does not exist
+LINE 4: JOIN &quot;master&quot;.&quot;device_details&quot; ON &quot;master&quot;.&quot;user_login&quot;.&quot;id&quot;...
+             ^', '/Applications/XAMPP/xamppfiles/htdocs/mbscan/system/Database/Postgre/Connection.php', 187)
+ 2 SYSTEMPATH/Database/Postgre/Connection.php(187): pg_query(Object(PgSql\Connection), 'SELECT "master"."user_login"."client_id", "client_details"."client_name", array_agg(device.id) as device_ids, array_agg(device.device_name) as device_names, "master"."user_login"."name", "user_role"."role_details", "master"."user_login"."status", "master"."user_login"."id" as "user_id"
+FROM "master"."user_login"
+JOIN "master"."user_role" ON "master"."user_login"."id" = "master"."user_role"."user_id"
+JOIN "master"."device_details" ON "master"."user_login"."id" = "master"."device_details"."user_id"
+JOIN "master"."device" ON "master"."device_details"."device_id" = "master"."device"."id"
+JOIN "master"."client_details" ON "master"."user_login"."client_id" = "master"."client_details"."id"
+WHERE "master"."user_login"."id" = \'68\'
+GROUP BY "master"."user_login"."client_id", "client_details"."client_name", "master"."user_login"."name", "user_role"."role_details", "master"."user_login"."status", "master"."user_login"."id"')
+ 3 SYSTEMPATH/Database/BaseConnection.php(693): CodeIgniter\Database\Postgre\Connection->execute('SELECT "master"."user_login"."client_id", "client_details"."client_name", array_agg(device.id) as device_ids, array_agg(device.device_name) as device_names, "master"."user_login"."name", "user_role"."role_details", "master"."user_login"."status", "master"."user_login"."id" as "user_id"
+FROM "master"."user_login"
+JOIN "master"."user_role" ON "master"."user_login"."id" = "master"."user_role"."user_id"
+JOIN "master"."device_details" ON "master"."user_login"."id" = "master"."device_details"."user_id"
+JOIN "master"."device" ON "master"."device_details"."device_id" = "master"."device"."id"
+JOIN "master"."client_details" ON "master"."user_login"."client_id" = "master"."client_details"."id"
+WHERE "master"."user_login"."id" = \'68\'
+GROUP BY "master"."user_login"."client_id", "client_details"."client_name", "master"."user_login"."name", "user_role"."role_details", "master"."user_login"."status", "master"."user_login"."id"')
+ 4 SYSTEMPATH/Database/BaseConnection.php(607): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT "master"."user_login"."client_id", "client_details"."client_name", array_agg(device.id) as device_ids, array_agg(device.device_name) as device_names, "master"."user_login"."name", "user_role"."role_details", "master"."user_login"."status", "master"."user_login"."id" as "user_id"
+FROM "master"."user_login"
+JOIN "master"."user_role" ON "master"."user_login"."id" = "master"."user_role"."user_id"
+JOIN "master"."device_details" ON "master"."user_login"."id" = "master"."device_details"."user_id"
+JOIN "master"."device" ON "master"."device_details"."device_id" = "master"."device"."id"
+JOIN "master"."client_details" ON "master"."user_login"."client_id" = "master"."client_details"."id"
+WHERE "master"."user_login"."id" = \'68\'
+GROUP BY "master"."user_login"."client_id", "client_details"."client_name", "master"."user_login"."name", "user_role"."role_details", "master"."user_login"."status", "master"."user_login"."id"')
+ 5 SYSTEMPATH/Database/BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT "master"."user_login"."client_id", "client_details"."client_name", array_agg(device.id) as device_ids, array_agg(device.device_name) as device_names, "master"."user_login"."name", "user_role"."role_details", "master"."user_login"."status", "master"."user_login"."id" as "user_id"
+FROM "master"."user_login"
+JOIN "master"."user_role" ON "master"."user_login"."id" = "master"."user_role"."user_id"
+JOIN "master"."device_details" ON "master"."user_login"."id" = "master"."device_details"."user_id"
+JOIN "master"."device" ON "master"."device_details"."device_id" = "master"."device"."id"
+JOIN "master"."client_details" ON "master"."user_login"."client_id" = "master"."client_details"."id"
+WHERE "master"."user_login"."id" = :master.user_login.id:
+GROUP BY "master"."user_login"."client_id", "client_details"."client_name", "master"."user_login"."name", "user_role"."role_details", "master"."user_login"."status", "master"."user_login"."id"', [...], false)
+ 6 SYSTEMPATH/Model.php(242): CodeIgniter\Database\BaseBuilder->get()
+ 7 SYSTEMPATH/BaseModel.php(638): CodeIgniter\Model->doFindAll(0, 0)
+ 8 APPPATH/Modules/client/Models/ClientLoginModel.php(35): CodeIgniter\BaseModel->findAll()
+ 9 APPPATH/Modules/Client/Controllers/DashboardController.php(138): App\Modules\client\Models\clientLoginModel->getUserData('68')
+10 APPPATH/Modules/Client/Controllers/DashboardController.php(100): App\Modules\Client\Controllers\DashboardController->getUserRoleDetails()
+11 SYSTEMPATH/CodeIgniter.php(941): App\Modules\Client\Controllers\DashboardController->dashboard()
+12 SYSTEMPATH/CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Modules\Client\Controllers\DashboardController))
+13 SYSTEMPATH/CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+14 FCPATH/index.php(79): CodeIgniter\CodeIgniter->run()
+INFO - 2024-04-05 02:06:12 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2024-04-05 02:06:12 --> ErrorException: pg_query(): Query failed: ERROR:  relation &quot;master.device_details&quot; does not exist
+LINE 4: JOIN &quot;master&quot;.&quot;device_details&quot; ON &quot;master&quot;.&quot;user_login&quot;.&quot;id&quot;...
+             ^ in /Applications/XAMPP/xamppfiles/htdocs/mbscan/system/Database/Postgre/Connection.php:187
+Stack trace:
+#0 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'pg_query(): Que...', '/Applications/X...', 187)
+#1 /Applications/XAMPP/xamppfiles/htdocs/mbscan/system/Database/Postgre/Connection.php(187): pg_query(Object(PgSql\Connection), 'SELECT "master"...')
+#2 /Applications/XAMPP/xamppfiles/htdocs/mbscan/system/Database/BaseConnection.php(693): CodeIgniter\Database\Postgre\Connection->execute('SELECT "master"...')
+#3 /Applications/XAMPP/xamppfiles/htdocs/mbscan/system/Database/BaseConnection.php(607): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT "master"...')
+#4 /Applications/XAMPP/xamppfiles/htdocs/mbscan/system/Database/BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT "master"...', Array, false)
+#5 /Applications/XAMPP/xamppfiles/htdocs/mbscan/system/Model.php(242): CodeIgniter\Database\BaseBuilder->get()
+#6 /Applications/XAMPP/xamppfiles/htdocs/mbscan/system/BaseModel.php(638): CodeIgniter\Model->doFindAll(0, 0)
+#7 /Applications/XAMPP/xamppfiles/htdocs/mbscan/app/Modules/client/Models/ClientLoginModel.php(35): CodeIgniter\BaseModel->findAll()
+#8 /Applications/XAMPP/xamppfiles/htdocs/mbscan/app/Modules/Client/Controllers/DashboardController.php(138): App\Modules\client\Models\clientLoginModel->getUserData('68')
+#9 /Applications/XAMPP/xamppfiles/htdocs/mbscan/app/Modules/Client/Controllers/DashboardController.php(100): App\Modules\Client\Controllers\DashboardController->getUserRoleDetails()
+#10 /Applications/XAMPP/xamppfiles/htdocs/mbscan/system/CodeIgniter.php(941): App\Modules\Client\Controllers\DashboardController->dashboard()
+#11 /Applications/XAMPP/xamppfiles/htdocs/mbscan/system/CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Modules\Client\Controllers\DashboardController))
+#12 /Applications/XAMPP/xamppfiles/htdocs/mbscan/system/CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#13 /Applications/XAMPP/xamppfiles/htdocs/mbscan/index.php(79): CodeIgniter\CodeIgniter->run()
+#14 {main}
+CRITICAL - 2024-04-05 02:06:12 --> CodeIgniter\Database\Exceptions\DatabaseException: pg_query(): Query failed: ERROR:  relation &quot;master.device_details&quot; does not exist
+LINE 4: JOIN &quot;master&quot;.&quot;device_details&quot; ON &quot;master&quot;.&quot;user_login&quot;.&quot;id&quot;...
+             ^
+in SYSTEMPATH/Database/BaseConnection.php on line 647.
+ 1 SYSTEMPATH/Database/BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT "master"."user_login"."client_id", "client_details"."client_name", array_agg(device.id) as device_ids, array_agg(device.device_name) as device_names, "master"."user_login"."name", "user_role"."role_details", "master"."user_login"."status", "master"."user_login"."id" as "user_id"
+FROM "master"."user_login"
+JOIN "master"."user_role" ON "master"."user_login"."id" = "master"."user_role"."user_id"
+JOIN "master"."device_details" ON "master"."user_login"."id" = "master"."device_details"."user_id"
+JOIN "master"."device" ON "master"."device_details"."device_id" = "master"."device"."id"
+JOIN "master"."client_details" ON "master"."user_login"."client_id" = "master"."client_details"."id"
+WHERE "master"."user_login"."id" = :master.user_login.id:
+GROUP BY "master"."user_login"."client_id", "client_details"."client_name", "master"."user_login"."name", "user_role"."role_details", "master"."user_login"."status", "master"."user_login"."id"', [...], false)
+ 2 SYSTEMPATH/Model.php(242): CodeIgniter\Database\BaseBuilder->get()
+ 3 SYSTEMPATH/BaseModel.php(638): CodeIgniter\Model->doFindAll(0, 0)
+ 4 APPPATH/Modules/client/Models/ClientLoginModel.php(35): CodeIgniter\BaseModel->findAll()
+ 5 APPPATH/Modules/Client/Controllers/DashboardController.php(138): App\Modules\client\Models\clientLoginModel->getUserData('68')
+ 6 APPPATH/Modules/Client/Controllers/DashboardController.php(100): App\Modules\Client\Controllers\DashboardController->getUserRoleDetails()
+ 7 SYSTEMPATH/CodeIgniter.php(941): App\Modules\Client\Controllers\DashboardController->dashboard()
+ 8 SYSTEMPATH/CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Modules\Client\Controllers\DashboardController))
+ 9 SYSTEMPATH/CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 FCPATH/index.php(79): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-04-05 02:06:12 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: pg_query(): Query failed: ERROR:  relation &quot;master.device_details&quot; does not exist
+LINE 4: JOIN &quot;master&quot;.&quot;device_details&quot; ON &quot;master&quot;.&quot;user_login&quot;.&quot;id&quot;...
+             ^
+in SYSTEMPATH/Database/Postgre/Connection.php on line 192.
+ 1 SYSTEMPATH/Database/BaseConnection.php(693): CodeIgniter\Database\Postgre\Connection->execute('SELECT "master"."user_login"."client_id", "client_details"."client_name", array_agg(device.id) as device_ids, array_agg(device.device_name) as device_names, "master"."user_login"."name", "user_role"."role_details", "master"."user_login"."status", "master"."user_login"."id" as "user_id"
+FROM "master"."user_login"
+JOIN "master"."user_role" ON "master"."user_login"."id" = "master"."user_role"."user_id"
+JOIN "master"."device_details" ON "master"."user_login"."id" = "master"."device_details"."user_id"
+JOIN "master"."device" ON "master"."device_details"."device_id" = "master"."device"."id"
+JOIN "master"."client_details" ON "master"."user_login"."client_id" = "master"."client_details"."id"
+WHERE "master"."user_login"."id" = \'68\'
+GROUP BY "master"."user_login"."client_id", "client_details"."client_name", "master"."user_login"."name", "user_role"."role_details", "master"."user_login"."status", "master"."user_login"."id"')
+ 2 SYSTEMPATH/Database/BaseConnection.php(607): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT "master"."user_login"."client_id", "client_details"."client_name", array_agg(device.id) as device_ids, array_agg(device.device_name) as device_names, "master"."user_login"."name", "user_role"."role_details", "master"."user_login"."status", "master"."user_login"."id" as "user_id"
+FROM "master"."user_login"
+JOIN "master"."user_role" ON "master"."user_login"."id" = "master"."user_role"."user_id"
+JOIN "master"."device_details" ON "master"."user_login"."id" = "master"."device_details"."user_id"
+JOIN "master"."device" ON "master"."device_details"."device_id" = "master"."device"."id"
+JOIN "master"."client_details" ON "master"."user_login"."client_id" = "master"."client_details"."id"
+WHERE "master"."user_login"."id" = \'68\'
+GROUP BY "master"."user_login"."client_id", "client_details"."client_name", "master"."user_login"."name", "user_role"."role_details", "master"."user_login"."status", "master"."user_login"."id"')
+ 3 SYSTEMPATH/Database/BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT "master"."user_login"."client_id", "client_details"."client_name", array_agg(device.id) as device_ids, array_agg(device.device_name) as device_names, "master"."user_login"."name", "user_role"."role_details", "master"."user_login"."status", "master"."user_login"."id" as "user_id"
+FROM "master"."user_login"
+JOIN "master"."user_role" ON "master"."user_login"."id" = "master"."user_role"."user_id"
+JOIN "master"."device_details" ON "master"."user_login"."id" = "master"."device_details"."user_id"
+JOIN "master"."device" ON "master"."device_details"."device_id" = "master"."device"."id"
+JOIN "master"."client_details" ON "master"."user_login"."client_id" = "master"."client_details"."id"
+WHERE "master"."user_login"."id" = :master.user_login.id:
+GROUP BY "master"."user_login"."client_id", "client_details"."client_name", "master"."user_login"."name", "user_role"."role_details", "master"."user_login"."status", "master"."user_login"."id"', [...], false)
+ 4 SYSTEMPATH/Model.php(242): CodeIgniter\Database\BaseBuilder->get()
+ 5 SYSTEMPATH/BaseModel.php(638): CodeIgniter\Model->doFindAll(0, 0)
+ 6 APPPATH/Modules/client/Models/ClientLoginModel.php(35): CodeIgniter\BaseModel->findAll()
+ 7 APPPATH/Modules/Client/Controllers/DashboardController.php(138): App\Modules\client\Models\clientLoginModel->getUserData('68')
+ 8 APPPATH/Modules/Client/Controllers/DashboardController.php(100): App\Modules\Client\Controllers\DashboardController->getUserRoleDetails()
+ 9 SYSTEMPATH/CodeIgniter.php(941): App\Modules\Client\Controllers\DashboardController->dashboard()
+10 SYSTEMPATH/CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Modules\Client\Controllers\DashboardController))
+11 SYSTEMPATH/CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 FCPATH/index.php(79): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-04-05 02:06:12 --> [Caused by] ErrorException: pg_query(): Query failed: ERROR:  relation &quot;master.device_details&quot; does not exist
+LINE 4: JOIN &quot;master&quot;.&quot;device_details&quot; ON &quot;master&quot;.&quot;user_login&quot;.&quot;id&quot;...
+             ^
+in SYSTEMPATH/Database/Postgre/Connection.php on line 187.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'pg_query(): Query failed: ERROR:  relation &quot;master.device_details&quot; does not exist
+LINE 4: JOIN &quot;master&quot;.&quot;device_details&quot; ON &quot;master&quot;.&quot;user_login&quot;.&quot;id&quot;...
+             ^', '/Applications/XAMPP/xamppfiles/htdocs/mbscan/system/Database/Postgre/Connection.php', 187)
+ 2 SYSTEMPATH/Database/Postgre/Connection.php(187): pg_query(Object(PgSql\Connection), 'SELECT "master"."user_login"."client_id", "client_details"."client_name", array_agg(device.id) as device_ids, array_agg(device.device_name) as device_names, "master"."user_login"."name", "user_role"."role_details", "master"."user_login"."status", "master"."user_login"."id" as "user_id"
+FROM "master"."user_login"
+JOIN "master"."user_role" ON "master"."user_login"."id" = "master"."user_role"."user_id"
+JOIN "master"."device_details" ON "master"."user_login"."id" = "master"."device_details"."user_id"
+JOIN "master"."device" ON "master"."device_details"."device_id" = "master"."device"."id"
+JOIN "master"."client_details" ON "master"."user_login"."client_id" = "master"."client_details"."id"
+WHERE "master"."user_login"."id" = \'68\'
+GROUP BY "master"."user_login"."client_id", "client_details"."client_name", "master"."user_login"."name", "user_role"."role_details", "master"."user_login"."status", "master"."user_login"."id"')
+ 3 SYSTEMPATH/Database/BaseConnection.php(693): CodeIgniter\Database\Postgre\Connection->execute('SELECT "master"."user_login"."client_id", "client_details"."client_name", array_agg(device.id) as device_ids, array_agg(device.device_name) as device_names, "master"."user_login"."name", "user_role"."role_details", "master"."user_login"."status", "master"."user_login"."id" as "user_id"
+FROM "master"."user_login"
+JOIN "master"."user_role" ON "master"."user_login"."id" = "master"."user_role"."user_id"
+JOIN "master"."device_details" ON "master"."user_login"."id" = "master"."device_details"."user_id"
+JOIN "master"."device" ON "master"."device_details"."device_id" = "master"."device"."id"
+JOIN "master"."client_details" ON "master"."user_login"."client_id" = "master"."client_details"."id"
+WHERE "master"."user_login"."id" = \'68\'
+GROUP BY "master"."user_login"."client_id", "client_details"."client_name", "master"."user_login"."name", "user_role"."role_details", "master"."user_login"."status", "master"."user_login"."id"')
+ 4 SYSTEMPATH/Database/BaseConnection.php(607): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT "master"."user_login"."client_id", "client_details"."client_name", array_agg(device.id) as device_ids, array_agg(device.device_name) as device_names, "master"."user_login"."name", "user_role"."role_details", "master"."user_login"."status", "master"."user_login"."id" as "user_id"
+FROM "master"."user_login"
+JOIN "master"."user_role" ON "master"."user_login"."id" = "master"."user_role"."user_id"
+JOIN "master"."device_details" ON "master"."user_login"."id" = "master"."device_details"."user_id"
+JOIN "master"."device" ON "master"."device_details"."device_id" = "master"."device"."id"
+JOIN "master"."client_details" ON "master"."user_login"."client_id" = "master"."client_details"."id"
+WHERE "master"."user_login"."id" = \'68\'
+GROUP BY "master"."user_login"."client_id", "client_details"."client_name", "master"."user_login"."name", "user_role"."role_details", "master"."user_login"."status", "master"."user_login"."id"')
+ 5 SYSTEMPATH/Database/BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT "master"."user_login"."client_id", "client_details"."client_name", array_agg(device.id) as device_ids, array_agg(device.device_name) as device_names, "master"."user_login"."name", "user_role"."role_details", "master"."user_login"."status", "master"."user_login"."id" as "user_id"
+FROM "master"."user_login"
+JOIN "master"."user_role" ON "master"."user_login"."id" = "master"."user_role"."user_id"
+JOIN "master"."device_details" ON "master"."user_login"."id" = "master"."device_details"."user_id"
+JOIN "master"."device" ON "master"."device_details"."device_id" = "master"."device"."id"
+JOIN "master"."client_details" ON "master"."user_login"."client_id" = "master"."client_details"."id"
+WHERE "master"."user_login"."id" = :master.user_login.id:
+GROUP BY "master"."user_login"."client_id", "client_details"."client_name", "master"."user_login"."name", "user_role"."role_details", "master"."user_login"."status", "master"."user_login"."id"', [...], false)
+ 6 SYSTEMPATH/Model.php(242): CodeIgniter\Database\BaseBuilder->get()
+ 7 SYSTEMPATH/BaseModel.php(638): CodeIgniter\Model->doFindAll(0, 0)
+ 8 APPPATH/Modules/client/Models/ClientLoginModel.php(35): CodeIgniter\BaseModel->findAll()
+ 9 APPPATH/Modules/Client/Controllers/DashboardController.php(138): App\Modules\client\Models\clientLoginModel->getUserData('68')
+10 APPPATH/Modules/Client/Controllers/DashboardController.php(100): App\Modules\Client\Controllers\DashboardController->getUserRoleDetails()
+11 SYSTEMPATH/CodeIgniter.php(941): App\Modules\Client\Controllers\DashboardController->dashboard()
+12 SYSTEMPATH/CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Modules\Client\Controllers\DashboardController))
+13 SYSTEMPATH/CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+14 FCPATH/index.php(79): CodeIgniter\CodeIgniter->run()
+INFO - 2024-04-05 02:06:16 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2024-04-05 02:06:16 --> ErrorException: pg_query(): Query failed: ERROR:  relation &quot;master.device_details&quot; does not exist
+LINE 4: JOIN &quot;master&quot;.&quot;device_details&quot; ON &quot;master&quot;.&quot;user_login&quot;.&quot;id&quot;...
+             ^ in /Applications/XAMPP/xamppfiles/htdocs/mbscan/system/Database/Postgre/Connection.php:187
+Stack trace:
+#0 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'pg_query(): Que...', '/Applications/X...', 187)
+#1 /Applications/XAMPP/xamppfiles/htdocs/mbscan/system/Database/Postgre/Connection.php(187): pg_query(Object(PgSql\Connection), 'SELECT "master"...')
+#2 /Applications/XAMPP/xamppfiles/htdocs/mbscan/system/Database/BaseConnection.php(693): CodeIgniter\Database\Postgre\Connection->execute('SELECT "master"...')
+#3 /Applications/XAMPP/xamppfiles/htdocs/mbscan/system/Database/BaseConnection.php(607): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT "master"...')
+#4 /Applications/XAMPP/xamppfiles/htdocs/mbscan/system/Database/BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT "master"...', Array, false)
+#5 /Applications/XAMPP/xamppfiles/htdocs/mbscan/system/Model.php(242): CodeIgniter\Database\BaseBuilder->get()
+#6 /Applications/XAMPP/xamppfiles/htdocs/mbscan/system/BaseModel.php(638): CodeIgniter\Model->doFindAll(0, 0)
+#7 /Applications/XAMPP/xamppfiles/htdocs/mbscan/app/Modules/client/Models/ClientLoginModel.php(35): CodeIgniter\BaseModel->findAll()
+#8 /Applications/XAMPP/xamppfiles/htdocs/mbscan/app/Modules/Client/Controllers/DashboardController.php(138): App\Modules\client\Models\clientLoginModel->getUserData('68')
+#9 /Applications/XAMPP/xamppfiles/htdocs/mbscan/app/Modules/Client/Controllers/DashboardController.php(100): App\Modules\Client\Controllers\DashboardController->getUserRoleDetails()
+#10 /Applications/XAMPP/xamppfiles/htdocs/mbscan/system/CodeIgniter.php(941): App\Modules\Client\Controllers\DashboardController->dashboard()
+#11 /Applications/XAMPP/xamppfiles/htdocs/mbscan/system/CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Modules\Client\Controllers\DashboardController))
+#12 /Applications/XAMPP/xamppfiles/htdocs/mbscan/system/CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#13 /Applications/XAMPP/xamppfiles/htdocs/mbscan/index.php(79): CodeIgniter\CodeIgniter->run()
+#14 {main}
+CRITICAL - 2024-04-05 02:06:16 --> CodeIgniter\Database\Exceptions\DatabaseException: pg_query(): Query failed: ERROR:  relation &quot;master.device_details&quot; does not exist
+LINE 4: JOIN &quot;master&quot;.&quot;device_details&quot; ON &quot;master&quot;.&quot;user_login&quot;.&quot;id&quot;...
+             ^
+in SYSTEMPATH/Database/BaseConnection.php on line 647.
+ 1 SYSTEMPATH/Database/BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT "master"."user_login"."client_id", "client_details"."client_name", array_agg(device.id) as device_ids, array_agg(device.device_name) as device_names, "master"."user_login"."name", "user_role"."role_details", "master"."user_login"."status", "master"."user_login"."id" as "user_id"
+FROM "master"."user_login"
+JOIN "master"."user_role" ON "master"."user_login"."id" = "master"."user_role"."user_id"
+JOIN "master"."device_details" ON "master"."user_login"."id" = "master"."device_details"."user_id"
+JOIN "master"."device" ON "master"."device_details"."device_id" = "master"."device"."id"
+JOIN "master"."client_details" ON "master"."user_login"."client_id" = "master"."client_details"."id"
+WHERE "master"."user_login"."id" = :master.user_login.id:
+GROUP BY "master"."user_login"."client_id", "client_details"."client_name", "master"."user_login"."name", "user_role"."role_details", "master"."user_login"."status", "master"."user_login"."id"', [...], false)
+ 2 SYSTEMPATH/Model.php(242): CodeIgniter\Database\BaseBuilder->get()
+ 3 SYSTEMPATH/BaseModel.php(638): CodeIgniter\Model->doFindAll(0, 0)
+ 4 APPPATH/Modules/client/Models/ClientLoginModel.php(35): CodeIgniter\BaseModel->findAll()
+ 5 APPPATH/Modules/Client/Controllers/DashboardController.php(138): App\Modules\client\Models\clientLoginModel->getUserData('68')
+ 6 APPPATH/Modules/Client/Controllers/DashboardController.php(100): App\Modules\Client\Controllers\DashboardController->getUserRoleDetails()
+ 7 SYSTEMPATH/CodeIgniter.php(941): App\Modules\Client\Controllers\DashboardController->dashboard()
+ 8 SYSTEMPATH/CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Modules\Client\Controllers\DashboardController))
+ 9 SYSTEMPATH/CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 FCPATH/index.php(79): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-04-05 02:06:16 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: pg_query(): Query failed: ERROR:  relation &quot;master.device_details&quot; does not exist
+LINE 4: JOIN &quot;master&quot;.&quot;device_details&quot; ON &quot;master&quot;.&quot;user_login&quot;.&quot;id&quot;...
+             ^
+in SYSTEMPATH/Database/Postgre/Connection.php on line 192.
+ 1 SYSTEMPATH/Database/BaseConnection.php(693): CodeIgniter\Database\Postgre\Connection->execute('SELECT "master"."user_login"."client_id", "client_details"."client_name", array_agg(device.id) as device_ids, array_agg(device.device_name) as device_names, "master"."user_login"."name", "user_role"."role_details", "master"."user_login"."status", "master"."user_login"."id" as "user_id"
+FROM "master"."user_login"
+JOIN "master"."user_role" ON "master"."user_login"."id" = "master"."user_role"."user_id"
+JOIN "master"."device_details" ON "master"."user_login"."id" = "master"."device_details"."user_id"
+JOIN "master"."device" ON "master"."device_details"."device_id" = "master"."device"."id"
+JOIN "master"."client_details" ON "master"."user_login"."client_id" = "master"."client_details"."id"
+WHERE "master"."user_login"."id" = \'68\'
+GROUP BY "master"."user_login"."client_id", "client_details"."client_name", "master"."user_login"."name", "user_role"."role_details", "master"."user_login"."status", "master"."user_login"."id"')
+ 2 SYSTEMPATH/Database/BaseConnection.php(607): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT "master"."user_login"."client_id", "client_details"."client_name", array_agg(device.id) as device_ids, array_agg(device.device_name) as device_names, "master"."user_login"."name", "user_role"."role_details", "master"."user_login"."status", "master"."user_login"."id" as "user_id"
+FROM "master"."user_login"
+JOIN "master"."user_role" ON "master"."user_login"."id" = "master"."user_role"."user_id"
+JOIN "master"."device_details" ON "master"."user_login"."id" = "master"."device_details"."user_id"
+JOIN "master"."device" ON "master"."device_details"."device_id" = "master"."device"."id"
+JOIN "master"."client_details" ON "master"."user_login"."client_id" = "master"."client_details"."id"
+WHERE "master"."user_login"."id" = \'68\'
+GROUP BY "master"."user_login"."client_id", "client_details"."client_name", "master"."user_login"."name", "user_role"."role_details", "master"."user_login"."status", "master"."user_login"."id"')
+ 3 SYSTEMPATH/Database/BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT "master"."user_login"."client_id", "client_details"."client_name", array_agg(device.id) as device_ids, array_agg(device.device_name) as device_names, "master"."user_login"."name", "user_role"."role_details", "master"."user_login"."status", "master"."user_login"."id" as "user_id"
+FROM "master"."user_login"
+JOIN "master"."user_role" ON "master"."user_login"."id" = "master"."user_role"."user_id"
+JOIN "master"."device_details" ON "master"."user_login"."id" = "master"."device_details"."user_id"
+JOIN "master"."device" ON "master"."device_details"."device_id" = "master"."device"."id"
+JOIN "master"."client_details" ON "master"."user_login"."client_id" = "master"."client_details"."id"
+WHERE "master"."user_login"."id" = :master.user_login.id:
+GROUP BY "master"."user_login"."client_id", "client_details"."client_name", "master"."user_login"."name", "user_role"."role_details", "master"."user_login"."status", "master"."user_login"."id"', [...], false)
+ 4 SYSTEMPATH/Model.php(242): CodeIgniter\Database\BaseBuilder->get()
+ 5 SYSTEMPATH/BaseModel.php(638): CodeIgniter\Model->doFindAll(0, 0)
+ 6 APPPATH/Modules/client/Models/ClientLoginModel.php(35): CodeIgniter\BaseModel->findAll()
+ 7 APPPATH/Modules/Client/Controllers/DashboardController.php(138): App\Modules\client\Models\clientLoginModel->getUserData('68')
+ 8 APPPATH/Modules/Client/Controllers/DashboardController.php(100): App\Modules\Client\Controllers\DashboardController->getUserRoleDetails()
+ 9 SYSTEMPATH/CodeIgniter.php(941): App\Modules\Client\Controllers\DashboardController->dashboard()
+10 SYSTEMPATH/CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Modules\Client\Controllers\DashboardController))
+11 SYSTEMPATH/CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 FCPATH/index.php(79): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-04-05 02:06:16 --> [Caused by] ErrorException: pg_query(): Query failed: ERROR:  relation &quot;master.device_details&quot; does not exist
+LINE 4: JOIN &quot;master&quot;.&quot;device_details&quot; ON &quot;master&quot;.&quot;user_login&quot;.&quot;id&quot;...
+             ^
+in SYSTEMPATH/Database/Postgre/Connection.php on line 187.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'pg_query(): Query failed: ERROR:  relation &quot;master.device_details&quot; does not exist
+LINE 4: JOIN &quot;master&quot;.&quot;device_details&quot; ON &quot;master&quot;.&quot;user_login&quot;.&quot;id&quot;...
+             ^', '/Applications/XAMPP/xamppfiles/htdocs/mbscan/system/Database/Postgre/Connection.php', 187)
+ 2 SYSTEMPATH/Database/Postgre/Connection.php(187): pg_query(Object(PgSql\Connection), 'SELECT "master"."user_login"."client_id", "client_details"."client_name", array_agg(device.id) as device_ids, array_agg(device.device_name) as device_names, "master"."user_login"."name", "user_role"."role_details", "master"."user_login"."status", "master"."user_login"."id" as "user_id"
+FROM "master"."user_login"
+JOIN "master"."user_role" ON "master"."user_login"."id" = "master"."user_role"."user_id"
+JOIN "master"."device_details" ON "master"."user_login"."id" = "master"."device_details"."user_id"
+JOIN "master"."device" ON "master"."device_details"."device_id" = "master"."device"."id"
+JOIN "master"."client_details" ON "master"."user_login"."client_id" = "master"."client_details"."id"
+WHERE "master"."user_login"."id" = \'68\'
+GROUP BY "master"."user_login"."client_id", "client_details"."client_name", "master"."user_login"."name", "user_role"."role_details", "master"."user_login"."status", "master"."user_login"."id"')
+ 3 SYSTEMPATH/Database/BaseConnection.php(693): CodeIgniter\Database\Postgre\Connection->execute('SELECT "master"."user_login"."client_id", "client_details"."client_name", array_agg(device.id) as device_ids, array_agg(device.device_name) as device_names, "master"."user_login"."name", "user_role"."role_details", "master"."user_login"."status", "master"."user_login"."id" as "user_id"
+FROM "master"."user_login"
+JOIN "master"."user_role" ON "master"."user_login"."id" = "master"."user_role"."user_id"
+JOIN "master"."device_details" ON "master"."user_login"."id" = "master"."device_details"."user_id"
+JOIN "master"."device" ON "master"."device_details"."device_id" = "master"."device"."id"
+JOIN "master"."client_details" ON "master"."user_login"."client_id" = "master"."client_details"."id"
+WHERE "master"."user_login"."id" = \'68\'
+GROUP BY "master"."user_login"."client_id", "client_details"."client_name", "master"."user_login"."name", "user_role"."role_details", "master"."user_login"."status", "master"."user_login"."id"')
+ 4 SYSTEMPATH/Database/BaseConnection.php(607): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT "master"."user_login"."client_id", "client_details"."client_name", array_agg(device.id) as device_ids, array_agg(device.device_name) as device_names, "master"."user_login"."name", "user_role"."role_details", "master"."user_login"."status", "master"."user_login"."id" as "user_id"
+FROM "master"."user_login"
+JOIN "master"."user_role" ON "master"."user_login"."id" = "master"."user_role"."user_id"
+JOIN "master"."device_details" ON "master"."user_login"."id" = "master"."device_details"."user_id"
+JOIN "master"."device" ON "master"."device_details"."device_id" = "master"."device"."id"
+JOIN "master"."client_details" ON "master"."user_login"."client_id" = "master"."client_details"."id"
+WHERE "master"."user_login"."id" = \'68\'
+GROUP BY "master"."user_login"."client_id", "client_details"."client_name", "master"."user_login"."name", "user_role"."role_details", "master"."user_login"."status", "master"."user_login"."id"')
+ 5 SYSTEMPATH/Database/BaseBuilder.php(1616): CodeIgniter\Database\BaseConnection->query('SELECT "master"."user_login"."client_id", "client_details"."client_name", array_agg(device.id) as device_ids, array_agg(device.device_name) as device_names, "master"."user_login"."name", "user_role"."role_details", "master"."user_login"."status", "master"."user_login"."id" as "user_id"
+FROM "master"."user_login"
+JOIN "master"."user_role" ON "master"."user_login"."id" = "master"."user_role"."user_id"
+JOIN "master"."device_details" ON "master"."user_login"."id" = "master"."device_details"."user_id"
+JOIN "master"."device" ON "master"."device_details"."device_id" = "master"."device"."id"
+JOIN "master"."client_details" ON "master"."user_login"."client_id" = "master"."client_details"."id"
+WHERE "master"."user_login"."id" = :master.user_login.id:
+GROUP BY "master"."user_login"."client_id", "client_details"."client_name", "master"."user_login"."name", "user_role"."role_details", "master"."user_login"."status", "master"."user_login"."id"', [...], false)
+ 6 SYSTEMPATH/Model.php(242): CodeIgniter\Database\BaseBuilder->get()
+ 7 SYSTEMPATH/BaseModel.php(638): CodeIgniter\Model->doFindAll(0, 0)
+ 8 APPPATH/Modules/client/Models/ClientLoginModel.php(35): CodeIgniter\BaseModel->findAll()
+ 9 APPPATH/Modules/Client/Controllers/DashboardController.php(138): App\Modules\client\Models\clientLoginModel->getUserData('68')
+10 APPPATH/Modules/Client/Controllers/DashboardController.php(100): App\Modules\Client\Controllers\DashboardController->getUserRoleDetails()
+11 SYSTEMPATH/CodeIgniter.php(941): App\Modules\Client\Controllers\DashboardController->dashboard()
+12 SYSTEMPATH/CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Modules\Client\Controllers\DashboardController))
+13 SYSTEMPATH/CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+14 FCPATH/index.php(79): CodeIgniter\CodeIgniter->run()
+INFO - 2024-04-05 02:11:43 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2024-04-05 02:11:43 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2024-04-05 02:11:58 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2024-04-05 02:12:01 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2024-04-05 02:12:01 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2024-04-05 02:12:02 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2024-04-05 02:12:07 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2024-04-05 02:12:07 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2024-04-05 02:12:14 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2024-04-05 02:12:14 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2024-04-05 02:12:15 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2024-04-05 02:12:15 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2024-04-05 02:12:39 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2024-04-05 02:12:39 --> User added successfully
+INFO - 2024-04-05 02:12:44 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2024-04-05 02:12:44 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2024-04-05 02:12:49 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2024-04-05 02:12:52 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2024-04-05 02:12:52 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2024-04-05 02:12:53 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2024-04-05 02:13:04 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.

@@ -24,6 +24,7 @@ class createClientModel extends Model
             'can_create' => $data['can_create'],
             'can_delete' => $data['can_delete'],
             'can_edit' => $data['can_edit'],
+            'can_adjust' => $data['can_adjust'],
             'status' => $data['status'],
             'updated_on' => date('Y-m-d')
         ];
@@ -45,7 +46,8 @@ class createClientModel extends Model
                 'can_create' => $data['can_create'],
                 'can_delete' => $data['can_delete'],
                 'can_update' => $data['can_edit'],
-                'can_view' => $data['can_view']
+                'can_view' => $data['can_view'],
+                'can_adjust' => $data['can_adjust']
             ]),
             'status' => $data['status'],
             'updated_on' => date('Y-m-d')

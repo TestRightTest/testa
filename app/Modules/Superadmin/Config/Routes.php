@@ -12,8 +12,6 @@ $routes->group("superAdmin", ["namespace" => "App\Modules\Superadmin\Controllers
     $routes->get("getDevices", "SuperAdminController::getDevices");
     $routes->get("getClientId", "SuperAdminController::getClientId");
     $routes->get("getDevicesByClientId", "SuperAdminController::getDevicesByClientId");
-
-
     $routes->post("loginAuth", "SuperAdminController::loginAuth");
     $routes->post('adduser', 'SuperAdminController::addUser');
     $routes->post('addclient', 'SuperAdminController::addClient');
