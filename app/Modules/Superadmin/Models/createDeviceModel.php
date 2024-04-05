@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Modules\SuperAdmin\Models;
+namespace App\Modules\Superadmin\Models;
 
 use CodeIgniter\Model;
 
-class CreateDeviceModel extends Model
+class createDeviceModel extends Model
 {
     protected $table = 'master.device'; // Assuming the table is under the master schema
     protected $primaryKey = 'id';

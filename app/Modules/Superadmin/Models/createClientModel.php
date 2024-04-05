@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Modules\SuperAdmin\Models;
+namespace App\Modules\Superadmin\Models;
 
 use CodeIgniter\Model;
 
-class CreateClientModel extends Model
+class createClientModel extends Model
 {
     protected $table = 'master.client_details';
     protected $primaryKey = 'id';
@@ -29,7 +29,7 @@ class CreateClientModel extends Model
         ];
 
         $roleInsert = $this->db->table('master.role_list')->insert($roleData);
-        
+
         if (!$roleInsert) {
             return false;
         }
@@ -65,12 +65,12 @@ class CreateClientModel extends Model
             $this->db->table('master.client_role')
                 ->where('client_id', $clientId)
                 ->update($data);
-    
+
             // Update status in client_details table
             $this->db->table('master.client_details')
                 ->where('id', $clientId)
                 ->update(['status' => $data['status']]);
-    
+
             // Log the success message
             log_message('debug', 'Client data updated successfully.');
             return true;
@@ -101,5 +101,5 @@ class CreateClientModel extends Model
         return $query->getResultArray();
     }
 
-    
+
 }

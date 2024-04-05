@@ -16,7 +16,7 @@ class App extends BaseConfig
      *
      * E.g., http://example.com/
      */
-    public string $baseURL = 'http://localhost/mbscan';
+    public string $baseURL = 'http://43.204.189.245/mbscan';
 
     /**
      * Allowed Hostnames in the Site URL other than the hostname in the baseURL.

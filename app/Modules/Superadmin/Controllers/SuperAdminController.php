@@ -1,10 +1,12 @@
 <?php
-namespace App\Modules\SuperAdmin\Controllers;
+namespace App\Modules\Superadmin\Controllers;
+
 use App\Controllers\BaseController;
-use App\Modules\SuperAdmin\Models\AdminLoginModel;
-use App\Modules\SuperAdmin\Models\createUserModel;
-use App\Modules\SuperAdmin\Models\createClientModel;
-use App\Modules\SuperAdmin\Models\CreateDeviceModel;
+
+use App\Modules\Superadmin\Models\AdminLoginModel;
+use App\Modules\Superadmin\Models\createUserModel;
+use App\Modules\Superadmin\Models\createClientModel;
+use App\Modules\Superadmin\Models\createDeviceModel;
 
 class SuperAdminController extends BaseController
 {
@@ -18,15 +20,14 @@ class SuperAdminController extends BaseController
         $this->createUserModel = new CreateUserModel();
         $this->createClientModel = new CreateClientModel();
         $this->createDeviceModel = new CreateDeviceModel();
-
     }
 
     public function index(): string {
-        return view('\App\Modules\SuperAdmin\Views\welcome_message');
+        return view('\App\Modules\Superadmin\Views\welcome_message');
     }
 
-    public function login():string {
-        return view('\App\Modules\SuperAdmin\Views\login');
+    public function login() {
+        return view('\App\Modules\Superadmin\Views\login');
     }
 
     public function dashboard() {
@@ -34,7 +35,7 @@ class SuperAdminController extends BaseController
         if (!session()->get('isLoggedIn')) {
             return redirect()->to(base_url('superAdmin/login'));
         }
-        return view('\App\Modules\SuperAdmin\Views\createClient');
+        return view('\App\Modules\Superadmin\Views\createClient');
     }
 
     public function createUser() {
@@ -42,7 +43,7 @@ class SuperAdminController extends BaseController
         if (!session()->get('isLoggedIn')) {
             return redirect()->to(base_url('superAdmin/login'));
         }
-        return view('\App\Modules\SuperAdmin\Views\createUser');
+        return view('\App\Modules\Superadmin\Views\createUser');
     }
 
     public function createDevice() {
@@ -50,7 +51,7 @@ class SuperAdminController extends BaseController
         if (!session()->get('isLoggedIn')) {
             return redirect()->to(base_url('superAdmin/login'));
         }
-        return view('\App\Modules\SuperAdmin\Views\createDevice');
+        return view('\App\Modules\Superadmin\Views\createDevice');
     }
 
     public function otaUpdate() {
@@ -58,7 +59,7 @@ class SuperAdminController extends BaseController
         if (!session()->get('isLoggedIn')) {
             return redirect()->to(base_url('superAdmin/login'));
         }
-        return view('\App\Modules\SuperAdmin\Views\otaUpdate');
+        return view('\App\Modules\Superadmin\Views\otaUpdate');
     }
 
     public function loginAuth() {
@@ -100,7 +101,7 @@ class SuperAdminController extends BaseController
             return redirect()->to(base_url('superAdmin/login'));
         }
         $createUserModel = new CreateUserModel();
-    
+
         // Retrieve data from the AJAX request
         $clientID = $this->request->getPost('client_id');
         $name = $this->request->getPost('name');
@@ -113,13 +114,13 @@ class SuperAdminController extends BaseController
         $update = $this->request->getPost('update') === 'true' ? true : false;
         $view = $this->request->getPost('view') === 'true' ? true : false;
         $delete = $this->request->getPost('delete') === 'true' ? true : false;
-    
+
         // Check if the username already exists
         $existingUser = $createUserModel->where('user_name', $username)->first();
         if ($existingUser) {
             return "Username already exists";
         }
-    
+
         // Get the ID of the current user
         $currentUserId = session()->get('userId');
         $data = [
@@ -132,12 +133,12 @@ class SuperAdminController extends BaseController
             'c_admin_id' => $currentUserId,
             'c_user_id' => 1
         ];
-        
+
         // // Check if 'client_id' is provided before adding it to the $data array
         // if ($clientID) {
         //     $data['client_id'] = $clientID;
         // }
-    
+
         // Prepare role-related data
         $roleData = [
             'can_view' => $view,
@@ -145,15 +146,15 @@ class SuperAdminController extends BaseController
             'can_delete' => $delete,
             'can_edit' => $update
         ];
-        
+
         // Insert data into the database
         $insertResult = $createUserModel->insert($data);
-    
+
         if ($insertResult === false) {
             log_message('error', 'Error inserting data into the database: ' . print_r($createUserModel->errors(), true));
             return "Error adding user";
         }
-    
+
         // Retrieve user_id for the inserted user
         $userId = $insertResult;
 
@@ -182,11 +183,11 @@ class SuperAdminController extends BaseController
 
         // Insert role-related data into the role_list table
         $roleInsertResult = $createUserModel->addRole($roleData);
-    
+
         if ($roleInsertResult === false) {
             log_message('error', 'Error inserting role data into the database');
         }
-    
+
         // Insert data into the user_role table
         $userRoleData = [
             'date_created' => date('Y-m-d H:i:s'),
@@ -197,34 +198,34 @@ class SuperAdminController extends BaseController
             'status' => $status,
             'updated_on' => date('Y-m-d')
         ];
-    
+
         $userRoleInsertResult = $createUserModel->db->table('master.user_role')->insert($userRoleData);
-    
+
         if ($userRoleInsertResult === false) {
             log_message('error', 'Error inserting user role data into the database');
         }
-    
+
         log_message('info', 'User added successfully');
         return "User added successfully";
     }
-    
+
     public function getUsers(){
         if (!session()->get('isLoggedIn')) {
             return redirect()->to(base_url('superAdmin/login'));
         }
-    
+
         // Fetch users with role details from the model
         $users = $this->createUserModel->getUsersWithRoleDetails();
-    
+
         // Return JSON response
         return $this->response->setJSON($users);
     }
-    
+
     public function getClient(){
         if (!session()->get('isLoggedIn')) {
             return redirect()->to(base_url('superAdmin/login'));
         }
-    
+
         // Use $this->createClientModel to access the model
         $clients = $this->createClientModel->getClientsWithRoles();
         return $this->response->setJSON($clients);
@@ -234,19 +235,19 @@ class SuperAdminController extends BaseController
         if (!session()->get('isLoggedIn')) {
             return redirect()->to(base_url('superAdmin/login'));
         }
-    
+
         // Get the current user's ID
         $currentUserId = session()->get('userId');
-    
+
         // Get the posted data
         $name = $this->request->getPost('name');
         $status = $this->request->getPost('status');
-    
+
         // Check if the client name already exists
         if ($this->createClientModel->clientExists($name)) {
             return "duplicate"; // Return a response indicating duplicate name
         }
-    
+
         // Get the role-related data
         $roleData = [
             'role_name' => $this->request->getPost('role_name'),
@@ -256,7 +257,7 @@ class SuperAdminController extends BaseController
             'can_edit' => $this->request->getPost('can_edit') == 'true' ? true : false,
             'status' => $this->request->getPost('status'),
         ];
-    
+
         // Insert data into the client_details table
         $data = [
             'date_created' => date('Y-m-d H:i:s'),
@@ -264,20 +265,20 @@ class SuperAdminController extends BaseController
             'status' => $status,
             'created_by_id' => $currentUserId,
         ];
-    
+
         $insertResult = $this->createClientModel->insert($data);
-    
+
         if ($insertResult === false) {
             log_message('error', 'Error inserting data into the database: ' . print_r($this->createClientModel->errors(), true));
             return "Error adding user";
         }
-    
+
         $clientId = $this->createClientModel->insertID();
         log_message('info', 'User added successfully with ID: ' . $clientId);
-    
+
         // Add client ID to the role data
         $roleData['client_id'] = $clientId;
-    
+
         // Insert role-related data into the role_list table
         // $roleInsertResult = $this->createClientModel->addRole($roleData);
         $roleInsertResult = $this->createClientModel->addRole($insertResult, $roleData);
@@ -285,10 +286,10 @@ class SuperAdminController extends BaseController
         if ($roleInsertResult === false) {
             log_message('error', 'Error inserting role data into the database');
         }
-    
+
         // Prepare the response containing both client ID and name
         $response = $clientId . '|' . $name;
-    
+
         return $response;
     }
 
@@ -322,11 +323,11 @@ class SuperAdminController extends BaseController
                 device_id INT,
                 channel_id INT,
                 test_count_id INT,
-                sample_name VARCHAR(255), 
+                sample_name VARCHAR(255),
                 progress_value FLOAT,
                 start_time TIMESTAMP,
                 end_time TIMESTAMP,
-                log_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,                
+                log_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 data_extra JSONB
             )
         ");
@@ -347,20 +348,20 @@ class SuperAdminController extends BaseController
         $clientId = $this->request->getPost('clientId');
         $status = $this->request->getPost('status');
         $roleDetails = $this->request->getPost('roleDetails'); // Get the role details as an array
-    
+
         // Convert role details values to boolean
         $roleDetails = array_map(function ($value) {
             return filter_var($value, FILTER_VALIDATE_BOOLEAN);
         }, $roleDetails);
-    
+
         // Construct data array
         $data = [
             'status' => $status,
             'role_details' => json_encode($roleDetails) // Convert array to JSON string
         ];
-    
+
         $result = $this->createClientModel->updateClient($clientId, $data);
-    
+
         if ($result) {
             // Construct the response object with information about the update
             $response = [
@@ -386,15 +387,15 @@ class SuperAdminController extends BaseController
         $roleDetails = array_map(function ($value) {
             return filter_var($value, FILTER_VALIDATE_BOOLEAN);
         }, $roleDetails);
-    
+
         // Construct data array
         $data = [
             'status' => $status,
             'role_details' => json_encode($roleDetails) // Convert array to JSON string
         ];
-    
+
         $result = $this->createUserModel->updateUserRole($userId, $data);
-    
+
         if ($result) {
             // Construct the response object with information about the update
             $response = [
@@ -451,20 +452,20 @@ class SuperAdminController extends BaseController
     public function getClientId() {
         $createClientModel = new CreateClientModel();
         $clients = $createClientModel->getClientWithRoleDetails(); // Assuming you have a method to fetch all clients
-    
+
         return $this->response->setJSON($clients);
     }
 
     public function getDevicesByClientId()
     {
         $clientId = $this->request->getGet('clientId'); // Get the client ID from the request
-        
+
         // Instantiate the CreateClientModel
         $createClientModel = new CreateClientModel();
-        
+
         // Call the getDevicesByClientId method to fetch devices based on the client ID
         $devices = $createClientModel->getDevicesByClientId($clientId);
-        
+
         // Return devices as JSON response
         return $this->response->setJSON($devices);
     }

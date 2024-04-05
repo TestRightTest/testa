@@ -1,5 +1,5 @@
 <?php
-$routes->group("superAdmin", ["namespace" => "App\Modules\SuperAdmin\Controllers"], function ($routes) {
+$routes->group("superAdmin", ["namespace" => "App\Modules\Superadmin\Controllers"], function ($routes) {
     $routes->get("/", "SuperAdminController::login");
     $routes->get("login", "SuperAdminController::login");
     $routes->get("dashboard", "SuperAdminController::dashboard");

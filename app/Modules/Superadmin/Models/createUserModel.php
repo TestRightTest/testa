@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Modules\SuperAdmin\Models;
+namespace App\Modules\Superadmin\Models;
 
 use CodeIgniter\Model;
 
-class CreateUserModel extends Model
+class createUserModel extends Model
 {
-    protected $table = 'master.user_login'; 
+    protected $table = 'master.user_login';
     protected $primaryKey = 'id';
     protected $allowedFields = ['name', 'user_name', 'password', 'status', 'date_created', 'updated_on', 'client_id', 'c_admin_id', 'c_user_id'];
 
@@ -23,7 +23,7 @@ class CreateUserModel extends Model
         $roleInsertResult = $this->db->table('master.role_list')->insert($roleData);
 
         if ($roleInsertResult === false) {
-            return false; 
+            return false;
         }
         $roleId = $this->db->insertID();
         return $roleId;
@@ -45,12 +45,12 @@ class CreateUserModel extends Model
             $this->db->table('master.user_role')
                 ->where('user_id', $userId)
                 ->update($data);
-    
+
             // Update status in client_details table
             $this->db->table('master.user_login')
                 ->where('id', $userId)
                 ->update(['status' => $data['status']]);
-    
+
             // Log the success message
             log_message('debug', 'Client data updated successfully.');
             return true;
