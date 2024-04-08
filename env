@@ -14,25 +14,15 @@
 # ENVIRONMENT
 #--------------------------------------------------------------------
 
-<<<<<<< HEAD
 CI_ENVIRONMENT = development
-=======
-# CI_ENVIRONMENT = development
->>>>>>> fc42a3c38ebf92068a36a9a969d3947cf8000455
 
 #--------------------------------------------------------------------
 # APP
 #--------------------------------------------------------------------
 
-<<<<<<< HEAD
 app.baseURL = 'http://localhost/mbscan'
 # If you have trouble with `.`, you could also use `_`.
 app_baseURL = 'http://localhost/mbscan'
-=======
-# app.baseURL = 'http://localhost/world'
-# If you have trouble with `.`, you could also use `_`.
-# app_baseURL = 'http://localhost/world'
->>>>>>> fc42a3c38ebf92068a36a9a969d3947cf8000455
 # app.forceGlobalSecureRequests = false
 # app.CSPEnabled = false
 

@@ -163,7 +163,7 @@
 									<table id="add-row" class="display table table-striped table-hover" >
 										<thead>
 											<tr>
-												<th>Client ID</th>
+												<th>Client Name</th>
 												<th>Name</th>
 												<th>Status</th>
 												<th>MAC ID</th>
@@ -221,11 +221,12 @@
                 url: '/mbscan/superadmin/getDevices',
                 type: 'GET',
                 success: function(response) {
+					console.log("device data: ", response);
                     table.clear();
 
                     response.forEach(function(device) {
                         table.row.add([
-							device.client_id || '-',
+							device.client_name || '-',
                             device.device_name || '-',
                             device.status || '-',
                             device.mac_id || '-'
@@ -290,6 +291,7 @@
             }
         });
     }
+
 </script>
 </body>
 </html>

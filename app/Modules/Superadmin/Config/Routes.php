@@ -12,6 +12,8 @@ $routes->group("superadmin", ["namespace" => "App\Modules\superadmin\Controllers
     $routes->get("getDevices", "superadminController::getDevices");
     $routes->get("getClientId", "superadminController::getClientId");
     $routes->get("getDevicesByClientId", "superadminController::getDevicesByClientId");
+    $routes->get("getDeviceDetails", "superadminController::getDeviceDetails");
+    $routes->get("getOtaDevices", "superadminController::getOtaDevices");
 
 
     $routes->post("loginAuth", "superadminController::loginAuth");
@@ -21,6 +23,7 @@ $routes->group("superadmin", ["namespace" => "App\Modules\superadmin\Controllers
     $routes->post("addDevice", "superadminController::addDevice");
     $routes->post("updateUser", "superadminController::updateUser");
     $routes->post("updateClient", "superadminController::updateClient");
+    $routes->post("addupdate", "superadminController::addupdate");
 
 });
 ?>

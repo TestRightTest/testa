@@ -2,13 +2,17 @@
 namespace App\Modules\Client\Controllers; 
 use App\Controllers\BaseController; 
 use App\Modules\client\Models\ClientLoginModel;
-use App\Modules\client\Models\createUserModel;
+use App\Modules\client\Models\deviceParametersModel;
+use App\Modules\Client\Models\CreateUserModel; // Add this line to import the CreateUserModel
+
 use Config\Constants;
 class DashboardController extends BaseController 
 { 
     protected $db; // Define the $db property
     protected $createUserModel;
     protected $clientLoginModel;
+    protected $deviceParametersModel;
+
 
     public function __construct()
     {
@@ -16,6 +20,7 @@ class DashboardController extends BaseController
         $this->db = \Config\Database::connect();
         $this->createUserModel = new CreateUserModel();
         $this->clientLoginModel = new clientLoginModel();
+        $this->deviceParametersModel = new deviceParametersModel();
     }
     public function index(): string 
     { 
@@ -338,5 +343,147 @@ private function getUserRoleDetails() {
         log_message('info', 'User added successfully');
         return "User added successfully";
     }
+    public function submitRotationInterval()
+    {
+        if ($this->request->isAJAX()) {
+            $deviceParametersModel = new DeviceParametersModel();
+    
+            // Get rotation interval from POST data
+            $rotationInterval = $this->request->getPost('rotationInterval');
+            $clientId = $this->request->getPost('client_id');
+
+            // Check if rotation interval is not empty
+            if (!empty($rotationInterval)) {
+                // Check if any records exist in the table
+                // Set the table dynamically based on the client ID
+                $deviceParametersModel->setTable($clientId);
+                
+                // Check if any records exist in the table
+                $existingRecord = $deviceParametersModel->first();    
+                if (!$existingRecord) {
+                    // If no records exist, insert a new one
+                    $deviceParametersModel->insert(['rotation_interval' => $rotationInterval]);
+                    $message = 'Rotation interval inserted successfully';
+                } else {
+                    // If records exist, update the existing record
+                    $deviceParametersModel->update($existingRecord['id'], ['rotation_interval' => $rotationInterval]);
+                    $message = 'Rotation interval updated successfully';
+                }
+    
+                // Return a success response
+                return $this->response->setJSON(['message' => $message, 'rotationInterval' => $rotationInterval]);
+            } else {
+                // Return an error response if rotation interval is empty
+                return $this->response->setStatusCode(400)->setJSON(['error' => 'Rotation interval is empty']);
+            }
+        } else {
+            return redirect()->to('/');
+        }
+    }
+
+    public function submitProgress()
+    {
+        if ($this->request->isAJAX()) {
+            $deviceParametersModel = new DeviceParametersModel();
+    
+            // Get progress threshold from POST data
+            $progressThreshold = $this->request->getPost('progressThreshold');
+            $clientId = $this->request->getPost('client_id');
+    
+            // Validate progress threshold
+            if (!empty($progressThreshold) && is_numeric($progressThreshold)) {
+                // Check if any records exist in the table
+                // Set the table dynamically based on the client ID
+                $deviceParametersModel->setTable($clientId);
+    
+                // Check if any records exist in the table
+                $existingRecord = $deviceParametersModel->first();
+                if (!$existingRecord) {
+                    // If no records exist, insert a new one
+                    $deviceParametersModel->insert(['progress_threshold' => $progressThreshold]);
+                    $message = 'Progress threshold inserted successfully';
+                } else {
+                    // If records exist, update the existing record
+                    $deviceParametersModel->update($existingRecord['id'], ['progress_threshold' => $progressThreshold]);
+                    $message = 'Progress threshold updated successfully';
+                }
+    
+                // Return a success response
+                return $this->response->setJSON(['message' => $message, 'progressThreshold' => $progressThreshold]);
+            } else {
+                // Return an error response if progress threshold is empty or not numeric
+                return $this->response->setStatusCode(400)->setJSON(['error' => 'Progress threshold is empty or invalid']);
+            }
+        } else {
+            return redirect()->to('/');
+        }
+    }
+    
+    public function enableRotation()
+    {
+        if ($this->request->isAJAX()) {
+            $deviceParametersModel = new DeviceParametersModel();
+    
+            // Get rotation enabled state from POST data (as boolean)
+            $rotationEnabled = $this->request->getPost('rotationEnabled');
+            $clientId = $this->request->getPost('client_id');
+    
+            // Set the table dynamically based on the client ID
+            $deviceParametersModel->setTable($clientId);
+    
+            // Check if any records exist in the table
+            $existingRecord = $deviceParametersModel->first();
+    
+            // If no records exist, insert a new one with the checkbox state
+            if (!$existingRecord) {
+                $deviceParametersModel->insert(['rotation_enable' => $rotationEnabled]);
+                $message = 'Rotation state inserted successfully';
+            } else {
+                // If records exist, update the existing record with the checkbox state
+                $deviceParametersModel->update($existingRecord['id'], ['rotation_enable' => $rotationEnabled]);
+                $message = 'Rotation state updated successfully';
+            }
+    
+            // Return a success response
+            return $this->response->setJSON(['message' => $message, 'rotationEnabled' => $rotationEnabled]);
+        } else {
+            return redirect()->to('/');
+        }
+    }
+    
+    
+    public function getData()
+    {
+        if ($this->request->isAJAX()) {
+            // Retrieve the client_id from the query parameters
+            $clientId = $this->request->getGet('client_id');
+
+            // Check if the client_id is provided
+            if ($clientId) {
+                // Create an instance of the DeviceParametersModel
+                $deviceParametersModel = new DeviceParametersModel();
+
+                // Set the table dynamically based on the client ID
+                $deviceParametersModel->setTable($clientId);
+
+                // Retrieve data from the model
+                $data = $deviceParametersModel->findAll(); // Adjust this based on your requirements
+
+                // Return the data as a JSON response
+                return $this->response->setJSON($data);
+            } else {
+                // If client_id is not provided, return an error response
+                return $this->response->setStatusCode(400)->setJSON(['error' => 'Client ID is missing']);
+            }
+        } else {
+            // If not an AJAX request, redirect or handle accordingly
+            return redirect()->to('/');
+        }
+    }
+
+    
+    
+    
+
     
 }

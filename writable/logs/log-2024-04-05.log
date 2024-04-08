@@ -1,0 +1,15 @@
+CRITICAL - 2024-04-05 11:05:09 --> Error: Call to undefined method App\Modules\superadmin\Controllers\superadminController::respond()
+in APPPATH\Modules\Superadmin\Controllers\SuperAdminController.php on line 564.
+ 1 SYSTEMPATH\CodeIgniter.php(941): App\Modules\superadmin\Controllers\superadminController->getOtaDevices()
+ 2 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Modules\superadmin\Controllers\superadminController))
+ 3 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-04-05 11:10:27 --> Error: Call to undefined method App\Modules\superadmin\Controllers\superadminController::respond()
+in APPPATH\Modules\Superadmin\Controllers\SuperAdminController.php on line 563.
+ 1 SYSTEMPATH\CodeIgniter.php(941): App\Modules\superadmin\Controllers\superadminController->getOtaDevices()
+ 2 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Modules\superadmin\Controllers\superadminController))
+ 3 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-04-05 11:10:56 --> ErrorException: Trait "App\Modules\superadmin\Controllers\ResponseTrait" not found
+in APPPATH\Modules\Superadmin\Controllers\SuperAdminController.php on line 10.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()

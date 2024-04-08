@@ -33,9 +33,10 @@ class CreateUserModel extends Model
     public function getUsersWithRoleDetails()
     {
         return $this->db->table('master.user_login')
-            ->select('user_login.*, STRING_AGG(user_role.role_details::text, \', \') AS role_details')
+            ->select('user_login.*, STRING_AGG(user_role.role_details::text, \', \') AS role_details, client_details.client_name')
             ->join('master.user_role', 'user_role.user_id = user_login.id', 'left')
-            ->groupBy('user_login.id')
+            ->join('master.client_details', 'master.client_details.id = user_login.client_id', 'left')
+            ->groupBy('user_login.id, client_details.client_name')
             ->get()
             ->getResult();
     }
