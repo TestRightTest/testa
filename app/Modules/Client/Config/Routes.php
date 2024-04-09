@@ -19,6 +19,7 @@ $routes->group("client", ["namespace" => "App\Modules\Client\Controllers"], func
     $routes->post("adduser", "DashboardController::adduser");
     $routes->post("submitRotationInterval", "DashboardController::submitRotationInterval");
     $routes->post("submitProgress", "DashboardController::submitProgress");   
+    $routes->post("updateTemp", "DashboardController::updateTemp");   
 
 
 });

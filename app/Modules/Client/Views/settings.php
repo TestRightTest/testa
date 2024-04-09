@@ -222,7 +222,7 @@
 								
 								<div class="card-body">
 
-								<div class="modal fade" id="updateTable" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+									<div class="modal fade" id="updateTable" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                         <div class="modal-dialog" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-body">
@@ -231,63 +231,21 @@
                                                         <div class="row">
                                                             <div class="col-sm-12">
                                                                 <div class="form-group form-group-default">
-                                                                    <label>Client Name</label>
-                                                                    <input id="updateClient" type="text" class="form-control" readonly>
+                                                                    <label>Device Name</label>
+                                                                    <input id="updateDevice" type="text" class="form-control" readonly>
                                                                 </div>
                                                             </div>
                                                             <div class="col-sm-12">
                                                                 <div class="form-group form-group-default">
-                                                                    <label>Name</label>
-                                                                    <input id="updateName" type="text" class="form-control" placeholder="Enter name" readonly>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <div class="form-group form-group-default">
-                                                                    <label>Username</label>
-                                                                    <input id="updateUserName" type="text" class="form-control" placeholder="Enter Username" readonly>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <div class="form-group form-group-default">
-                                                                    <label>Status</label>
-                                                                    <select id="updateStatus" class="form-control">
-                                                                        <option value="Active">Active</option>
-                                                                        <option value="InActive">InActive</option>
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-12">
-                                                                <div class="form-group form-group-default" id = "updateRole">
-                                                                    <label>Role</label>
-                                                                    <div class="row">
-                                                                        <div class="col-sm-3">
-                                                                            <input type="checkbox" id="updateCreateCheckbox" data-role="create" value="create">
-                                                                            <label for="roleCreate" id= "updateCheckboxLabel">Create</label>
-                                                                        </div>
-                                                                        <div class="col-sm-3">
-                                                                            <input type="checkbox" id="updateRoleCheckbox" data-role="edit" value="edit">
-                                                                            <label for="roleEdit" id= "editRoleLabel">Edit</label>
-                                                                        </div>
-                                                                        <div class="col-sm-3">
-                                                                            <input type="checkbox" id="updateViewCheckbox" data-role="view" value="view">
-                                                                            <label for="roleView" id="viewRoleLabel">View</label>
-                                                                        </div>
-                                                                        <div class="col-sm-3">
-                                                                            <input type="checkbox" id="updateDeleteRole" data-role="delete" value="delete">
-                                                                            <label for="roleDelete" id="deleteRoleLabel">Delete</label>
-                                                                        </div>
-                                                                        <div class="col-sm-3">
-                                                                            <input type="checkbox" id="updateAdjustRole" data-role="adjust" value="adjust">
-                                                                            <label for="roleAdjust" id="adjustRoleLabel">Adjust</label>
-                                                                        </div>
-                                                                    </div>
+                                                                    <label>Adjust Temp</label>
+                                                                    <input id="updateTemp" type="text" class="form-control" placeholder="Enter updated temp" >
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </form>
                                                 </div>
                                                 <div class="modal-footer no-bd">
-                                                    <button type="button" id="updateButton" class="btn btn-primary" onclick= "updateUserDetails()">Update</button>
+                                                    <button type="button" id="updateButton" class="btn btn-primary" onclick= "updateDeviceDetails()">Update</button>
                                                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                                                 </div>
                                             </div>
@@ -333,15 +291,15 @@
 	<!-- Atlantis DEMO methods, don't include it in your project! -->
 	<script src="<?php echo base_url(); ?>assets/js/setting-demo2.js"></script>
 	<script >
-$(document).ready(function() {
-    // Add Row
-    var table = $('#add-row').DataTable({
-        "pageLength": 5,
-    });
+	$(document).ready(function() {
+		// Add Row
+		var table = $('#add-row').DataTable({
+			"pageLength": 5,
+		});
 
-    var action = '<td> <div class="form-button-action"> <button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Edit Task"> <i class="fa fa-edit"></i> </button></div> </td>';
-    var clientId;
-    $.ajax({
+		var action = '<td> <div class="form-button-action"> <button type="button" data-toggle="modal" data-target="#updateTable" title="" class="btn btn-link btn-primary btn-lg edit-btn-1" data-original-title="Edit Task" id="editButton"> <i class="fa fa-edit"></i> </button></div> </td>';
+		var clientId;
+		$.ajax({
         url: '/mbscan/client/getUser',
         type: 'GET',
         success: function(data) {
@@ -353,21 +311,38 @@ $(document).ready(function() {
             response.forEach(function(data) {
                 console.log("device_names:", data.device_names);
 
-                if (data.device_names) {
-                    var deviceNamesString = data.device_names;
-                    var deviceNamesArray = deviceNamesString.substring(1, deviceNamesString.length - 1).split(',');
-                    deviceNamesArray.forEach(function(deviceName) {
-                        table.row.add([
-                            deviceName.trim() || '-',
-                            data.temperature || '-',
-                            action
-                        ]).draw(false);
-                    });
+                var deviceIds = data.device_ids.substring(1, data.device_ids.length - 1).split(',');
+                var deviceNames = data.device_names.substring(1, data.device_names.length - 1).split(',');
 
-                    clientId = data.client_id;
-                    console.log("clientId inside loop: ", clientId);
+                for (var i = 0; i < deviceIds.length; i++) {
+                    var deviceId = deviceIds[i].trim();
+                    var deviceName = deviceNames[i].trim();
 
-                    // Make the second AJAX call inside this callback
+                    table.row.add([
+                        deviceName || '-',
+                        data.temperature || '-',
+                        '<td><div class="form-button-action"><button type="button" data-toggle="modal" data-target="#updateTable" title="" class="btn btn-link btn-primary btn-lg edit-btn-1" data-original-title="Edit Task" data-device-id="' + deviceId + '"><i class="fa fa-edit"></i></button></div></td>'
+                    ]).draw(false);
+                }
+                clientId = data.client_id;
+                console.log("clientId inside loop: ", clientId);
+
+                $(document).on('click', '.edit-btn-1', function () {
+                    console.log("button clicked");
+                    const $row = $(this).closest('tr');
+                    var deviceName = $row.find('td:eq(0)').text();
+                    var deviceId = $(this).data('device-id');
+                    console.log("Device ID:", deviceId);
+
+					$('#updateDevice').val(deviceName);
+					$('#updateButton').data('device-id', deviceId);
+					$('#updateButton').data('client-id', clientId);
+
+					$('#updateTemp').val('');
+                    $('#updateTable').modal('show');
+                });
+
+					// Make the second AJAX call inside this callback
 					$.ajax({
 						type: 'GET',
 						url: '/mbscan/client/getData',
@@ -396,14 +371,12 @@ $(document).ready(function() {
 							console.error('Error fetching uploaded data:', error);
 						}
 					});
-
-                }
-            });
-        },
-        error: function(xhr, status, error) {
-            console.error(xhr.responseText);
-        }
-    });
+				});
+			},
+			error: function(xhr, status, error) {
+				console.error(xhr.responseText);
+			}
+		});
 
 
 
@@ -411,6 +384,7 @@ $(document).ready(function() {
 
 		// Edit buttons for table rows and form input groups
 		$('.edit-btn').click(function () {
+			console.log("edit button clicked");
 			var container = $(this).closest('.input-group, tr');
 
 			// Check the checkbox state
@@ -522,6 +496,38 @@ $(document).ready(function() {
 		});
 	});
 
+	function updateDeviceDetails() {
+		var updatedTemp = $('#updateTemp').val();
+
+		// Check if the entered temperature is within the specified range
+		if (updatedTemp >= 32.5 && updatedTemp <= 42.5) {
+			var deviceId = $('#updateButton').data('device-id'); 
+			var clientId = $('#updateButton').data('client-id'); 
+
+			console.log("Updated Temperature:", updatedTemp);
+			console.log("Device ID:", deviceId);
+			console.log("clientId: ", clientId);
+			$('#updateTable').modal('hide');
+
+			$.ajax({
+				url: '/mbscan/client/updateTemp',
+				type: 'POST',
+				data: {
+					device_id: deviceId,
+					temperature: updatedTemp,
+					client_id: clientId
+				},
+				success: function(response) {
+					console.log('Data successfully updated:', response);
+				},
+				error: function(xhr, status, error) {
+					console.error('Error updating data:', error);
+				}
+			});
+		} else {
+			alert("Temperature must be between 32.5 and 42.5.");
+		}
+	}
 
 	function toggleEditable(container, isEditable) {
 		container.find('td, input[type="text"]').attr('contenteditable', isEditable).prop('disabled', !isEditable);
@@ -596,7 +602,9 @@ $(document).ready(function() {
 		}, 3000);
 	}
 
+
 	</script>
     <!-- <script src="../documentation/assets/Dashboard.js"></script> -->
 </body>
 </html>
+

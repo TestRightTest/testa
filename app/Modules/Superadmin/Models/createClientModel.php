@@ -93,6 +93,16 @@ class CreateClientModel extends Model
 
     return $query->getResultArray();
 }
+    public function getDevicesByClientId($clientId)
+    {
+        // Query to fetch devices based on client ID
+        $query = $this->db->table('master.device')
+            ->select('id, device_name')
+            ->where('client_id', $clientId)
+            ->get();
+
+        return $query->getResultArray();
+    }
 
     
 }

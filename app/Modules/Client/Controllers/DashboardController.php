@@ -481,9 +481,72 @@ private function getUserRoleDetails() {
         }
     }
 
+    public function updateTemp()
+    {
+        if ($this->request->isAJAX()) {
+            $deviceParametersModel = new DeviceParametersModel();
+    
+            $temperature = $this->request->getPost('temperature');
+            $clientId = $this->request->getPost('client_id');
+            $deviceId = (int) $this->request->getPost('device_id');
+            
+            // Debugging: Log the received device_id
+            log_message('info', 'Received device_id: ' . $deviceId);
+    
+            if (!empty($temperature) && is_numeric($temperature) && is_int($deviceId)) {
+                // Set the table based on client ID
+                $deviceParametersModel->setTable($clientId);
+    
+                // Check if the device ID already exists
+                $existingRecord = $deviceParametersModel->where('device_id', $deviceId)->first();
+        
+                if (!$existingRecord) {
+                    // If device ID doesn't exist, insert a new record with device_id
+                    $deviceParametersModel->insert([
+                        'device_id' => $deviceId,
+                        'temperature' => $temperature
+                    ]);
+                    $message = 'Temperature record added successfully';
+                } else {
+                    // If device ID exists, update the temperature value
+                    $deviceParametersModel->update($existingRecord['id'], ['temperature' => $temperature]);
+                    $message = 'Temperature record updated successfully';
+                }
+        
+                return $this->response->setJSON(['message' => $message, 'temperature' => $temperature, 'device_id' => $deviceId]);
+            } else {
+                return $this->response->setStatusCode(400)->setJSON(['error' => 'Temperature or device ID is empty or invalid']);
+            }
+        } else {
+            return redirect()->to('/');
+        }
+    }
+    
+    
     
     
     
 
+
+    // public function updateTemp()
+    // {
+    //     $deviceId = $this->request->getPost('device_id');
+    //     $temperature = $this->request->getPost('temperature');
+    //     $clientId = $this->request->getPost('client_id');
+    //     $deviceParametersModel = new DeviceParametersModel();
+    
+    //     $deviceParametersModel->setTable($clientId);
+    
+    //     $existingRecord = $deviceParametersModel->where('device_id', $deviceId)->first();
+    
+    //     if ($existingRecord) {
+    //         $deviceParametersModel->update($existingRecord['id'], ['temperature' => $temperature]);
+    //         $responseMessage = 'Temperature updated successfully for device ID: ' . $deviceId;
+    //         return $this->response->setJSON(['message' => $responseMessage])->setStatusCode(200);
+    //     } else {
+    //         $responseMessage = 'Device ID not found. Temperature not updated.';
+    //         return $this->response->setJSON(['message' => $responseMessage])->setStatusCode(404);
+    //     }
+    // }
     
 }
