@@ -438,7 +438,11 @@
 	function updateClientDetails() {
 		// Get the updated status and role details
 		var status = $('#updateStatus').val();
-		
+		    can_create = $('#updateRole input[data-role="create"]').prop('checked'),
+			can_update = $('#updateRole input[data-role="edit"]').prop('checked'),
+			can_delete = $('#updateRole input[data-role="delete"]').prop('checked'),
+			can_view = $('#updateRole input[data-role="view"]').prop('checked'),
+			can_adjust = $('#updateRole input[data-role="adjust"]').prop('checked')
 		// Get boolean values for role details
 		var roles = {
 			can_create: $('#updateRole input[data-role="create"]').prop('checked'),
@@ -446,7 +450,6 @@
 			can_delete: $('#updateRole input[data-role="delete"]').prop('checked'),
 			can_view: $('#updateRole input[data-role="view"]').prop('checked'),
 			can_adjust: $('#updateRole input[data-role="adjust"]').prop('checked')
-
 		};
 
 		// Convert boolean values to strings
@@ -458,7 +461,12 @@
 		var data = {
 			clientId: updateClientId,
 			status: status,
-			roleDetails: roles 
+			roleDetails: roles,
+			can_create: can_create,
+			can_update: can_update,
+			can_delete: can_delete,
+			can_view: can_view,
+			can_adjust: can_adjust
 		};
 
 		$.ajax({
@@ -475,16 +483,16 @@
 	}
 
 	function logout(){
-	$.ajax({
-	type: "GET",
-	url: "/mbscan/superadmin/logout",
-	success: function(response) {
-		window.location.href = '/mbscan/superadmin/login';
-	},
-	error: function(xhr, status, error) {
-		console.error(xhr.responseText);
-	}
-	});
+		$.ajax({
+			type: "GET",
+			url: "/mbscan/superadmin/logout",
+			success: function(response) {
+				window.location.href = '/mbscan/superadmin/login';
+			},
+			error: function(xhr, status, error) {
+				console.error(xhr.responseText);
+			}
+		});
 
 	}
 </script>

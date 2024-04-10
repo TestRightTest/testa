@@ -109,53 +109,28 @@ class DashboardController extends BaseController
     }
 
     // Method to fetch user's role details
-    // private function getUserRoleDetails() {
-    //     // Fetch user's role details from session or database
-    //     // Implement your logic to retrieve role details
-    //     $roleDetails = [
-    //         Constants::CAN_VIEW => true, 
-    //         Constants::CAN_EDIT => false, 
-    //         Constants::CAN_DELETE => false, 
-    //         Constants::CAN_CREATE => false, 
-    //         Constants::CAN_ADJUST => false, 
+    private function getUserRoleDetails() {
+        // Check if roleDetails is available in the session
+        $roleDetails = session()->get('roleDetails');
 
-    //         // Add other role permissions here
-    //     ];
+        if ($roleDetails !== null) {
+            return $roleDetails;
+        }
+        $userId = session()->get('userId');
 
-    //     return $roleDetails;
-    // }
+        $model = new ClientLoginModel();
+        $userData = $model->getUserData($userId);
 
-    // Method to fetch user's role details
-// Method to fetch user's role details
-private function getUserRoleDetails() {
-    // Check if roleDetails is available in the session
-    $roleDetails = session()->get('roleDetails');
+        $roleDetails = [];
 
-    if ($roleDetails !== null) {
+        if (!empty($userData)) {
+            $roleDetailsJson = $userData[0]['role_details'];
+
+            $roleDetails = json_decode($roleDetailsJson, true);
+        }
+
         return $roleDetails;
     }
-
-    // If roleDetails is not available in the session, fetch it from the database
-    $userId = session()->get('userId'); // Assuming you have stored user ID in the session
-
-    // Fetch role details for the user from the database
-    $model = new ClientLoginModel();
-    $userData = $model->getUserData($userId);
-
-    // Initialize empty array to hold role details
-    $roleDetails = [];
-
-    // Check if user data exists
-    if (!empty($userData)) {
-        // Parse JSON data for role details
-        $roleDetailsJson = $userData[0]['role_details'];
-
-        // Decode JSON data into associative array
-        $roleDetails = json_decode($roleDetailsJson, true);
-    }
-
-    return $roleDetails;
-}
 
 
 
@@ -177,17 +152,46 @@ private function getUserRoleDetails() {
         $roleDetails = $this->getUserRoleDetails();
         return view('\App\Modules\Client\Views\createuser', ['roleDetails' => $roleDetails]); 
     } 
+
+
+    // public function getSelectedUserData()
+    // {
+    //     $deviceId = $this->request->getGet('device_id');
+    //     $clientId = $this->request->getGet('client_id');
+    //     $schemaName = 'client_' . $clientId;
+        
+    //     $sql = "SELECT * FROM $schemaName.device_log WHERE device_id = ?";
+    //     $query = $this->db->query($sql, [$deviceId]);
+    //     $deviceLogData = $query->getResultArray();
+    //     return $this->response->setJSON($deviceLogData);
+    // }
     public function getSelectedUserData()
     {
         $deviceId = $this->request->getGet('device_id');
         $clientId = $this->request->getGet('client_id');
         $schemaName = 'client_' . $clientId;
         
+        // Get device log data
         $sql = "SELECT * FROM $schemaName.device_log WHERE device_id = ?";
         $query = $this->db->query($sql, [$deviceId]);
         $deviceLogData = $query->getResultArray();
+        
+        // Get device name from master.device table
+        $sqlDevice = "SELECT device_name FROM master.device WHERE id = ?";
+        $queryDevice = $this->db->query($sqlDevice, [$deviceId]);
+        $deviceNameData = $queryDevice->getRowArray();
+        
+        $deviceName = $deviceNameData['device_name'];
+        
+        // Add device name to each item in device log data
+        foreach ($deviceLogData as &$item) {
+            $item['device_name'] = $deviceName;
+        }
+        
         return $this->response->setJSON($deviceLogData);
     }
+    
+    
     
     public function getAllDeviceData()
     {
@@ -210,13 +214,18 @@ private function getUserRoleDetails() {
         
         // Build the SQL query to fetch device log data for the user's devices
         $deviceIdsString = implode(',', $deviceIds);
-        $sql = "SELECT * FROM $schemaName.device_log WHERE device_id IN ($deviceIdsString)";
+        $sql = "SELECT dl.*, md.device_name 
+                FROM $schemaName.device_log dl
+                LEFT JOIN master.device md ON dl.device_id = md.id
+                WHERE dl.device_id IN ($deviceIdsString)";
         
         $query = $this->db->query($sql);
         
         $deviceLogData = $query->getResultArray();
         return $this->response->setJSON($deviceLogData);
     }
+    
+    
     
     public function getclientusers(){
         if (!session()->get('isLoggedIn')) {
@@ -268,13 +277,7 @@ private function getUserRoleDetails() {
             'c_admin_id' => $currentUserId,
             'c_user_id' => 1
         ];
-        
-        // // Check if 'client_id' is provided before adding it to the $data array
-        // if ($clientID) {
-        //     $data['client_id'] = $clientID;
-        // }
-    
-        // Prepare role-related data
+
         $roleData = [
             'can_view' => $view,
             'can_create' => $create,
@@ -354,23 +357,17 @@ private function getUserRoleDetails() {
 
             // Check if rotation interval is not empty
             if (!empty($rotationInterval)) {
-                // Check if any records exist in the table
-                // Set the table dynamically based on the client ID
                 $deviceParametersModel->setTable($clientId);
                 
-                // Check if any records exist in the table
                 $existingRecord = $deviceParametersModel->first();    
                 if (!$existingRecord) {
-                    // If no records exist, insert a new one
                     $deviceParametersModel->insert(['rotation_interval' => $rotationInterval]);
                     $message = 'Rotation interval inserted successfully';
                 } else {
-                    // If records exist, update the existing record
                     $deviceParametersModel->update($existingRecord['id'], ['rotation_interval' => $rotationInterval]);
                     $message = 'Rotation interval updated successfully';
                 }
     
-                // Return a success response
                 return $this->response->setJSON(['message' => $message, 'rotationInterval' => $rotationInterval]);
             } else {
                 // Return an error response if rotation interval is empty
@@ -386,32 +383,23 @@ private function getUserRoleDetails() {
         if ($this->request->isAJAX()) {
             $deviceParametersModel = new DeviceParametersModel();
     
-            // Get progress threshold from POST data
             $progressThreshold = $this->request->getPost('progressThreshold');
             $clientId = $this->request->getPost('client_id');
     
-            // Validate progress threshold
             if (!empty($progressThreshold) && is_numeric($progressThreshold)) {
-                // Check if any records exist in the table
-                // Set the table dynamically based on the client ID
                 $deviceParametersModel->setTable($clientId);
     
-                // Check if any records exist in the table
                 $existingRecord = $deviceParametersModel->first();
                 if (!$existingRecord) {
-                    // If no records exist, insert a new one
                     $deviceParametersModel->insert(['progress_threshold' => $progressThreshold]);
                     $message = 'Progress threshold inserted successfully';
                 } else {
-                    // If records exist, update the existing record
                     $deviceParametersModel->update($existingRecord['id'], ['progress_threshold' => $progressThreshold]);
                     $message = 'Progress threshold updated successfully';
                 }
     
-                // Return a success response
                 return $this->response->setJSON(['message' => $message, 'progressThreshold' => $progressThreshold]);
             } else {
-                // Return an error response if progress threshold is empty or not numeric
                 return $this->response->setStatusCode(400)->setJSON(['error' => 'Progress threshold is empty or invalid']);
             }
         } else {

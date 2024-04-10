@@ -1,0 +1,78 @@
+ERROR - 2024-04-10 13:29:10 --> ErrorException: pg_query(): Query failed: ERROR:  column md.device_id does not exist
+LINE 3: ...     LEFT JOIN master.device md ON dl.device_id = md.device_...
+                                                             ^
+HINT:  Perhaps you meant to reference the column &quot;dl.device_id&quot;. in C:\xampp\htdocs\mbscan\system\Database\Postgre\Connection.php:187
+Stack trace:
+#0 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'pg_query(): Que...', 'C:\\xampp\\htdocs...', 187)
+#1 C:\xampp\htdocs\mbscan\system\Database\Postgre\Connection.php(187): pg_query(Object(PgSql\Connection), 'SELECT dl.*, md...')
+#2 C:\xampp\htdocs\mbscan\system\Database\BaseConnection.php(693): CodeIgniter\Database\Postgre\Connection->execute('SELECT dl.*, md...')
+#3 C:\xampp\htdocs\mbscan\system\Database\BaseConnection.php(607): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT dl.*, md...')
+#4 C:\xampp\htdocs\mbscan\app\Modules\Client\Controllers\DashboardController.php(222): CodeIgniter\Database\BaseConnection->query('SELECT dl.*, md...')
+#5 C:\xampp\htdocs\mbscan\system\CodeIgniter.php(941): App\Modules\Client\Controllers\DashboardController->getAllDeviceData()
+#6 C:\xampp\htdocs\mbscan\system\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Modules\Client\Controllers\DashboardController))
+#7 C:\xampp\htdocs\mbscan\system\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\xampp\htdocs\mbscan\index.php(79): CodeIgniter\CodeIgniter->run()
+#9 {main}
+CRITICAL - 2024-04-10 13:29:10 --> CodeIgniter\Database\Exceptions\DatabaseException: pg_query(): Query failed: ERROR:  column md.device_id does not exist
+LINE 3: ...     LEFT JOIN master.device md ON dl.device_id = md.device_...
+                                                             ^
+HINT:  Perhaps you meant to reference the column &quot;dl.device_id&quot;.
+in SYSTEMPATH\Database\BaseConnection.php on line 647.
+ 1 APPPATH\Modules\Client\Controllers\DashboardController.php(222): CodeIgniter\Database\BaseConnection->query('SELECT dl.*, md.device_name 
+                FROM client_157.device_log dl
+                LEFT JOIN master.device md ON dl.device_id = md.device_id
+                WHERE dl.device_id IN (27,28)')
+ 2 SYSTEMPATH\CodeIgniter.php(941): App\Modules\Client\Controllers\DashboardController->getAllDeviceData()
+ 3 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Modules\Client\Controllers\DashboardController))
+ 4 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-04-10 13:29:10 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: pg_query(): Query failed: ERROR:  column md.device_id does not exist
+LINE 3: ...     LEFT JOIN master.device md ON dl.device_id = md.device_...
+                                                             ^
+HINT:  Perhaps you meant to reference the column &quot;dl.device_id&quot;.
+in SYSTEMPATH\Database\Postgre\Connection.php on line 192.
+ 1 SYSTEMPATH\Database\BaseConnection.php(693): CodeIgniter\Database\Postgre\Connection->execute('SELECT dl.*, md.device_name 
+                FROM client_157.device_log dl
+                LEFT JOIN master.device md ON dl.device_id = md.device_id
+                WHERE dl.device_id IN (27,28)')
+ 2 SYSTEMPATH\Database\BaseConnection.php(607): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT dl.*, md.device_name 
+                FROM client_157.device_log dl
+                LEFT JOIN master.device md ON dl.device_id = md.device_id
+                WHERE dl.device_id IN (27,28)')
+ 3 APPPATH\Modules\Client\Controllers\DashboardController.php(222): CodeIgniter\Database\BaseConnection->query('SELECT dl.*, md.device_name 
+                FROM client_157.device_log dl
+                LEFT JOIN master.device md ON dl.device_id = md.device_id
+                WHERE dl.device_id IN (27,28)')
+ 4 SYSTEMPATH\CodeIgniter.php(941): App\Modules\Client\Controllers\DashboardController->getAllDeviceData()
+ 5 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Modules\Client\Controllers\DashboardController))
+ 6 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+CRITICAL - 2024-04-10 13:29:10 --> [Caused by] ErrorException: pg_query(): Query failed: ERROR:  column md.device_id does not exist
+LINE 3: ...     LEFT JOIN master.device md ON dl.device_id = md.device_...
+                                                             ^
+HINT:  Perhaps you meant to reference the column &quot;dl.device_id&quot;.
+in SYSTEMPATH\Database\Postgre\Connection.php on line 187.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'pg_query(): Query failed: ERROR:  column md.device_id does not exist
+LINE 3: ...     LEFT JOIN master.device md ON dl.device_id = md.device_...
+                                                             ^
+HINT:  Perhaps you meant to reference the column &quot;dl.device_id&quot;.', 'C:\\xampp\\htdocs\\mbscan\\system\\Database\\Postgre\\Connection.php', 187)
+ 2 SYSTEMPATH\Database\Postgre\Connection.php(187): pg_query(Object(PgSql\Connection), 'SELECT dl.*, md.device_name 
+                FROM client_157.device_log dl
+                LEFT JOIN master.device md ON dl.device_id = md.device_id
+                WHERE dl.device_id IN (27,28)')
+ 3 SYSTEMPATH\Database\BaseConnection.php(693): CodeIgniter\Database\Postgre\Connection->execute('SELECT dl.*, md.device_name 
+                FROM client_157.device_log dl
+                LEFT JOIN master.device md ON dl.device_id = md.device_id
+                WHERE dl.device_id IN (27,28)')
+ 4 SYSTEMPATH\Database\BaseConnection.php(607): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT dl.*, md.device_name 
+                FROM client_157.device_log dl
+                LEFT JOIN master.device md ON dl.device_id = md.device_id
+                WHERE dl.device_id IN (27,28)')
+ 5 APPPATH\Modules\Client\Controllers\DashboardController.php(222): CodeIgniter\Database\BaseConnection->query('SELECT dl.*, md.device_name 
+                FROM client_157.device_log dl
+                LEFT JOIN master.device md ON dl.device_id = md.device_id
+                WHERE dl.device_id IN (27,28)')
+ 6 SYSTEMPATH\CodeIgniter.php(941): App\Modules\Client\Controllers\DashboardController->getAllDeviceData()
+ 7 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Modules\Client\Controllers\DashboardController))
+ 8 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()

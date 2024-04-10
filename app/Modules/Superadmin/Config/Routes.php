@@ -1,5 +1,6 @@
 <?php
 $routes->group("superadmin", ["namespace" => "App\Modules\superadmin\Controllers"], function ($routes) {
+    
     $routes->get("/", "superadminController::login");
     $routes->get("login", "superadminController::login");
     $routes->get("dashboard", "superadminController::dashboard");
@@ -25,5 +26,6 @@ $routes->group("superadmin", ["namespace" => "App\Modules\superadmin\Controllers
     $routes->post("updateClient", "superadminController::updateClient");
     $routes->post("addupdate", "superadminController::addupdate");
 
+    
 });
 ?>

@@ -235,7 +235,7 @@
                                                         <div class="row">
                                                             <div class="col-sm-12">
                                                                 <div class="form-group form-group-default">
-                                                                    <label>Client ID</label>
+                                                                    <label>Client Name</label>
                                                                     <input id="updateClient" type="text" class="form-control" readonly>
                                                                 </div>
                                                             </div>
@@ -301,10 +301,11 @@
 										<table id="add-row" class="display table table-striped table-hover" >
 											<thead>
 												<tr>
-													<th>Client ID</th>
+													<th>Client Name</th>
 													<th>Name</th>
 													<th>Username</th>
 													<th>Role</th>
+                                                    <th>Devices</th>
                                                     <th>Status</th>
 													<th style="width: 10%">Action</th>
 												</tr>
@@ -343,6 +344,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 
 	<script>
+        var clientId;
+        var allDeviceId;
         $(document).ready(function () {
         const table = $('#add-row').DataTable({
             pageLength: 10
@@ -365,14 +368,17 @@
         
         $(document).on('click', '.edit-btn', function () {
             const $row = $(this).closest('tr');
-            var clientId = $row.find('td:eq(0)').text();
+            var clientName = $row.find('td:eq(0)').text();
             var name = $row.find('td:eq(1)').text();
             var userName = $row.find('td:eq(2)').text();
             var roles = $row.find('td:eq(3)').text().split(', '); 
-            var status = $row.find('td:eq(4)').text();
+            var status = $row.find('td:eq(5)').text();
 			var userId = $row.data('user-id'); 
-			console.log("User ID:", userId); 
-            $('#updateClient').val(clientId);
+            clientId = $row.data('client-id');
+            // console.log("Client ID:", clientId); 
+
+			// console.log("User ID:", userId); 
+            $('#updateClient').val(clientName);
             $('#updateName').val(name);
             $('#updateUserName').val(userName);
 			$('#updateStatus').val(status);
@@ -450,6 +456,7 @@
             type: 'GET',
             url: '/mbscan/superadmin/getUsers',
             success: function (response) {
+            console.log("response from getUser: ",response);
             table.clear().draw();
             response.forEach(user => {
                 var roles = '';
@@ -463,10 +470,11 @@
                 }
                 roles = roles.replace(/,\s*$/, '');
                 const rowData = [
-                    user.client_id || '-',
+                    user.client_name || '-',
                     user.name || '-',
                     user.user_name || '-',
-                    roles || '-', // Include role details here
+                    roles || '-', 
+                    user.device_names || '-',
                     user.status || '-',
                     `<div class="form-button-action">
                         <button type="button" data-toggle="tooltip" class="btn btn-link btn-primary btn-lg edit-btn">
@@ -474,17 +482,22 @@
                         </button>
                     </div>`
                 ];
-                console.log('User ID:', user.id); // Log user_id to console
+                // console.log('User ID:', user.id);
                 initTooltips();
                 var row =  table.row.add(rowData).draw(false).node();
                 $(row).data('roles', roles);
                 $(row).data('user-id', user.id); 
-
+                $(row).data('client-id', user.client_id); 
                 // Create invisible row containing client_id only
                 var invisibleRow = '<tr class="invisible-row" data-user-id="' + user.id + '"></tr>';
+                var invisibleRow1 = '<tr class="invisible-row" data-user-id="' + user.client_id + '"></tr>';
+
                 $(row).after(invisibleRow);
+                $(row).after(invisibleRow1);
+
                 });
-        },
+                
+            },
 
             error: function (xhr, status, error) {
                 console.error(xhr.responseText);
@@ -502,7 +515,7 @@
                     $.each(data, function(index, value) {
                         // Append option elements to select element
                         var $option = $('<option value="' + value.id + '">' + value.client_name + '</option>');
-                        $option.data('role_details', value.role_details); // Set role_details as data attribute
+                        $option.data('role_details', value.role_details); 
                         $('#addclientID').append($option);
                     });
                 }
@@ -629,6 +642,11 @@
             var status = $('#updateStatus').val();
             var clientId = $('#updateClient').val();
             var username = $('#updateUserName').val();
+            can_create = $('#updateRole input[data-role="create"]').prop('checked'),
+            can_edit = $('#updateRole input[data-role="edit"]').prop('checked'),
+            can_delete = $('#updateRole input[data-role="delete"]').prop('checked'),
+            can_view = $('#updateRole input[data-role="view"]').prop('checked'),
+            can_adjust = $('#updateRole input[data-role="adjust"]').prop('checked')
             // Get boolean values for role details
             var roles = {
                 can_create: $('#updateRole input[data-role="create"]').prop('checked'),
@@ -652,14 +670,21 @@
                 userId: updateUserId,
                 status: status,
                 roleDetails: roles,
-                user_name: username 
+                user_name: username
             };
             console.log("data",data);
 
             $.ajax({
                 type: 'POST',
                 url: '/mbscan/superadmin/updateUser',
+                data:{
                 data: data,
+                can_create: can_create,
+                can_edit: can_edit,
+                can_delete: can_delete,
+                can_view: can_view,
+                can_adjust: can_adjust
+                },
                 success: function (response) {
                     $('#updateTable').modal('hide');
                 },

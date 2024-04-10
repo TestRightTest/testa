@@ -56,12 +56,14 @@ class CreateClientModel extends Model
 
         return $this->db->table('master.client_role')->insert($clientRoleData);
     }
+
     public function getClientsWithRoles()
     {
         return $this->select('master.client_details.*, client_role.role_details')
             ->join('master.client_role', 'client_role.client_id = client_details.id', 'left')
             ->findAll();
     }
+    
     public function updateClient($clientId, $data)
     {
         try {
@@ -83,16 +85,24 @@ class CreateClientModel extends Model
         }
     }
 
+    public function getRoleDetails($roleIds) {
+        return $this->db->table('master.role_list')
+            ->whereIn('id', $roleIds)
+            ->get()
+            ->getResultArray();
+    }
+    
     public function getClientWithRoleDetails()
-{
-    // Fetch all clients along with their role details
-    $query = $this->db->table('master.client_details')
-        ->select('master.client_details.id, master.client_details.client_name, client_role.role_details')
-        ->join('master.client_role', 'client_role.client_id = master.client_details.id', 'left')
-        ->get();
+    {
+        // Fetch all clients along with their role details
+        $query = $this->db->table('master.client_details')
+            ->select('master.client_details.id, master.client_details.client_name, client_role.role_details')
+            ->join('master.client_role', 'client_role.client_id = master.client_details.id', 'left')
+            ->get();
 
-    return $query->getResultArray();
-}
+        return $query->getResultArray();
+    }
+    
     public function getDevicesByClientId($clientId)
     {
         // Query to fetch devices based on client ID
@@ -104,5 +114,28 @@ class CreateClientModel extends Model
         return $query->getResultArray();
     }
 
+    public function getRoleId($clientId)
+    {
+        return $this->db->table('master.client_role')
+                        ->select('role_id')
+                        ->where('client_id', $clientId)
+                        ->get()
+                        ->getRow()
+                        ->role_id;
+    }
+    public function updateRoleList($roleId, $roleData)
+    {
+        try {
+            $this->db->table('master.role_list')
+                ->where('id', $roleId)
+                ->update($roleData);
+    
+            log_message('debug', 'Role list data updated successfully.');
+            return true;
+        } catch (\Exception $e) {
+            log_message('error', $e->getMessage());
+            return false;
+        }
+    }
     
 }

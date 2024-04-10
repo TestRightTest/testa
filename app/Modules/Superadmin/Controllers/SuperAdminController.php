@@ -351,25 +351,47 @@ class superadminController extends BaseController
         return "Schema and tables created successfully for client ID: $clientId.";
     }
 
-    public function updateClient(){
+    public function updateClient()
+    {
         $clientId = $this->request->getPost('clientId');
         $status = $this->request->getPost('status');
-        $roleDetails = $this->request->getPost('roleDetails'); // Get the role details as an array
-
+        $roleDetails = $this->request->getPost('roleDetails'); 
+    
+        $can_create = $this->request->getPost('can_create'); 
+        $can_edit= $this->request->getPost('can_update'); 
+        $can_delete = $this->request->getPost('can_delete'); 
+        $can_view = $this->request->getPost('can_view'); 
+        $can_adjust = $this->request->getPost('can_adjust'); 
+    
         // Convert role details values to boolean
         $roleDetails = array_map(function ($value) {
             return filter_var($value, FILTER_VALIDATE_BOOLEAN);
         }, $roleDetails);
-
+    
         // Construct data array
         $data = [
             'status' => $status,
             'role_details' => json_encode($roleDetails) // Convert array to JSON string
         ];
-
+    
         $result = $this->createClientModel->updateClient($clientId, $data);
-
+    
         if ($result) {
+            // Update role_list table
+            $roleData = [
+                'can_create' => $can_create,
+                'can_view' => $can_view,
+                'can_edit' => $can_edit, // Assuming 'can_edit' corresponds to 'can_view' in your master.role_list table
+                'can_delete' => $can_delete,
+                'can_adjust' => $can_adjust
+            ];
+    
+            $roleId = $this->createClientModel->getRoleId($clientId); // Assuming a method getRoleId() is defined in your createClientModel to retrieve role_id
+    
+            if ($roleId !== null) {
+                $this->createClientModel->updateRoleList($roleId, $roleData);
+            }
+    
             // Construct the response object with information about the update
             $response = [
                 'success' => true,
@@ -382,13 +404,19 @@ class superadminController extends BaseController
             return $this->response->setJSON(['success' => false, 'error' => 'Failed to update client details']);
         }
     }
+    
 
     public function updateUser(){
         $clientId = $this->request->getPost('clientId');
         $userId = $this->request->getPost('userId');
+        $can_create = $this ->getPost('can_create');
+        $can_edit = $this ->getPost('can_edit');
+        $can_delete = $this ->getPost('can_delete');
+        $can_view = $this ->getPost('can_view');
+        $can_adjust = $this ->getPost('can_adjust');
 
         $status = $this->request->getPost('status');
-        $roleDetails = $this->request->getPost('roleDetails'); // Get the role details as an array
+        $roleDetails = $this->request->getPost('roleDetails');
         $user_name = $this-> request->getPost('user_name');
         // Convert role details values to boolean
         $roleDetails = array_map(function ($value) {
@@ -398,7 +426,7 @@ class superadminController extends BaseController
         // Construct data array
         $data = [
             'status' => $status,
-            'role_details' => json_encode($roleDetails) // Convert array to JSON string
+            'role_details' => json_encode($roleDetails)
         ];
 
         $result = $this->createUserModel->updateUserRole($userId, $data);
@@ -409,7 +437,7 @@ class superadminController extends BaseController
                 'success' => true,
                 'message' => 'User details updated successfully',
                 'userId' => $userId,
-                'updatedData' => $data // Include the updated data in the response
+                'updatedData' => $data
             ];
             return $this->response->setJSON($response);
         } else {
@@ -418,14 +446,12 @@ class superadminController extends BaseController
     }
 
     public function addDevice() {
-        // Check if it's an AJAX request
         if ($this->request->isAJAX()) {
-            // Get data from POST request
+
             $name = $this->request->getPost('name');
             $status = $this->request->getPost('status');
             $macId = $this->request->getPost('mac_id');
-            $clientId = $this->request ->getpost('client_id');
-            // Prepare data array
+            $clientId = $this->request ->getpost('client_id');            
             $data = [
                 'log_time' => date('Y-m-d H:i:s'),
                 'device_name' => $name,
@@ -535,21 +561,18 @@ class superadminController extends BaseController
 
     public function getDeviceDetails()
     {
-        // Instantiate the otaUpdateModel
+
         $otaUpdateModel = new otaUpdateModel();
 
-        // Call the getDeviceDetails() method to fetch device details
         $deviceDetails = $otaUpdateModel->getDeviceDetails();
 
-        // Check if device details were fetched successfully
         if (!empty($deviceDetails)) {
-            // Send the device details as JSON response
             return $this->response->setJSON($deviceDetails);
         } else {
-            // If there was an error or no device details found, return an error response
             return $this->response->setJSON(['error' => 'Failed to fetch device details'])->setStatusCode(500);
         }
     }
+
     public function getOtaDevices()
     {
         // Load the model

@@ -30,16 +30,51 @@ class CreateUserModel extends Model
         return $roleId;
 
     }
+
+
+
     public function getUsersWithRoleDetails()
     {
-        return $this->db->table('master.user_login')
-            ->select('user_login.*, STRING_AGG(user_role.role_details::text, \', \') AS role_details, client_details.client_name')
-            ->join('master.user_role', 'user_role.user_id = user_login.id', 'left')
-            ->join('master.client_details', 'master.client_details.id = user_login.client_id', 'left')
-            ->groupBy('user_login.id, client_details.client_name')
-            ->get()
-            ->getResult();
+    
+        // Subquery to aggregate role details for each user
+        $roleSubquery = $this->db->table('master.user_role')
+            ->select('user_id, STRING_AGG(role_details::text, \', \') AS role_details')
+            ->groupBy('user_id')
+            ->getCompiledSelect();
+    
+        // Subquery to aggregate device IDs for each user
+        $deviceSubquery = $this->db->table('master.device_details')
+            ->select('user_id, STRING_AGG(device_id::text, \', \') AS device_ids')
+            ->groupBy('user_id')
+            ->getCompiledSelect();
+    
+        // Main query to join user_login, role details, client details, and device IDs
+        $query = $this->db->table('master.user_login')
+            ->select('user_login.id, user_login.*, role_agg.role_details, client_details.client_name, device_agg.device_ids');
+    
+        // Join with role details subquery
+        $query->join("($roleSubquery) as role_agg", 'role_agg.user_id = user_login.id', 'left');
+    
+        // Join with client details
+        $query->join('master.client_details', 'master.client_details.id = user_login.client_id', 'left');
+    
+        // Join with device IDs subquery
+        $query->join("($deviceSubquery) as device_agg", 'device_agg.user_id = user_login.id', 'left');
+    
+        // Join with device names using master.device table
+        $query->join('master.device', 'master.device.id = ANY(string_to_array(device_agg.device_ids, \',\')::int[])', 'left');
+    
+        // Select device names
+        $query->select("ARRAY_TO_STRING(ARRAY_AGG(master.device.device_name), ', ') AS device_names");
+    
+        // Group by necessary columns
+        $query->groupBy('user_login.id, user_login.*, role_agg.role_details, client_details.client_name, device_agg.device_ids');
+    
+        // Execute the query and return results
+        return $query->get()->getResult();
+        
     }
+
 
     public function updateUserRole($userId, $data)
     {
